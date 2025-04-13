@@ -11,11 +11,5 @@
       "src": "/(.*)",
       "dest": "src/main.py"
     }
-  ],
-  "env": {
-    "APP_MODULE": "src.main:app",
-    "OPENAI_API_KEY": "@openai-api-key",
-    "ALLOWED_ORIGINS": "@allowed-origins",
-    "ENVIRONMENT": "production"
-  }
+  ]
 }

@@ -55,11 +55,11 @@ export default function App() {
         alt="Earthbar Logo"
         style={{
           position: "absolute",
-          top: isVerySmallMobile ? "3px" : (isMobile ? "8px" : "20px"),
-          left: isVerySmallMobile ? "3px" : (isMobile ? "8px" : "20px"),
-          width: isVerySmallMobile ? "25px" : (isMobile ? "35px" : "120px"), // Shrink logo more on very small screens
+          top: isVerySmallMobile ? "2px" : (isMobile ? "5px" : "20px"),
+          left: isVerySmallMobile ? "2px" : (isMobile ? "5px" : "20px"),
+          width: isVerySmallMobile ? "18px" : (isMobile ? "22px" : "120px"), // Make logo much smaller on mobile
           zIndex: "10",
-          opacity: "0.8", // Further reduce opacity on mobile for better visual integration
+          opacity: "0.7", // Further reduce opacity on mobile for better visual integration
         }}
       />
       <div

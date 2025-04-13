@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Global lock to prevent page scrolling */
+html, body {
+  height: 100%;
+  overflow: hidden;
+}

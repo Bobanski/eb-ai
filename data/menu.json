@@ -1,0 +1,446 @@
+{
+    "categories": [
+      {
+        "id": "smoothies",
+        "label": "Smoothies",
+        "items": [
+          {
+            "id": "blue_moon",
+            "name": "Blue Moon",
+            "type": "smoothie",
+            "price_usd": 12.95,
+            "protein_g": null,
+            "image_path": "/images/BlueMoon.jpg",
+            "ingredients": [
+              "coconut meat",
+              "cashews",
+              "almond butter",
+              "dates",
+              "vanilla",
+              "sea salt",
+              "almond milk",
+              "blue spirulina"
+            ],
+            "health_tags": [
+              "healthy_fats",
+              "energy",
+              "antioxidant",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "blueberry_bliss",
+            "name": "Blueberry Bliss",
+            "type": "smoothie",
+            "price_usd": 12.95,
+            "protein_g": 23,
+            "image_path": "/images/BlueberryBliss.jpg",
+            "ingredients": [
+              "blueberry",
+              "banana",
+              "almond butter",
+              "hemp milk",
+              "Earthfusion protein"
+            ],
+            "health_tags": [
+              "high_protein",
+              "antioxidant",
+              "energy",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "chocolate_supreme",
+            "name": "Chocolate Supreme",
+            "type": "smoothie",
+            "price_usd": 12.95,
+            "protein_g": 25,
+            "image_path": "/images/ChocolateSupreme.jpg",
+            "ingredients": [
+              "banana",
+              "almond butter",
+              "cacao nibs",
+              "maca",
+              "mesquite",
+              "cacao",
+              "chocolate hemp milk",
+              "Earthfusion plant protein"
+            ],
+            "health_tags": [
+              "high_protein",
+              "energy",
+              "antioxidant",
+              "hormone_balance",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "detox_greens",
+            "name": "Detox Greens",
+            "type": "smoothie",
+            "price_usd": 11.95,
+            "protein_g": 6,
+            "image_path": "/images/DetoxGreens.jpg",
+            "ingredients": [
+              "pineapple",
+              "spinach",
+              "banana",
+              "coconut water",
+              "Detox Tonic"
+            ],
+            "health_tags": [
+              "detox",
+              "antioxidant",
+              "hydration",
+              "low_calorie",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "flax_master",
+            "name": "Flax Master™",
+            "type": "smoothie",
+            "price_usd": 13.95,
+            "protein_g": 24,
+            "image_path": "/images/FlaxMaster.jpg",
+            "ingredients": [
+              "acai",
+              "blueberry",
+              "banana",
+              "almond butter",
+              "cinnamon",
+              "coconut water",
+              "Earthfusion protein",
+              "maca",
+              "L‑glutamine",
+              "vitamin B‑12",
+              "flax oil"
+            ],
+            "health_tags": [
+              "high_protein",
+              "antioxidant",
+              "omega_3",
+              "energy",
+              "muscle_recovery",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "great_breakfast",
+            "name": "Great Breakfast",
+            "type": "smoothie",
+            "price_usd": 12.95,
+            "protein_g": 28,
+            "image_path": "/images/GreatBreakfast.jpg",
+            "ingredients": [
+              "banana",
+              "almond butter",
+              "almond milk",
+              "Earthfusion protein",
+              "granola"
+            ],
+            "health_tags": [
+              "high_protein",
+              "energy",
+              "fiber",
+              "meal_replacement",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "muscle_up",
+            "name": "Muscle Up",
+            "type": "smoothie",
+            "price_usd": 12.95,
+            "protein_g": 27,
+            "image_path": "/images/MuscleUp.jpg",
+            "ingredients": [
+              "banana",
+              "almond butter",
+              "almond milk",
+              "Earthfusion protein",
+              "L‑glutamine"
+            ],
+            "health_tags": [
+              "high_protein",
+              "muscle_recovery",
+              "energy",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "power_shred",
+            "name": "Power Shred™",
+            "type": "smoothie",
+            "price_usd": 14.95,
+            "protein_g": 23,
+            "image_path": "/images/PowerShred.png",
+            "ingredients": [
+              "mango",
+              "banana",
+              "spinach",
+              "sea salt",
+              "vanilla",
+              "cinnamon",
+              "chia seeds",
+              "coconut",
+              "coconut water",
+              "Earthfusion vanilla plant protein",
+              "L‑glutamine",
+              "creatine",
+              "BCAAs"
+            ],
+            "health_tags": [
+              "high_protein",
+              "muscle_recovery",
+              "weight_management",
+              "antioxidant",
+              "energy",
+              "hydration",
+              "plant_based"
+            ]
+          },
+          {
+            "id": "slim_down",
+            "name": "Slim Down",
+            "type": "smoothie",
+            "price_usd": 12.95,
+            "protein_g": 21,
+            "image_path": "/images/SlimDown.jpg",
+            "ingredients": [
+              "strawberry",
+              "pineapple",
+              "Earthfusion protein",
+              "coconut water",
+              "Slim Down™ Boost"
+            ],
+            "health_tags": [
+              "high_protein",
+              "weight_management",
+              "antioxidant",
+              "hydration",
+              "plant_based"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "protein_coffee",
+        "label": "Protein Coffee",
+        "items": [
+          {
+            "id": "original_fit_frappe",
+            "name": "Original Fit Frappe",
+            "type": "protein_coffee",
+            "price_usd": 9.95,
+            "protein_g": null,
+            "image_path": "/images/OriginalFitFrappe.jpg",
+            "ingredients": [
+              "vanilla Earthfusion protein",
+              "coffee",
+              "electrolytes",
+              "banana",
+              "dates",
+              "vanilla"
+            ],
+            "health_tags": [
+              "high_protein",
+              "energy",
+              "caffeine",
+              "electrolytes"
+            ]
+          },
+          {
+            "id": "mocha_fit_frappe",
+            "name": "Mocha Fit Frappe",
+            "type": "protein_coffee",
+            "price_usd": 10.95,
+            "protein_g": null,
+            "image_path": "/images/MochaFitFrapee.jpg",
+            "ingredients": [
+              "Earthfusion protein",
+              "cacao nibs",
+              "cacao powder",
+              "coffee",
+              "electrolytes",
+              "banana",
+              "dates",
+              "vanilla"
+            ],
+            "health_tags": [
+              "high_protein",
+              "energy",
+              "caffeine",
+              "antioxidant",
+              "electrolytes"
+            ]
+          },
+          {
+            "id": "matcha_fit_frappe",
+            "name": "Matcha Fit Frappe",
+            "type": "protein_coffee",
+            "price_usd": 11.95,
+            "protein_g": null,
+            "image_path": "/images/MatchaFitFrappe.jpg",
+            "ingredients": [
+              "Earthfusion protein",
+              "ceremonial grade matcha",
+              "cinnamon",
+              "electrolytes",
+              "banana",
+              "dates",
+              "vanilla"
+            ],
+            "health_tags": [
+              "high_protein",
+              "energy",
+              "caffeine",
+              "antioxidant",
+              "electrolytes"
+            ]
+          },
+          {
+            "id": "protein_cold_foam_coffee",
+            "name": "Protein Cold Foam Coffee",
+            "type": "protein_coffee",
+            "price_usd": 5.95,
+            "protein_g": 12,
+            "image_path": "/images/ProteinColdFoamCoffee.jpg",
+            "ingredients": [
+              "coffee",
+              "whey protein",
+              "coconut",
+              "hemp milk",
+              "vanilla"
+            ],
+            "health_tags": [
+              "high_protein",
+              "caffeine",
+              "energy"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "coffee_lattes_tea",
+        "label": "Coffee, Lattes, & Tea",
+        "items": [
+          {
+            "id": "brain_alchemy_latte",
+            "name": "Brain Alchemy Latte",
+            "type": "latte_tea",
+            "price_usd": 5.95,
+            "protein_g": null,
+            "image_path": "/images/BrainAlchemyLatte.jpg",
+            "ingredients": [
+              "Get Up & Go Go herbal tonic",
+              "cacao",
+              "cinnamon",
+              "vanilla",
+              "coconut nectar",
+              "almond milk"
+            ],
+            "health_tags": [
+              "caffeine",
+              "antioxidant",
+              "energy",
+              "brain_boost"
+            ]
+          },
+          {
+            "id": "collagen_mocha_latte",
+            "name": "Collagen Mocha Latte",
+            "type": "latte_tea",
+            "price_usd": 5.95,
+            "protein_g": null,
+            "image_path": "/images/CollagenMochaLatte.jpg",
+            "ingredients": [
+              "Glow & Restore Collagen",
+              "coffee",
+              "cacao",
+              "reishi mushroom",
+              "vanilla",
+              "coconut nectar",
+              "almond milk"
+            ],
+            "health_tags": [
+              "caffeine",
+              "collagen",
+              "antioxidant",
+              "immune_support",
+              "skin_health"
+            ]
+          },
+          {
+            "id": "golden_immunity_latte",
+            "name": "Golden Immunity Latte (Caffeine Free)",
+            "type": "latte_tea",
+            "price_usd": 5.95,
+            "protein_g": null,
+            "image_path": "/images/GoldenImmunityLate.jpg",
+            "ingredients": [
+              "Super Immune herbal tonic",
+              "turmeric",
+              "cinnamon",
+              "ginger",
+              "maca",
+              "black pepper",
+              "honey",
+              "almond milk"
+            ],
+            "health_tags": [
+              "immune_support",
+              "anti_inflammatory",
+              "caffeine_free",
+              "antioxidant"
+            ]
+          },
+          {
+            "id": "mindful_matcha_latte",
+            "name": "Mindful Matcha Latte",
+            "type": "latte_tea",
+            "price_usd": 5.95,
+            "protein_g": null,
+            "image_path": "/images/MindfulMatchaLatte.jpg",
+            "ingredients": [
+              "Get Up & Go Go herbal tonic",
+              "ceremonial grade matcha",
+              "blue spirulina",
+              "MCT oil",
+              "vanilla",
+              "coconut nectar",
+              "almond milk"
+            ],
+            "health_tags": [
+              "caffeine",
+              "antioxidant",
+              "brain_boost",
+              "energy",
+              "healthy_fats"
+            ]
+          },
+          {
+            "id": "superfood_coffee",
+            "name": "Superfood Coffee",
+            "type": "latte_tea",
+            "price_usd": 4.25,
+            "protein_g": null,
+            "image_path": "/images/SuperfoodCoffee.jpg",
+            "ingredients": [
+              "100% Arabica bean coffee",
+              "matcha",
+              "goji berry",
+              "rooibos red tea",
+              "South African honeybush"
+            ],
+            "health_tags": [
+              "caffeine",
+              "antioxidant",
+              "energy",
+              "immune_support"
+            ]
+          }
+        ]
+      }
+    ]
+  }

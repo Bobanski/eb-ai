@@ -1,0 +1,11 @@
+user_input,expected_id
+"I need something high in protein for muscle recovery after my workout",muscle_up
+"I'm looking for a detox drink with low calories",detox_greens
+"I want something with coffee and protein for energy",original_fit_frappe
+"I need an immunity boost without caffeine",golden_immunity_latte
+"I want a breakfast replacement with protein",great_breakfast
+"I'm trying to lose weight and need something with protein",slim_down
+"I need something with antioxidants and healthy fats",blue_moon
+"I want a matcha drink with protein",matcha_fit_frappe
+"I need a brain boost with caffeine",brain_alchemy_latte
+"I want something with collagen for skin health",collagen_mocha_latte

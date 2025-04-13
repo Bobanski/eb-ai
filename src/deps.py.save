@@ -1,0 +1,27 @@
+
+
+
+# src/deps.py
+from pathlib import Path
+from functools import lru_cache
+import os, yaml
+from dotenv import load_dotenv
+from openai import OpenAI
+
+# Auto‑load .env when running locally
+load_dotenv()
+
+BASE_DIR = Path(__file__).resolve().parents[1]
+
+@lru_cache
+def settings():
+    """Return merged YAML + environment settings."""
+    cfg = yaml.safe_load((BASE_DIR / "llm/config.yaml").read_text())
+    # Env var overrides YAML (good for prod)
+    cfg["api_key"] = os.getenv("OPENAI_API_KEY", cfg.get("api_key"))
+    return cfg
+
+@lru_cache
+def openai_client() -> OpenAI:
+    cfg = settings()
+    return OpenAI(api_key=cfg["api_key"])

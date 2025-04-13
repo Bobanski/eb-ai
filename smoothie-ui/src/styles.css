@@ -6,9 +6,10 @@
 /* Apply custom fonts */
 body {
   font-family: 'Inter', sans-serif;
-  /* White background as requested */
-  background: white;
+  /* Light blue background to match App.jsx */
+  background: #c7e0ff;
   min-height: 100vh;
+  padding-bottom: env(safe-area-inset-bottom, 0px); /* Ensure bottom padding respects safe areas */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -180,9 +181,9 @@ main > div * {
   border-color: transparent;
 }
 
-/* White background (no gradient) */
+/* Light blue background to match gradient bottom */
 body {
-  background: white;
+  background: #c7e0ff;
 }
 
 /* Custom rounded corners for user messages */
@@ -224,4 +225,30 @@ body {
   text-align: center;
   color: #6b7280;
   font-size: 0.875rem;
+}
+
+.content-container { /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL & MOBILE-UI-ELEMENT-SIZING */
+  width: 100%; /* MOBILE-UI-ELEMENT-SIZING */
+  max-width: 95%; /* MOBILE-UI-ELEMENT-SIZING - For mobile */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  margin: -85px auto 0; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - Negative margin to move content way up */
+  padding-top: 10px; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - For mobile */
+  padding: 0 0.75rem; /* MOBILE-UI-ELEMENT-POSITIONING-HORIZONTAL - For mobile */
+  overflow-x: hidden;
+  overflow-y: auto;
+  box-sizing: border-box;
+  z-index: 10;
+  position: relative;
+}
+
+@media (min-width: 769px) {
+  .content-container {
+    max-width: 600px; /* MOBILE-UI-ELEMENT-SIZING - For desktop */
+    margin-top: 0; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - For desktop */
+    padding-top: 0; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - For desktop */
+    padding: 0 1rem; /* MOBILE-UI-ELEMENT-POSITIONING-HORIZONTAL - For desktop */
+  }
 }

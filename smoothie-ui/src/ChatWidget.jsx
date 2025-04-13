@@ -94,7 +94,7 @@ export default function ChatWidget() {
   const scrollToBottom = () =>
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
 
-  useEffect(scrollToBottom, [messages]);
+  // useEffect(scrollToBottom, []);
 
   const getCurrentTime = () =>
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });

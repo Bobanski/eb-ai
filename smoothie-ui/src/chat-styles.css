@@ -534,8 +534,11 @@ p {
     overflow-x: hidden;
     overflow-y: hidden; /* Prevent outer container from scrolling */
     position: relative;
-    padding-top: 1.5rem; /* Increase top padding to shift everything down more */
-    padding-bottom: env(safe-area-inset-bottom, 1rem); /* Add bottom padding for iOS compatibility */
+    padding-top: 0.8rem; /* Reduced top padding to move content down less */
+    padding-bottom: env(safe-area-inset-bottom, 0.5rem); /* Reduced bottom padding to bring content closer to footer */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align content toward the bottom */
   }
   
   /* Adjust smoothie image size */
@@ -615,7 +618,10 @@ p {
     padding: 0.2rem 0;
     width: 100%;
     margin: 0 auto;
-    padding-top: 1.75rem; /* Increase top padding to shift everything down more */
+    padding-top: 0.8rem; /* Reduced top padding to move content down less */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align content toward the bottom */
   }
   
   p {
@@ -692,7 +698,10 @@ p {
     width: 98%;
     margin: 0 auto;
     padding: 0.15rem 0;
-    padding-top: 0.5rem; /* Add top padding to shift everything down */
+    padding-top: 0.3rem; /* Reduced top padding */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align content toward the bottom */
     padding-bottom: env(safe-area-inset-bottom, 0.6rem); /* Add bottom padding for iOS compatibility */
   }
   
@@ -723,8 +732,11 @@ p {
   .main-content {
     width: 100%;
     margin: 0 auto;
-    padding-top: 1.2rem; /* Increase top padding to shift everything down more */
-    padding-bottom: env(safe-area-inset-bottom, 0.8rem); /* Add bottom padding for iOS compatibility */
+    padding-top: 0.6rem; /* Reduced top padding */
+    padding-bottom: env(safe-area-inset-bottom, 0.4rem); /* Reduced bottom padding */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Align content toward the bottom */
   }
   
   .chat-container {

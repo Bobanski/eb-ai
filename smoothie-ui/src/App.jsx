@@ -47,6 +47,7 @@ export default function App() {
         alignItems: "center",
         justifyContent: "center",
         fontSize: isVerySmallMobile ? "0.85rem" : (isMobile ? "0.9rem" : "1rem"), // Smaller base font size on mobile devices
+        paddingTop: isMobile ? "2rem" : "0", // Add top padding on mobile to push content down
         overflow: "hidden", // Prevent outer container from scrolling
       }}
     >

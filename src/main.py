@@ -18,7 +18,11 @@ production_origins = [
     "https://smoothie-bot.vercel.app",  # Main production URL
     "https://www.smoothie-bot.vercel.app",  # With www subdomain
     "https://smoothie-bot-git-main.vercel.app",
-    "https://eb-ai-backend.vercel.app"  # Vercel preview URL pattern
+    "https://eb-ai-backend.vercel.app",  # Backend URL
+    "https://smoothie-bot-frontend.vercel.app",  # Frontend URL 1
+    "https://www.smoothie-bot-frontend.vercel.app",  # Frontend URL 1 with www
+    "https://earthbar-ai.vercel.app",  # Frontend URL 2
+    "https://www.earthbar-ai.vercel.app"  # Frontend URL 2 with www
 ]
 
 # Combine default and production origins if ALLOWED_ORIGINS is not set

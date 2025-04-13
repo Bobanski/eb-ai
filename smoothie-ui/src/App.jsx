@@ -40,15 +40,19 @@ export default function App() {
   return (
     <div
       style={{
-        position: "fixed",
-        inset: 0,
+        position: "relative", // Use relative positioning instead of fixed
+        minHeight: "100vh", // Use viewport height for full screen
         background: "linear-gradient(to bottom, #e8f3ff, #c7e0ff)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         fontSize: isVerySmallMobile ? "0.85rem" : (isMobile ? "0.9rem" : "1rem"), // Smaller base font size on mobile devices
-        paddingTop: isMobile ? "2rem" : "0", // Add top padding on mobile to push content down
-        overflow: "hidden", // Prevent outer container from scrolling
+        paddingTop: isMobile ? "env(safe-area-inset-top, 2rem)" : "0", // Use safe area inset for top padding
+        paddingBottom: isMobile ? "env(safe-area-inset-bottom, 0.5rem)" : "0", // Use safe area inset for bottom padding
+        overflowX: "hidden", // Prevent horizontal scrolling
+        overflowY: "auto", // Allow vertical scrolling if needed
+        width: "100%",
+        boxSizing: "border-box",
       }}
     >
       <img
@@ -56,7 +60,7 @@ export default function App() {
         alt="Earthbar Logo"
         style={{
           position: "absolute",
-          top: isVerySmallMobile ? "2px" : (isMobile ? "5px" : "20px"),
+          top: isVerySmallMobile ? "calc(env(safe-area-inset-top, 0) + 2px)" : (isMobile ? "calc(env(safe-area-inset-top, 0) + 5px)" : "20px"),
           left: isVerySmallMobile ? "2px" : (isMobile ? "5px" : "20px"),
           width: isVerySmallMobile ? "18px" : (isMobile ? "22px" : "120px"), // Make logo much smaller on mobile
           zIndex: "10",
@@ -66,27 +70,38 @@ export default function App() {
       <div
         style={{
           width: "100%",
-          maxWidth: "600px",
+          maxWidth: isMobile ? "95%" : "600px", // Slightly wider on mobile
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "center", // Center content vertically
           margin: "0 auto",
           padding: isVerySmallMobile ? "0 0.5rem" : (isMobile ? "0 0.75rem" : "0 1rem"),
-          overflow: "hidden", // Prevent this container from scrolling
+          overflowX: "hidden", // Prevent horizontal scrolling
+          overflowY: "auto", // Allow vertical scrolling if needed
+          boxSizing: "border-box",
         }}
       >
         <ChatWidget />
-        <p style={{
-          color: "black",
-          marginTop: isVerySmallMobile ? "0.5rem" : (isMobile ? "0.75rem" : "1.5rem"),
-          fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
-          fontWeight: "bold",
-          fontSize: isVerySmallMobile ? "0.8rem" : (isMobile ? "0.9rem" : "1.2rem"), // Smaller text on mobile
-          marginBottom: isMobile ? "env(safe-area-inset-bottom, 0.5rem)" : 0, // Reduced bottom margin to bring content closer
-          paddingBottom: isMobile ? "0.5rem" : 0 // Reduced padding to bring content closer
+        {/* Footer text inside the main container */}
+        <div style={{
+          width: "100%",
+          textAlign: "center",
+          marginTop: "auto", // Push to bottom of flex container
+          paddingTop: "1rem",
+          paddingBottom: isMobile ? "env(safe-area-inset-bottom, 0.5rem)" : "0.5rem",
         }}>
-          Be more than well.
-        </p>
+          <p style={{
+            color: "black",
+            fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
+            fontWeight: "bold",
+            fontSize: isVerySmallMobile ? "0.8rem" : (isMobile ? "0.9rem" : "1.2rem"), // Smaller text on mobile
+            margin: 0,
+            padding: 0,
+          }}>
+            Be more than well.
+          </p>
+        </div>
       </div>
     </div>
   );

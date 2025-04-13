@@ -2,11 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global lock to prevent page scrolling but allow internal scrolling */
+/* Mobile-friendly layout that respects safe areas and prevents cropping */
 html, body {
   height: 100%;
-  overflow: hidden; /* Prevent page scrolling */
-  position: fixed; /* Ensure the app stays fixed on screen */
-  inset: 0; /* Cover the entire viewport */
+  min-height: 100vh; /* Use viewport height instead of fixed positioning */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  overflow-y: auto; /* Allow vertical scrolling if needed */
+  position: relative; /* Use relative positioning instead of fixed */
   width: 100%;
+  margin: 0;
+  padding: 0;
+  /* Add safe area insets for iOS devices */
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
 }

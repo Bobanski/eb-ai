@@ -46,7 +46,8 @@ export default function App() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: isVerySmallMobile ? "0.9rem" : "1rem", // Smaller base font size on very small devices
+        fontSize: isVerySmallMobile ? "0.85rem" : (isMobile ? "0.9rem" : "1rem"), // Smaller base font size on mobile devices
+        overflow: "hidden", // Prevent outer container from scrolling
       }}
     >
       <img
@@ -54,11 +55,11 @@ export default function App() {
         alt="Earthbar Logo"
         style={{
           position: "absolute",
-          top: isVerySmallMobile ? "5px" : (isMobile ? "10px" : "20px"),
-          left: isVerySmallMobile ? "5px" : (isMobile ? "10px" : "20px"),
-          width: isVerySmallMobile ? "30px" : (isMobile ? "40px" : "120px"), // Shrink logo by ~50% on mobile
+          top: isVerySmallMobile ? "3px" : (isMobile ? "8px" : "20px"),
+          left: isVerySmallMobile ? "3px" : (isMobile ? "8px" : "20px"),
+          width: isVerySmallMobile ? "25px" : (isMobile ? "35px" : "120px"), // Shrink logo more on very small screens
           zIndex: "10",
-          opacity: "0.9", // Slightly reduce opacity for better visual integration
+          opacity: "0.8", // Further reduce opacity on mobile for better visual integration
         }}
       />
       <div
@@ -69,17 +70,18 @@ export default function App() {
           flexDirection: "column",
           alignItems: "center",
           margin: "0 auto",
-          padding: "0 1rem",
-          // Remove transform scaling which causes layout issues
+          padding: isVerySmallMobile ? "0 0.5rem" : (isMobile ? "0 0.75rem" : "0 1rem"),
+          overflow: "hidden", // Prevent this container from scrolling
         }}
       >
         <ChatWidget />
         <p style={{
           color: "black",
-          marginTop: "1.5rem",
+          marginTop: isVerySmallMobile ? "0.5rem" : (isMobile ? "0.75rem" : "1.5rem"),
           fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           fontWeight: "bold",
-          fontSize: isMobile ? "1rem" : "1.2rem" // Smaller text on mobile
+          fontSize: isVerySmallMobile ? "0.8rem" : (isMobile ? "0.9rem" : "1.2rem"), // Smaller text on mobile
+          marginBottom: 0
         }}>
           Be more than well.
         </p>

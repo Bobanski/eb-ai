@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Global lock to prevent page scrolling */
+/* Global lock to prevent page scrolling but allow internal scrolling */
 html, body {
   height: 100%;
-  overflow: hidden;
+  overflow: hidden; /* Prevent page scrolling */
+  position: fixed; /* Ensure the app stays fixed on screen */
+  inset: 0; /* Cover the entire viewport */
+  width: 100%;
 }

@@ -81,7 +81,8 @@ export default function App() {
           fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
           fontWeight: "bold",
           fontSize: isVerySmallMobile ? "0.8rem" : (isMobile ? "0.9rem" : "1.2rem"), // Smaller text on mobile
-          marginBottom: 0
+          marginBottom: isMobile ? "env(safe-area-inset-bottom, 1.5rem)" : 0, // Add bottom margin on mobile to avoid browser controls
+          paddingBottom: isMobile ? "0.75rem" : 0 // Additional padding to ensure visibility
         }}>
           Be more than well.
         </p>

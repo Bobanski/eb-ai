@@ -18,7 +18,6 @@ production_origins = [
     "https://smoothie-bot.vercel.app",  # Main production URL
     "https://www.smoothie-bot.vercel.app",  # With www subdomain
     "https://smoothie-bot-git-main.vercel.app",
-    "https://eb-ai-frontend.vercel.app",
     "https://eb-ai-backend.vercel.app"  # Vercel preview URL pattern
 ]
 

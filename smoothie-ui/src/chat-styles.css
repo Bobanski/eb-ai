@@ -47,11 +47,9 @@ p {
   align-items: center;
   justify-content: center;
   box-sizing: border-box;
-  /* Mobile-friendly scrolling */
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden;
   position: relative;
-  min-height: 100vh; /* Use viewport height for full screen */
   padding-top: env(safe-area-inset-top, 0); /* Safe area inset for top */
   padding-bottom: env(safe-area-inset-bottom, 0); /* Safe area inset for bottom */
 }
@@ -93,6 +91,18 @@ p {
   background-color: white;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+  .main-content {
+    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
+    overflow-y: auto; /* Allow vertical scrolling if needed */
+  }
+  
+  .chat-messages {
+    height: calc(100dvh - 12rem); /* Use dynamic viewport height for better iOS support */
+  }
 }
 
 /* Message alignment */
@@ -554,10 +564,10 @@ p {
     width: 100%;
     max-width: 100vw;
     margin: 0 auto;
-    min-height: 100vh; /* Use viewport height instead of fixed height */
+    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
     box-sizing: border-box;
     overflow-x: hidden;
-    overflow-y: auto; /* Allow vertical scrolling if needed */
+    overflow: hidden; /* Prevent scroll bounce on iOS */
     position: relative;
     padding-top: calc(env(safe-area-inset-top, 0) + 0.68rem); /* Safe area inset plus padding */
     padding-bottom: env(safe-area-inset-bottom, 0.5rem); /* Safe area inset for bottom */
@@ -614,11 +624,11 @@ p {
   }
   
   .chat-messages {
-    height: calc(100vh - 14rem); /* Further adjust for very small screens */
+    height: calc(100dvh - 14rem); /* Use dynamic viewport height for better iOS support */
     padding: 0.3rem;
     gap: 0.75rem;
-    max-height: 55vh; /* Use viewport height for better mobile scaling */
-    min-height: 45vh; /* Use viewport height for better mobile scaling */
+    max-height: 55dvh; /* Use dynamic viewport height for better iOS support */
+    min-height: 45dvh; /* Use dynamic viewport height for better iOS support */
   }
   
   .message-wrapper-inner {
@@ -656,7 +666,7 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
-    min-height: 100vh; /* Use viewport height for full screen */
+    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
   }
   
   p {
@@ -692,7 +702,7 @@ p {
 /* Optimize for landscape orientation on mobile */
 @media (max-height: 500px) and (orientation: landscape) {
   .chat-messages {
-    height: calc(100vh - 8rem); /* Adjust for landscape */
+    height: calc(100dvh - 8rem); /* Use dynamic viewport height for better iOS support */
     min-height: 9rem;
   }
   
@@ -733,11 +743,12 @@ p {
     width: 98%;
     margin: 0 auto;
     padding: 0.15rem 0;
-    padding-top: 0.3rem; /* Reduced top padding */
+    padding-top: calc(env(safe-area-inset-top, 0) + 0.3rem); /* Safe area inset plus padding */
     display: flex;
     flex-direction: column;
     justify-content: flex-end; /* Align content toward the bottom */
     padding-bottom: env(safe-area-inset-bottom, 0.6rem); /* Add bottom padding for iOS compatibility */
+    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
   }
   
   /* Adjust input area for landscape */
@@ -772,7 +783,7 @@ p {
     display: flex;
     flex-direction: column;
     justify-content: center; /* Center content vertically */
-    min-height: 100vh; /* Use viewport height for full screen */
+    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
   }
   
   .chat-container {
@@ -790,9 +801,9 @@ p {
   }
   
   .chat-messages {
-    height: calc(100vh - 12rem); /* Adjust height */
-    max-height: 58vh; /* Use viewport height for better mobile scaling */
-    min-height: 48vh; /* Use viewport height for better mobile scaling */
+    height: calc(100dvh - 12rem); /* Use dynamic viewport height for better iOS support */
+    max-height: 58dvh; /* Use dynamic viewport height for better iOS support */
+    min-height: 48dvh; /* Use dynamic viewport height for better iOS support */
   }
   
   /* Adjust header for intermediate size */

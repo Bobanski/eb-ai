@@ -37,23 +37,39 @@ export default function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Separate styles for mobile and desktop to preserve desktop experience
+  const mobileContainerStyle = {
+    minHeight: "100dvh", // Use dynamic viewport height for better iOS support
+    paddingTop: "env(safe-area-inset-top, 0)",
+    paddingBottom: "env(safe-area-inset-bottom, 0)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "linear-gradient(to bottom, #e8f3ff, #c7e0ff)",
+    position: "relative", // Use relative positioning instead of fixed
+    overflow: "hidden", // Prevent scroll bounce on iOS
+    width: "100%",
+    boxSizing: "border-box",
+    fontSize: isVerySmallMobile ? "0.85rem" : "0.9rem", // Smaller base font size on mobile devices
+  };
+
+  // Original desktop style
+  const desktopContainerStyle = {
+    position: "fixed",
+    inset: 0,
+    background: "linear-gradient(to bottom, #e8f3ff, #c7e0ff)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    fontSize: "1rem",
+    overflow: "hidden",
+  };
+
+  // Use the appropriate style based on device type
+  const outerContainerStyle = isMobile ? mobileContainerStyle : desktopContainerStyle;
+
   return (
-    <div
-      style={{
-        position: "relative", // Use relative positioning instead of fixed
-        minHeight: "100vh", // Use viewport height for full screen
-        background: "linear-gradient(to bottom, #e8f3ff, #c7e0ff)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        fontSize: isVerySmallMobile ? "0.85rem" : (isMobile ? "0.9rem" : "1rem"), // Smaller base font size on mobile devices
-        paddingTop: isMobile ? "env(safe-area-inset-top, 2rem)" : "0", // Use safe area inset for top padding
-        paddingBottom: isMobile ? "env(safe-area-inset-bottom, 0.5rem)" : "0", // Use safe area inset for bottom padding
-        overflowX: "hidden", // Prevent horizontal scrolling
-        overflowY: "auto", // Allow vertical scrolling if needed
-        width: "100%",
-        boxSizing: "border-box",
-      }}
+    <div style={outerContainerStyle}
     >
       <img
         src={EarthbarLogo}

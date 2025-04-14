@@ -351,8 +351,23 @@ export const getInputFieldStyles = (deviceInfo) => {
       backgroundColor: layout.INPUT_FIELD.BACKGROUND_COLOR,
       color: layout.INPUT_FIELD.TEXT_COLOR,
       borderRadius: layout.INPUT_FIELD.BORDER_RADIUS,
-      border: `1px solid ${layout.INPUT_FIELD.BORDER_COLOR}`
+      border: `1px solid ${layout.INPUT_FIELD.BORDER_COLOR}`,
+      boxSizing: 'border-box', // Ensure consistent box model
+      lineHeight: '1', // Control text vertical alignment
+      display: 'flex',
+      alignItems: 'center'
     };
+    
+    // Add vertical position if specified in the layout
+    if (layout.INPUT_FIELD.VERTICAL_POSITION) {
+      styles.position = 'absolute';
+      styles.top = layout.INPUT_FIELD.VERTICAL_POSITION;
+    }
+    
+    // Add height if specified in the layout
+    if (layout.INPUT_FIELD.HEIGHT) {
+      styles.height = layout.INPUT_FIELD.HEIGHT;
+    }
     
     // Add width if specified in the layout
     if (layout.INPUT_FIELD.WIDTH) {
@@ -394,7 +409,7 @@ export const getSendButtonStyles = (deviceInfo, isEnabled = true) => {
   
   // Only apply these styles if SEND_BUTTON exists in the layout
   if (layout.SEND_BUTTON) {
-    return {
+    const styles = {
       padding: layout.SEND_BUTTON.PADDING,
       fontSize: layout.SEND_BUTTON.FONT_SIZE,
       fontWeight: layout.SEND_BUTTON.FONT_WEIGHT,
@@ -402,8 +417,31 @@ export const getSendButtonStyles = (deviceInfo, isEnabled = true) => {
       backgroundColor: isEnabled ? layout.SEND_BUTTON.ENABLED_BG_COLOR : layout.SEND_BUTTON.DISABLED_BG_COLOR,
       color: isEnabled ? layout.SEND_BUTTON.ENABLED_TEXT_COLOR : layout.SEND_BUTTON.DISABLED_TEXT_COLOR,
       cursor: isEnabled ? 'pointer' : 'not-allowed',
-      transition: 'background-color 0.2s'
+      transition: 'background-color 0.2s',
+      boxSizing: 'border-box', // Ensure consistent box model
+      lineHeight: '1', // Control text vertical alignment
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
     };
+    
+    // Add vertical position if specified in the layout
+    if (layout.SEND_BUTTON.VERTICAL_POSITION) {
+      styles.position = 'absolute';
+      styles.top = layout.SEND_BUTTON.VERTICAL_POSITION;
+    }
+    
+    // Add height if specified in the layout
+    if (layout.SEND_BUTTON.HEIGHT) {
+      styles.height = layout.SEND_BUTTON.HEIGHT;
+    }
+    
+    // Add left offset if specified in the layout
+    if (layout.SEND_BUTTON.LEFT_OFFSET) {
+      styles.marginLeft = layout.SEND_BUTTON.LEFT_OFFSET;
+    }
+    
+    return styles;
   } // End of if (layout.SEND_BUTTON)
   
   // Return default styles if not defined in layout for getSendButtonStyles

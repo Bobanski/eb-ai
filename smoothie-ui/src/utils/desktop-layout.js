@@ -16,11 +16,11 @@ const DESKTOP_LAYOUT = {
    * Controls the positioning of the header container with logo and title
    */
   HEADER: {
-    // Absolute position from the top of the container
-    TOP: '30px',
+    // Position from the top of the container (percentage-based)
+    TOP: '3%',
     
     // Horizontal position (centered by default)
-    LEFT: '-1.1rem',
+    LEFT: '-4%',
     RIGHT: '0',
     
     // Internal padding of the header
@@ -35,14 +35,14 @@ const DESKTOP_LAYOUT = {
    * Note: The logo is absolutely positioned and won't affect other elements
    */
   APP_LOGO: {
-    // Logo height (controls the size of the logo)
-    HEIGHT: '100px',
+    // Logo height (controls the size of the logo - percentage of viewport height)
+    HEIGHT: '12vh',
     
-    // Absolute position from the left edge
-    LEFT_MARGIN: '-5rem',
+    // Position from the left edge (percentage-based)
+    LEFT_MARGIN: '-8%',
     
-    // Absolute position from the top edge
-    TOP_OFFSET: '2rem',
+    // Position from the top edge (percentage-based)
+    TOP_OFFSET: '3%',
     
     // Z-index (controls stacking order - higher numbers appear on top)
     Z_INDEX: 20
@@ -53,8 +53,8 @@ const DESKTOP_LAYOUT = {
    * Controls the size and appearance of the SVG logo in the chat header
    */
   CHAT_LOGO: {
-    // Logo height (controls the size of the logo)
-    HEIGHT: '2.75rem',
+    // Logo height (controls the size of the logo - percentage of viewport height)
+    HEIGHT: '4vh',
     
     // Width setting (auto by default)
     WIDTH: 'auto',
@@ -68,8 +68,8 @@ const DESKTOP_LAYOUT = {
    * Controls the size and appearance of title text
    */
   TITLE: {
-    // Font size of the title text
-    FONT_SIZE: '1.75rem',
+    // Font size of the title text (using viewport width units for responsive text)
+    FONT_SIZE: '1vw',
     
     // Line height of the title text
     LINE_HEIGHT: 1.2
@@ -80,11 +80,11 @@ const DESKTOP_LAYOUT = {
    * Controls the size and appearance of subtitle text
    */
   SUBTITLE: {
-    // Font size of the subtitle text
-    FONT_SIZE: '0.9rem',
+    // Font size of the subtitle text (using viewport width units for responsive text)
+    FONT_SIZE: '.8vw',
     
-    // Space above the subtitle
-    TOP_MARGIN: '0.75rem'
+    // Space above the subtitle (percentage-based)
+    TOP_MARGIN: '1%'
   },
   
   /**
@@ -96,18 +96,18 @@ const DESKTOP_LAYOUT = {
     WIDTH: '100%',
     
     // Maximum width of the chat container
-    MAX_WIDTH: '1200px',
+    MAX_WIDTH: '250%',
     
-    // Absolute position from the top of the container
-    TOP: '150px',
+    // Position from the top of the container (percentage-based)
+    TOP: '18%',
     
-    // BOTTOM: '185px',
-    HEIGHT: '750px',
+    // BOTTOM: '20%',
+    HEIGHT: '65%',
     LEFT: '0',
     RIGHT: '0',
     
-    // Rounded corners radius
-    BORDER_RADIUS: '1.5rem',
+    // Rounded corners radius (using viewport width units)
+    BORDER_RADIUS: '1.5vw',
     
     // Z-index (controls stacking order - higher numbers appear on top)
     Z_INDEX: 5
@@ -119,12 +119,12 @@ const DESKTOP_LAYOUT = {
    */
   CHAT_MESSAGES: {
     POSITION: 'absolute',
-    TOP: '0',
+    TOP: '0%',
     LEFT: '0',
     RIGHT: '0',
-    BOTTOM: '6.5rem',
+    BOTTOM: '10%',
     OVERFLOW: 'auto',
-    PADDING: '1rem 1.25rem'
+    PADDING: '2% 2.5%'
   },
   
   /**
@@ -132,11 +132,11 @@ const DESKTOP_LAYOUT = {
    * Controls the positioning and appearance of the chat input area
    */
   CHAT_INPUT_AREA: {
-    // Height of the input area
-    HEIGHT: '4.5rem',
+    // Height of the input area (percentage-based)
+    HEIGHT: '5%',
     
-    // Internal padding of the input area
-    PADDING: '1rem 1rem',
+    // Internal padding of the input area (percentage-based)
+    PADDING: '2% 2%',
     
     // Extra padding for the bottom (adds safe area inset for iOS)
     PADDING_BOTTOM: 'calc(env(safe-area-inset-bottom, 0.75rem) + 0.5rem)',
@@ -146,7 +146,7 @@ const DESKTOP_LAYOUT = {
     
     // Position
     POSITION: 'relative',
-    BOTTOM: '20px'
+    BOTTOM: '2%'
   },
   
   /**
@@ -154,20 +154,26 @@ const DESKTOP_LAYOUT = {
    * Controls the appearance of the text input field
    */
   INPUT_FIELD: {
-    // Padding inside the input field
-    PADDING: '0.8rem 1rem',
+    // Padding inside the input field (percentage-based)
+    PADDING: '1.5% 2%',
     
-    // Font size of the input text
-    FONT_SIZE: '1rem',
+    // Font size of the input text (using viewport width units)
+    FONT_SIZE: '1vw',
     
     // Width of the input field (relative to container)
-    WIDTH: '114%',
+    WIDTH: '75%',
     
     // Position from the left side of the container
-    LEFT_OFFSET: '-5%',
+    LEFT_OFFSET: '-2%',
     
-    // Border radius for rounded corners
-    BORDER_RADIUS: '0.75rem',
+    // Vertical position relative to the container (percentage from top)
+    VERTICAL_POSITION: '18%',
+    
+    // Height of the input field (percentage-based)
+    HEIGHT: '95%',
+    
+    // Border radius for rounded corners (using viewport width units)
+    BORDER_RADIUS: '1vw',
     
     // Colors
     BACKGROUND_COLOR: 'white',
@@ -175,7 +181,7 @@ const DESKTOP_LAYOUT = {
     BORDER_COLOR: '#e5e7eb',
     
     // Gap between input field and send button
-    GAP: '0.75rem'
+    GAP: '1.5%'
   },
   
   /**
@@ -183,15 +189,24 @@ const DESKTOP_LAYOUT = {
    * Controls the appearance of the send button
    */
   SEND_BUTTON: {
-    // Padding inside the button
-    PADDING: '0.8rem 1.5rem',
+    // Padding inside the button (percentage-based)
+    PADDING: '1.5% 3%',
     
-    // Font size and weight
-    FONT_SIZE: '1rem',
+    // Font size and weight (using viewport width units)
+    FONT_SIZE: '1.2vw',
     FONT_WEIGHT: '500',
     
-    // Border radius for rounded corners
-    BORDER_RADIUS: '0.75rem',
+    // Vertical position relative to the container (percentage from top)
+    VERTICAL_POSITION: '18%',
+    
+    // Horizontal position from the left side of the container
+    LEFT_OFFSET: '77%',
+    
+    // Height of the button (percentage-based)
+    HEIGHT: '95%',
+    
+    // Border radius for rounded corners (using viewport width units)
+    BORDER_RADIUS: '1vw',
     
     // Colors for enabled state
     ENABLED_BG_COLOR: '#3b82f6',
@@ -207,18 +222,18 @@ const DESKTOP_LAYOUT = {
    * Controls the positioning of the footer
    */
   FOOTER: {
-    // Absolute position from the bottom of the container
-    BOTTOM: '140px',
+    // Position from the bottom of the container (percentage-based)
+    BOTTOM: '10%',
     
     // Horizontal position (centered by default)
-    LEFT: '-1.4rem',
+    LEFT: '-2%',
     RIGHT: '0',
     
-    // Internal padding of the footer
-    PADDING: '1rem',
+    // Internal padding of the footer (percentage-based)
+    PADDING: '1.5%',
     
-    // Font size of the footer text
-    FONT_SIZE: '1.2rem',
+    // Font size of the footer text (using viewport width units)
+    FONT_SIZE: '1.5vw',
     
     // Z-index (controls stacking order - higher numbers appear on top)
     Z_INDEX: 10
@@ -229,14 +244,14 @@ const DESKTOP_LAYOUT = {
    * Controls the overall container that holds all UI elements
    */
   CONTAINER: {
-    // Padding around the entire container
-    PADDING: '2rem',
+    // Padding around the entire container (percentage-based)
+    PADDING: '3%',
     
-    // Maximum width of the container
-    MAX_WIDTH: '600px',
+    // Maximum width of the container (percentage-based)
+    MAX_WIDTH: '80%',
     
-    // Base font size for the container
-    FONT_SIZE: '1rem'
+    // Base font size for the container (using viewport width units)
+    FONT_SIZE: '1.2vw'
   }
 ,
     PROMPT_BUTTONS: {
@@ -244,16 +259,16 @@ const DESKTOP_LAYOUT = {
         DISPLAY: 'flex',
         FLEX_DIRECTION: 'row',
         FLEX_WRAP: 'wrap',
-        GAP: '0.5rem',
+        GAP: '1%',
         JUSTIFY_CONTENT: 'space-around',
         WIDTH: '90%',
         POSITION: 'absolute',
         /* Shifting offsets below - user can adjust these to move container as desired. */
         TOP: 'auto',
-        LEFT: '20px',
-        RIGHT: '10px',
-        BOTTOM: '10px',
-        PADDING: '0.25rem 0',
+        LEFT: '4%',
+        RIGHT: '1.5%',
+        BOTTOM: '1%',
+        PADDING: '2.5% 0',
         BORDER_TOP: '1px solid #e5e7eb',
         BACKGROUND_COLOR: 'white'
       },
@@ -261,12 +276,12 @@ const DESKTOP_LAYOUT = {
         BACKGROUND_COLOR: '#f2f2f2',
         TEXT_COLOR: '#666666',
         BORDER: '1px solid #e0e0e0',
-        BORDER_RADIUS: '0.75rem',
-        PADDING: '0.5rem 0.25rem',
-        FONT_SIZE: '0.85rem',
+        BORDER_RADIUS: '1vw',
+        PADDING: '1% 0.5%',
+        FONT_SIZE: '0.8vw',
         FONT_WEIGHT: '400',
         WHITE_SPACE: 'normal',
-        LINE_HEIGHT: '1.2',
+        LINE_HEIGHT: '1.3',
         MAX_WIDTH: '31%'
       }
     }

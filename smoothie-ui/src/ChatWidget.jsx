@@ -268,7 +268,7 @@ export default function ChatWidget() {
     <div className="main-content">
       <div style={getHeaderStyles(deviceInfo)}>
         <div className="title-with-logo">
-          <div className="title-text">Your personal</div>
+          <div className="title-text" style={{fontSize: getLayout(deviceInfo).TITLE.FONT_SIZE, lineHeight: getLayout(deviceInfo).TITLE.LINE_HEIGHT}}>Your personal</div>
           <div className="logo-container">
             <img
               src={EarthBarLogo}
@@ -276,9 +276,9 @@ export default function ChatWidget() {
               style={getChatLogoStyles(deviceInfo)}
             />
           </div>
-          <div className="title-text">assistant</div>
+          <div className="title-text" style={{fontSize: getLayout(deviceInfo).TITLE.FONT_SIZE, lineHeight: getLayout(deviceInfo).TITLE.LINE_HEIGHT}}>assistant</div>
         </div>
-        <p className="subtitle">Tell us what you're craving, we'll pick out a smoothie that works as hard as you do</p>
+        <p className="subtitle" style={{fontSize: getLayout(deviceInfo).SUBTITLE.FONT_SIZE, marginTop: getLayout(deviceInfo).SUBTITLE.TOP_MARGIN}}>Tell us what you're craving, we'll pick out a smoothie that works as hard as you do</p>
       </div>
       <div style={getChatContainerStyles(deviceInfo)}>
         {/* Chat messages */}

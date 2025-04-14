@@ -16,11 +16,11 @@ const MOBILE_LAYOUT = {
    * Controls the positioning of the header container with logo and title
    */
   HEADER: {
-    // Absolute position from the top of the container
-    TOP: '-25px',
+    // Position from the top of the container (percentage-based)
+    TOP: '-3%',
     
     // Horizontal position (centered by default)
-    LEFT: '-0.7rem',
+    LEFT: '-2%',
     RIGHT: '0',
     
     // Internal padding of the header
@@ -35,16 +35,16 @@ const MOBILE_LAYOUT = {
    * Note: The logo is absolutely positioned and won't affect other elements
    */
   APP_LOGO: {
-    // Logo height (controls the size of the logo)
-    HEIGHT: '35px',
+    // Logo height (controls the size of the logo - percentage of viewport height)
+    HEIGHT: '5vh',
     
-    // Absolute position from the left edge
-    LEFT: '0.75rem',
-    LEFT_MARGIN: '0.75rem', // For inline style consistency
+    // Position from the left edge (percentage-based)
+    LEFT: '2%',
+    LEFT_MARGIN: '2%', // For inline style consistency
     
-    // Absolute position from the top edge
-    TOP: '0.75rem',
-    TOP_OFFSET: '0.75rem', // For inline style consistency
+    // Position from the top edge (percentage-based)
+    TOP: '2%',
+    TOP_OFFSET: '2%', // For inline style consistency
     
     // Z-index (controls stacking order - higher numbers appear on top)
     Z_INDEX: 20
@@ -55,8 +55,8 @@ const MOBILE_LAYOUT = {
    * Controls the size and appearance of the SVG logo in the chat header
    */
   CHAT_LOGO: {
-    // Logo height (controls the size of the logo)
-    HEIGHT: '2.1rem',
+    // Logo height (controls the size of the logo - percentage of viewport height)
+    HEIGHT: '4vh',
     
     // Width setting (auto by default)
     WIDTH: 'auto',
@@ -70,8 +70,8 @@ const MOBILE_LAYOUT = {
    * Controls the size and appearance of title text
    */
   TITLE: {
-    // Font size of the title text
-    FONT_SIZE: '0.85rem',
+    // Font size of the title text (using viewport width units for responsive text)
+    FONT_SIZE: '2.5vw',
     
     // Line height of the title text
     LINE_HEIGHT: 1.2
@@ -82,11 +82,11 @@ const MOBILE_LAYOUT = {
    * Controls the size and appearance of subtitle text
    */
   SUBTITLE: {
-    // Font size of the subtitle text
-    FONT_SIZE: '0.85rem',
+    // Font size of the subtitle text (using viewport width units for responsive text)
+    FONT_SIZE: '2.5vw',
     
-    // Space above the subtitle
-    TOP_MARGIN: '0.5rem'
+    // Space above the subtitle (percentage-based)
+    TOP_MARGIN: '1%'
   },
   
   /**
@@ -100,12 +100,12 @@ const MOBILE_LAYOUT = {
     // Maximum width of the chat container
     MAX_WIDTH: '95%',
     
-    // Absolute position from the top of the container
-    TOP: '85px',
+    // Position from the top of the container (percentage-based)
+    TOP: '0%',
     
-    // Absolute position from the bottom of the container
+    // Position from the bottom of the container (percentage-based)
     // Setting this extends the container downward
-    BOTTOM: '50px',
+    BOTTOM: '12%',
     
     // Horizontal position (centered by default)
     LEFT: '0',
@@ -118,7 +118,7 @@ const MOBILE_LAYOUT = {
     Z_INDEX: 5,
     
     // Height property (percentage of available space)
-    HEIGHT: 'calc(100dvh - 8rem)' // Further increased container height
+    HEIGHT: '80vh' // Using viewport height for responsive sizing
   },
   
   /**
@@ -126,17 +126,17 @@ const MOBILE_LAYOUT = {
    * Controls the chat messages area
    */
   CHAT_MESSAGES: {
-    // Height of the chat messages area - now using percentage
-    HEIGHT: 'calc(100% - 10rem)', // Adjusted to be relative to container height minus input area height
+    // Height of the chat messages area - using percentage
+    HEIGHT: '90%', // Percentage of container height
     
     // Maximum height of the chat messages area
-    MAX_HEIGHT: '100dvh',
+    MAX_HEIGHT: '90vh',
     
     // Minimum height of the chat messages area
     MIN_HEIGHT: '60vh',
     
-    // Internal padding of the chat messages area
-    PADDING: '1.5rem',
+    // Internal padding of the chat messages area (percentage-based)
+    PADDING: '3%',
     
     // Flex property to take available space
     FLEX: '2'
@@ -147,18 +147,18 @@ const MOBILE_LAYOUT = {
    * Controls the positioning of the footer
    */
   FOOTER: {
-    // Absolute position from the bottom of the container
-    BOTTOM: '-25px',
+    // Position from the bottom of the container (percentage-based)
+    BOTTOM: '5%',
     
     // Horizontal position (centered by default)
-    LEFT: '-0.8rem',
-    RIGHT: '1.75 rem',
+    LEFT: '-2%',
+    RIGHT: '2%',
     
-    // Internal padding of the footer
-    PADDING: '0.5rem',
+    // Internal padding of the footer (percentage-based)
+    PADDING: '1%',
     
-    // Font size of the footer text
-    FONT_SIZE: '1rem',
+    // Font size of the footer text (using viewport width units)
+    FONT_SIZE: '3vw',
     
     // Z-index (controls stacking order - higher numbers appear on top)
     Z_INDEX: 10
@@ -169,14 +169,14 @@ const MOBILE_LAYOUT = {
    * Controls the overall container that holds all UI elements
    */
   CONTAINER: {
-    // Padding around the entire container
-    PADDING: '0rem',
+    // Padding around the entire container (percentage-based)
+    PADDING: '0%',
     
     // Maximum width of the container
     MAX_WIDTH: '100%',
     
-    // Base font size for the container
-    FONT_SIZE: '0.9rem'
+    // Base font size for the container (using viewport width units)
+    FONT_SIZE: '2.5vw'
   },
   
   /**
@@ -184,20 +184,26 @@ const MOBILE_LAYOUT = {
    * Controls the appearance of the text input field
    */
   INPUT_FIELD: {
-    // Padding inside the input field
-    PADDING: '0.7rem 1.5rem',
+    // Padding inside the input field (percentage-based)
+    PADDING: '2% 4%',
     
-    // Font size of the input text
-    FONT_SIZE: '0.85rem',
+    // Font size of the input text (using viewport width units)
+    FONT_SIZE: '2.5vw',
     
     // Width of the input field (relative to container)
     WIDTH: '70%',
     
     // Position from the left side of the container
-    LEFT_OFFSET: '-8%',
+    LEFT_OFFSET: '-6%',
     
-    // Border radius for rounded corners
-    BORDER_RADIUS: '0.75rem',
+    // Vertical position relative to the container (percentage from top)
+    VERTICAL_POSITION: '30%',
+    
+    // Height of the input field (percentage-based)
+    HEIGHT: '60%',
+    
+    // Border radius for rounded corners (percentage-based)
+    BORDER_RADIUS: '1.5vw',
     
     // Colors
     BACKGROUND_COLOR: 'white',
@@ -205,7 +211,7 @@ const MOBILE_LAYOUT = {
     BORDER_COLOR: '#e5e7eb',
     
     // Gap between input field and send button
-    GAP: '0.5rem'
+    GAP: '1%'
   },
   
   /**
@@ -213,15 +219,24 @@ const MOBILE_LAYOUT = {
    * Controls the appearance of the send button for mobile devices
    */
   SEND_BUTTON: {
-    // Padding inside the button
-    PADDING: '0.7rem 1rem',
+    // Padding inside the button (percentage-based)
+    PADDING: '2% 8%',
 
-    // Font size and weight
-    FONT_SIZE: '0.9rem',
+    // Font size and weight (using viewport width units)
+    FONT_SIZE: '2.5vw',
     FONT_WEIGHT: '500',
+    
+    // Vertical position relative to the container (percentage from top)
+    VERTICAL_POSITION: '30%',
+    
+    // Horizontal position from the left side of the container
+    LEFT_OFFSET: '68%',
+    
+    // Height of the button (percentage-based)
+    HEIGHT: '60%',
 
-    // Border radius for rounded corners
-    BORDER_RADIUS: '0.75rem',
+    // Border radius for rounded corners (percentage-based)
+    BORDER_RADIUS: '1.5vw',
 
     // Colors for enabled state
     ENABLED_BG_COLOR: '#3b82f6',
@@ -236,16 +251,16 @@ const MOBILE_LAYOUT = {
     CONTAINER: {
       DISPLAY: 'flex',
       FLEX_DIRECTION: 'row',
-      GAP: '.5rem',
+      GAP: '1%',
       JUSTIFY_CONTENT: 'space-between',
       WIDTH: '100%',
-      PADDING: '.5rem',
+      PADDING: '1%',
       BORDER_TOP: '1px solid #e5e7eb',
       BACKGROUND_COLOR: '#f9f9f9',
       POSITION: 'absolute',
       TOP: 'auto',
-      BOTTOM: '0rem',
-      LEFT: '0rem',
+      BOTTOM: '0%',
+      LEFT: '0%',
       RIGHT: '1rem',
       /* The user can easily shift these offsets (TOP, BOTTOM, LEFT, RIGHT) as desired
          to reposition the prompt buttons within the chat window. */
@@ -254,9 +269,9 @@ const MOBILE_LAYOUT = {
       BACKGROUND_COLOR: '#f2f2f2',
       TEXT_COLOR: '#666666',
       BORDER: '1px solid #e0e0e0',
-      BORDER_RADIUS: '0.75rem',
-      PADDING: '0.5rem 0.25rem',
-      FONT_SIZE: '0.75rem',
+      BORDER_RADIUS: '1.5vw',
+      PADDING: '1% 0.5%',
+      FONT_SIZE: '2vw',
       FONT_WEIGHT: '400',
       WHITE_SPACE: 'normal',
       LINE_HEIGHT: '1.2',
@@ -268,10 +283,10 @@ const MOBILE_LAYOUT = {
 // Very small mobile overrides (phones smaller than 375px)
 const VERY_SMALL_MOBILE_OVERRIDES = {
   APP_LOGO: {
-    HEIGHT: '14px'
+    HEIGHT: '3vh'
   },
   CHAT_LOGO: {
-    HEIGHT: '1.8rem'
+    HEIGHT: '3.5vh'
   },
   PROMPT_BUTTONS: {
     CONTAINER: {
@@ -283,11 +298,11 @@ const VERY_SMALL_MOBILE_OVERRIDES = {
       WIDTH: '100%',
       POSITION: 'absolute',
       /* Shifting offsets below - user can edit these to move container. Currently all set to 'auto' except top, which is 0. */
-      TOP: '0',
+      TOP: '0%',
       LEFT: 'auto',
       RIGHT: 'auto',
       BOTTOM: 'auto',
-      PADDING: '0.5rem',
+      PADDING: '1%',
       BORDER_TOP: '1px solid #e5e7eb',
       BACKGROUND_COLOR: 'white'
     },
@@ -295,9 +310,9 @@ const VERY_SMALL_MOBILE_OVERRIDES = {
       BACKGROUND_COLOR: '#f2f2f2',
       TEXT_COLOR: '#666666',
       BORDER: '1px solid #e0e0e0',
-      BORDER_RADIUS: '0.75rem',
-      PADDING: '0.5rem 0.25rem',
-      FONT_SIZE: '0.75rem',
+      BORDER_RADIUS: '1.5vw',
+      PADDING: '1% 0.5%',
+      FONT_SIZE: '2vw',
       FONT_WEIGHT: '400',
       WHITE_SPACE: 'normal',
       LINE_HEIGHT: '1.2',
@@ -305,29 +320,29 @@ const VERY_SMALL_MOBILE_OVERRIDES = {
     }
   },
   TITLE: {
-    FONT_SIZE: '0.7rem'
+    FONT_SIZE: '2vw'
   },
   SUBTITLE: {
-    FONT_SIZE: '0.6rem'
+    FONT_SIZE: '1.8vw'
   },
   CONTAINER: {
-    PADDING: '0.5rem',
-    FONT_SIZE: '0.85rem'
+    PADDING: '1%',
+    FONT_SIZE: '2.2vw'
   },
   FOOTER: {
-    FONT_SIZE: '0.6rem'
+    FONT_SIZE: '1.8vw'
   },
   HEADER: {
-    TOP_MARGIN: '0.5rem',
-    BOTTOM_MARGIN: '0.3rem',
-    PADDING: '0.3rem'
+    TOP_MARGIN: '1%',
+    BOTTOM_MARGIN: '0.5%',
+    PADDING: '0.5%'
   },
   INPUT_FIELD: {
-    // Smaller padding for very small devices
-    PADDING: '0.5rem 0.6rem',
+    // Smaller padding for very small devices (percentage-based)
+    PADDING: '1.5% 2%',
     
-    // Smaller font size for very small devices
-    FONT_SIZE: '0.75rem',
+    // Smaller font size for very small devices (using viewport width units)
+    FONT_SIZE: '2vw',
     
     // Narrower width for very small devices
     WIDTH: '60%',
@@ -335,8 +350,8 @@ const VERY_SMALL_MOBILE_OVERRIDES = {
     // Position from the left side of the container for very small devices
     LEFT_OFFSET: '2%',
     
-    // Smaller border radius
-    BORDER_RADIUS: '0.5rem'
+    // Smaller border radius (using viewport width units)
+    BORDER_RADIUS: '1vw'
   },
   // No duplicate PROMPT_BUTTONS needed here
 };

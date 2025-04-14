@@ -172,10 +172,16 @@ export const getHeaderStyles = (deviceInfo) => {
  */
 export const getChatContainerStyles = (deviceInfo) => {
   const layout = getLayout(deviceInfo);
-  
+
+  // If bottom is set in the layout, we override the top to auto
+  // so the container stays anchored to the bottom instead of the top.
+  const topValue = (layout.CHAT_CONTAINER.BOTTOM !== undefined)
+    ? 'auto'
+    : layout.CHAT_CONTAINER.TOP;
+
   return {
     position: "absolute",
-    top: layout.CHAT_CONTAINER.TOP,
+    top: topValue,
     left: layout.CHAT_CONTAINER.LEFT,
     right: layout.CHAT_CONTAINER.RIGHT,
     width: layout.CHAT_CONTAINER.WIDTH,
@@ -188,7 +194,7 @@ export const getChatContainerStyles = (deviceInfo) => {
     display: "flex",
     flexDirection: "column",
     overflow: "hidden",
-    border: "15px solid black", // Added black border
+    border: "15px solid black",
     boxSizing: "border-box",
     bottom: layout.CHAT_CONTAINER.BOTTOM || 'auto',
     height: layout.CHAT_CONTAINER.HEIGHT || 'auto'

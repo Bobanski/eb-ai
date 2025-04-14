@@ -118,7 +118,7 @@ const MOBILE_LAYOUT = {
     Z_INDEX: 5,
     
     // Height property (percentage of available space)
-    HEIGHT: 'calc(100dvh - 12rem)' // Further increased container height
+    HEIGHT: 'calc(100dvh - 8rem)' // Further increased container height
   },
   
   /**
@@ -133,7 +133,7 @@ const MOBILE_LAYOUT = {
     MAX_HEIGHT: '100dvh',
     
     // Minimum height of the chat messages area
-    MIN_HEIGHT: '20vh',
+    MIN_HEIGHT: '60vh',
     
     // Internal padding of the chat messages area
     PADDING: '1.5rem',

@@ -74,7 +74,7 @@ const DESKTOP_LAYOUT = {
    */
   TITLE: {
     // Font size of the title text (using viewport width units for responsive text)
-    FONT_SIZE: '1.9vw',
+    FONT_SIZE: '1.5vw',
     
     // Line height of the title text
     LINE_HEIGHT: 1.2
@@ -86,13 +86,13 @@ const DESKTOP_LAYOUT = {
    */
   SUBTITLE: {
     // Font size of the subtitle text (using viewport width units for responsive text)
-    FONT_SIZE: '1.2vw',
+    FONT_SIZE: '1vw',
     
     // Space above the subtitle (percentage-based)
     TOP_MARGIN: '-2%', // Increased to allow for vertical adjustment
     
     // Additional properties for subtitle positioning
-    MAX_WIDTH: '80%',
+    MAX_WIDTH: '90%',
     TEXT_ALIGN: 'center'
   },
   
@@ -229,7 +229,7 @@ const DESKTOP_LAYOUT = {
    */
   SEND_BUTTON: {
     // Padding inside the button (percentage-based)
-    PADDING: '1.5% 3%',
+    PADDING: '1% 5%',
     
     // Vertical position relative to the container (percentage from top)
     VERTICAL_POSITION: '18%',
@@ -254,7 +254,7 @@ const DESKTOP_LAYOUT = {
     // Text styling properties (added from mobile layout)
     TEXT: {
       // Font size of the button text (using viewport width units)
-      FONT_SIZE: '1.2vw',
+      FONT_SIZE: '1vw',
       
       // Font weight of the button text
       FONT_WEIGHT: '500',
@@ -340,7 +340,7 @@ const DESKTOP_LAYOUT = {
         BORDER_TOP: '1px solid #e5e7eb',
         BACKGROUND_COLOR: 'white',
         /* Explicit minimum height that can be adjusted */
-        MIN_HEIGHT: '3rem',
+        MIN_HEIGHT: '4rem',
         BOX_SIZING: 'border-box'
       },
       BUTTON: {
@@ -349,7 +349,7 @@ const DESKTOP_LAYOUT = {
         BORDER: '1px solid #e0e0e0',
         BORDER_RADIUS: '1vw',
         PADDING: '1% 0.5%',
-        FONT_SIZE: '0.8vw',
+        FONT_SIZE: '0.7vw',
         FONT_WEIGHT: '400',
         WHITE_SPACE: 'normal',
         LINE_HEIGHT: '1.3',
@@ -359,7 +359,7 @@ const DESKTOP_LAYOUT = {
         ALIGN_ITEMS: 'center',
         JUSTIFY_CONTENT: 'center',
         /* Explicit height property that can be easily adjusted */
-        HEIGHT: '3rem'
+        HEIGHT: '4rem'
       }
     }
   };

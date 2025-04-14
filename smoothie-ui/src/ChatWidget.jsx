@@ -9,9 +9,11 @@ import {
   getChatInputAreaStyles,
   getInputFieldStyles,
   getSendButtonStyles,
-  getPromptButtonsContainerStyles, // Added import
-  getPromptButtonStyles // Added import
+  getPromptButtonsContainerStyles,
+  getPromptButtonStyles
 } from "./utils/layout-manager";
+import { scrollToTop, initMobileAutoScroll } from "./utils/mobile-autoscroll";
+import { captureInitialViewState, restoreInitialView, isAtInitialView } from "./utils/initial-view-manager";
 
 /* ------------------------------------------------------------------ */
 /* 1.  image imports (unchanged)                                      */
@@ -106,13 +108,26 @@ export default function ChatWidget() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   const preGeneratedPrompts = [
     "I need a smoothie to boost my immune system",
     "What's the best smoothie for post-workout recovery?",
     "I'd like a detox smoothie for cleansing"
   ];
   const [isTyping, setIsTyping] = useState(false);
+  const [initialViewCaptured, setInitialViewCaptured] = useState(false);
 
+  // Capture initial view state on first render
+  useEffect(() => {
+    // Small delay to ensure everything is properly rendered
+    setTimeout(() => {
+      const captured = captureInitialViewState();
+      setInitialViewCaptured(captured);
+      console.log("Initial view state captured:", captured);
+    }, 300);
+  }, []);
+
+  // Scroll to bottom of chat messages when messages change
   useEffect(() => {
     // Use a short delay so DOM is updated before calculating scroll height.
     setTimeout(() => {
@@ -122,13 +137,92 @@ export default function ChatWidget() {
       }
     }, 0);
   }, [messages, isTyping]);
+  
+  // Initialize mobile auto-scroll functionality
+  useEffect(() => {
+    // Only enable auto-scroll on mobile devices
+    if (deviceInfo.isMobile) {
+      // Track viewport height to detect keyboard appearance/dismissal
+      let lastHeight = window.innerHeight;
+      let lastVisualViewportHeight = window.visualViewport?.height || window.innerHeight;
+      
+      // Function to scroll to top
+      const scrollWindowToTop = () => {
+        window.scrollTo(0, 0);
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+      };
+      
+      // Function that detects keyboard dismissal and scrolls to top
+      const handleViewportChange = () => {
+        const currentHeight = window.innerHeight;
+        const currentVisualViewportHeight = window.visualViewport?.height || window.innerHeight;
+        
+        // When height increases significantly, it means keyboard is dismissed
+        if (
+          (window.visualViewport && currentVisualViewportHeight > lastVisualViewportHeight * 1.1) ||
+          (!window.visualViewport && currentHeight > lastHeight * 1.1)
+        ) {
+          console.log("Keyboard dismissed detected - scrolling to top");
+          
+          // Multiple attempts for reliability
+          scrollWindowToTop();
+          setTimeout(scrollWindowToTop, 100);
+          setTimeout(scrollWindowToTop, 300);
+          setTimeout(scrollWindowToTop, 500);
+        }
+        
+        // Update last heights
+        lastHeight = currentHeight;
+        lastVisualViewportHeight = currentVisualViewportHeight;
+      };
+      
+      // Register event listeners for viewport changes
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', handleViewportChange);
+      }
+      window.addEventListener('resize', handleViewportChange);
+      
+      // Initial scroll to top
+      scrollWindowToTop();
+      
+      // Clean up event listeners
+      return () => {
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener('resize', handleViewportChange);
+        }
+        window.removeEventListener('resize', handleViewportChange);
+      };
+    }
+  }, [deviceInfo.isMobile]);
+  
+  // Handle input field focusing (when keyboard appears)
+  useEffect(() => {
+    if (deviceInfo.isMobile) {
+      const inputEl = document.querySelector('.chat-input');
+      if (!inputEl) return;
+      
+      const handleFocus = () => {
+        // Make input visible when keyboard shows
+        setTimeout(() => {
+          inputEl.scrollIntoView({ behavior: 'auto', block: 'center' });
+        }, 100);
+      };
+      
+      inputEl.addEventListener('focus', handleFocus);
+      
+      return () => {
+        inputEl.removeEventListener('focus', handleFocus);
+      };
+    }
+}, [deviceInfo.isMobile]);
+// Removed redundant focusout listener to simplify scroll logic
+
   const messagesEndRef = useRef(null);
 
   /* ---------------- helpers ---------------- */
   const scrollToBottom = () =>
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-
-  // useEffect(scrollToBottom, []);
 
   const getCurrentTime = () =>
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -140,6 +234,27 @@ export default function ChatWidget() {
     // Hide prompt buttons once a selection is made
     setShowPromptButtons(false);
     
+    // On mobile, blur input and make multiple attempts to restore the initial view for reliability
+    if (deviceInfo.isMobile) {
+      const inputEl = document.querySelector(".chat-input");
+      if (inputEl) inputEl.blur();
+
+      const attemptRestoreView = () => {
+        // If initial view state is captured, use that to restore the original view
+        if (initialViewCaptured) {
+          console.log("Restoring initial view after send");
+          restoreInitialView();
+        } else {
+          // Fall back to standard scroll top if initial view not captured
+          console.log("Scrolling to top after send (fallback)");
+          scrollToTop({ forceScroll: true });
+        }
+      };
+      
+      // Increased initial delay to ensure keyboard is fully dismissed
+      setTimeout(attemptRestoreView, 500);
+    }
+
     const userMsg = { role: "user", content: promptText };
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
@@ -311,6 +426,17 @@ export default function ChatWidget() {
                           if (chatMessagesDiv) {
                             chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
                           }
+                          
+                          // Restore to initial view on mobile after image loads
+                          if (deviceInfo.isMobile) {
+                            if (initialViewCaptured) {
+                              console.log("Restoring initial view after image load");
+                              // Short delay to ensure image is fully rendered
+                              setTimeout(restoreInitialView, 50);
+                            } else {
+                              scrollToTop();
+                            }
+                          }
                         }}
                       />
                     )}
@@ -381,6 +507,49 @@ export default function ChatWidget() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
+              onFocus={() => {
+                if (deviceInfo.isMobile) {
+                  // On focus, ensure the input is visible with keyboard
+                  setTimeout(() => {
+                    const inputEl = document.querySelector(".chat-input");
+                    if (inputEl) inputEl.scrollIntoView({ behavior: 'auto', block: 'center' });
+                  }, 100);
+                }
+              }}
+              onBlur={() => {
+                if (deviceInfo.isMobile) {
+                  // More aggressive approach for iOS on blur
+                  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                  
+                  // Use initial view restoration if available
+                  if (initialViewCaptured) {
+                    console.log("Restoring initial view on input blur");
+                    restoreInitialView();
+                    
+                    // Multiple attempts with increasing delays
+                    setTimeout(restoreInitialView, 100);
+                    setTimeout(restoreInitialView, 300);
+                    
+                    // iOS needs extra attention
+                    if (isIOS) {
+                      setTimeout(restoreInitialView, 500);
+                      setTimeout(restoreInitialView, 800);
+                    }
+                  } else {
+                    // Fall back to standard scroll if initial view not captured
+                    scrollToTop({ forceScroll: true });
+                    setTimeout(() => scrollToTop({ forceScroll: true }), 100);
+                    setTimeout(() => scrollToTop({ forceScroll: true }), 300);
+                    
+                    if (isIOS) {
+                      setTimeout(() => scrollToTop({ forceScroll: true }), 500);
+                      setTimeout(() => scrollToTop({ forceScroll: true }), 800);
+                    }
+                  }
+                }
+              }}
+              className="chat-input"
             />
             <button
               style={getSendButtonStyles(deviceInfo, input.trim())}

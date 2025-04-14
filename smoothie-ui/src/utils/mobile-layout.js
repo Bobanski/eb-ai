@@ -103,9 +103,6 @@ const MOBILE_LAYOUT = {
     // Position from the top of the container (percentage-based)
     TOP: '12%',
     
-    // Position from the bottom of the container (percentage-based)
-    // Setting this extends the container downward
-    
     // Horizontal position (centered by default)
     LEFT: '0',
     RIGHT: '0',
@@ -351,7 +348,7 @@ const VERY_SMALL_MOBILE_OVERRIDES = {
     
     // Smaller border radius (using viewport width units)
     BORDER_RADIUS: '1vw'
-  },
+  }
   // No duplicate PROMPT_BUTTONS needed here
 };
 

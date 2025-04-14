@@ -191,7 +191,7 @@ const MOBILE_LAYOUT = {
     FONT_SIZE: '0.85rem',
     
     // Width of the input field (relative to container)
-    WIDTH: '80%',
+    WIDTH: '70%',
     
     // Position from the left side of the container
     LEFT_OFFSET: '-8%',

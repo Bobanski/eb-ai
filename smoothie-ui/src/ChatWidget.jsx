@@ -112,6 +112,16 @@ export default function ChatWidget() {
     "I'd like a detox smoothie for cleansing"
   ];
   const [isTyping, setIsTyping] = useState(false);
+
+  useEffect(() => {
+    // Use a short delay so DOM is updated before calculating scroll height.
+    setTimeout(() => {
+      const chatMessagesDiv = document.querySelector(".chat-messages");
+      if (chatMessagesDiv) {
+        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+      }
+    }, 0);
+  }, [messages, isTyping]);
   const messagesEndRef = useRef(null);
 
   /* ---------------- helpers ---------------- */
@@ -295,6 +305,13 @@ export default function ChatWidget() {
                         alt="Smoothie"
                         className="smoothie-image"
                         onError={(e) => (e.currentTarget.style.display = "none")}
+                        onLoad={() => {
+                          // Ensure container scrolls after bot image loads
+                          const chatMessagesDiv = document.querySelector(".chat-messages");
+                          if (chatMessagesDiv) {
+                            chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+                          }
+                        }}
                       />
                     )}
 

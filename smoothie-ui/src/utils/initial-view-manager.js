@@ -34,11 +34,34 @@ export const captureInitialViewState = () => {
  * Specifically targets making the header with logo visible in the same position
  */
 export const restoreInitialView = () => {
+  console.log("restoreInitialView called", {
+    activeElement: document.activeElement ? document.activeElement.tagName : 'none',
+    activeElementHasFocus: document.activeElement &&
+                          (document.activeElement.tagName === 'INPUT' ||
+                           document.activeElement.tagName === 'TEXTAREA'),
+    hadFullKeyboardShown: document.activeElement ? document.activeElement.dataset.hadFullKeyboardShown : 'N/A'
+  });
+
+  // CRITICAL: Don't restore view if the keyboard is being shown for the first time
+  // This is likely causing the view to reset after the keyboard appears
+  if (document.activeElement &&
+      (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') &&
+      !document.activeElement.dataset.hadFullKeyboardShown) {
+    console.log("CRITICAL: Blocking restoreInitialView during first keyboard appearance");
+    return false;
+  }
+
   if (!headerElement || initialHeaderTop === null) {
     // If we don't have reference data, fall back to standard scroll to top
-    window.scrollTo(0, 0);
-    document.body.scrollTop = 0;
-    document.documentElement.scrollTop = 0;
+    
+    // But DO NOT scroll to top if an input field has keyboard focus for the first time
+    if (!(document.activeElement &&
+         (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') &&
+         !document.activeElement.dataset.hadFullKeyboardShown)) {
+      window.scrollTo(0, 0);
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
     return false;
   }
   
@@ -48,6 +71,14 @@ export const restoreInitialView = () => {
   // If current position matches initial position, nothing to do
   if (Math.abs(currentHeaderTop - initialHeaderTop) < 5) {
     return true;
+  }
+  
+  // CRITICAL: Don't adjust position if keyboard is showing for first time
+  if (document.activeElement &&
+      (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') &&
+      !document.activeElement.dataset.hadFullKeyboardShown) {
+    console.log("CRITICAL: Preventing initial view restoration during keyboard appearance");
+    return false;
   }
   
   // Calculate the adjustment needed to restore the header to its initial position
@@ -61,6 +92,14 @@ export const restoreInitialView = () => {
   
   // Double-check and fine-tune (iOS sometimes needs multiple attempts)
   setTimeout(() => {
+    // Check again to ensure an input hasn't been focused since we started
+    if (document.activeElement &&
+        (document.activeElement.tagName === 'INPUT' || document.activeElement.tagName === 'TEXTAREA') &&
+        !document.activeElement.dataset.hadFullKeyboardShown) {
+      console.log("CRITICAL: Canceling fine-tune adjustment during keyboard appearance");
+      return;
+    }
+    
     const newHeaderTop = headerElement.getBoundingClientRect().top;
     if (Math.abs(newHeaderTop - initialHeaderTop) > 5) {
       const fineAdjustment = window.scrollY + (newHeaderTop - initialHeaderTop);

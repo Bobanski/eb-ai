@@ -25,7 +25,10 @@ export default function MobileInputOverlay({
   }, [isVisible]);
 
   // Handle sending a message
-  const handleSend = () => {
+  const handleSend = (e) => {
+    // Stop event propagation to prevent it from reaching the overlay background
+    if (e) e.stopPropagation();
+    
     if (input.trim()) {
       onSendMessage(input.trim());
       setInput("");
@@ -33,10 +36,10 @@ export default function MobileInputOverlay({
     }
   };
 
-  // Handle ESC key press
+  // Handle keyboard events (Enter to send, Escape to close)
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
-      handleSend();
+      handleSend(e); // Pass the event to handleSend
     } else if (e.key === "Escape") {
       onClose();
     }

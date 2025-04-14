@@ -89,6 +89,8 @@ console.log("Environment Variables:", import.meta.env);
 export default function ChatWidget() {
   /* ---------------- state ---------------- */
   const [input, setInput] = useState("");
+  const [pendingSend, setPendingSend] = useState(false);
+  const pendingInputRef = useRef("");
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -113,7 +115,29 @@ export default function ChatWidget() {
   useEffect(() => {
     // Only initialize on mobile devices
     if (deviceInfo.isMobile) {
+      console.log("Initializing mobile autoscroll");
       const cleanup = initMobileAutoScroll();
+      
+      // IMPORTANT: Add keyboard event listeners for better debugging
+      const inputEl = document.querySelector('.chat-input');
+      if (inputEl) {
+        const originalFocus = inputEl.onfocus;
+        const originalBlur = inputEl.onblur;
+        
+        // Add global tracking for first keyboard appearance
+        window._keyboardShownFirstTime = false;
+        
+        // Expose helper to reset keyboard appearance
+        window.resetKeyboardFirstTimeState = () => {
+          window._keyboardShownFirstTime = false;
+          if (inputEl) {
+            delete inputEl.dataset.hadFocus;
+            delete inputEl.dataset.hadFullKeyboardShown;
+          }
+          console.log("Keyboard first-time state has been reset");
+        };
+      }
+      
       return cleanup;
     }
   }, [deviceInfo.isMobile]);
@@ -136,12 +160,48 @@ useEffect(() => {
   }, 0);
   
   // On mobile, ensure we're at the top of the viewport
+  // BUT NOT during first keyboard appearance
   if (deviceInfo.isMobile) {
-    scrollToTop();
+    // Get reference to input element to check if it's in first keyboard state
+    const inputEl = document.querySelector('.chat-input');
+    const isFirstKeyboardAppearance = inputEl &&
+                                     !inputEl.dataset.hadFullKeyboardShown &&
+                                     document.activeElement === inputEl;
+    
+    if (!isFirstKeyboardAppearance) {
+      scrollToTop();
+    } else {
+      console.log("Skipping scrollToTop during messages update - first keyboard appearance in progress");
+    }
   }
 }, [messages, isTyping, deviceInfo.isMobile]);
-  
-  
+
+// Handle pending send requests (for keyboard issues)
+useEffect(() => {
+  if (pendingSend && pendingInputRef.current) {
+    // We need specific handling for iOS devices
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    
+    // Reset the pendingSend state immediately to prevent double execution
+    setPendingSend(false);
+    
+    // Use longer delays for iOS devices
+    const delay = isIOS ? 300 : 100;
+    
+    console.log("Preparing to send with delay:", delay, "ms, text:", pendingInputRef.current);
+    
+    // Execute the send with a delay to allow for keyboard dismissal
+    setTimeout(() => {
+      console.log("Executing delayed send with:", pendingInputRef.current);
+      if (pendingInputRef.current) {
+        send(pendingInputRef.current);
+        pendingInputRef.current = "";
+      }
+    }, delay);
+  }
+}, [pendingSend]);
+
 
   const messagesEndRef = useRef(null);
 
@@ -154,14 +214,21 @@ useEffect(() => {
 
   /* ---------------- send ---------------- */
   async function send(promptText = input) {
-    if (!promptText.trim()) return;
+    // Ensure we have a non-empty string
+    if (!promptText || !promptText.trim()) return;
 
+    // Normalize the input value
+    const inputValue = promptText.trim();
+    
     // Hide prompt buttons once a selection is made
     setShowPromptButtons(false);
     
+    // Log to help debug mobile send issues
+    console.log("Sending message:", inputValue);
+    
     // No need for manual view restoration on mobile anymore
 
-    const userMsg = { role: "user", content: promptText };
+    const userMsg = { role: "user", content: inputValue };
     const updatedMessages = [...messages, userMsg];
     setMessages(updatedMessages);
     setInput("");
@@ -418,21 +485,119 @@ useEffect(() => {
               onKeyDown={(e) => e.key === "Enter" && send()}
               className="chat-input"
               // Add keyboard event handlers for iOS
-              onFocus={() => {
+              onFocus={(e) => {
+                console.log("INPUT FOCUS EVENT - handling keyboard appearance");
                 if (deviceInfo.isMobile) {
-                  // Force redraw after keyboard appears
+                  // Log device details
+                  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+                  
+                  console.log("Mobile device detected:", {
+                    userAgent: navigator.userAgent,
+                    isIOS: isIOS,
+                    visualViewportHeight: window.visualViewport?.height,
+                    windowHeight: window.innerHeight
+                  });
+                  
+                  // Track if this is the first focus - don't set the flag immediately
+                  const isFirstFocus = !e.target.dataset.hadFocus;
+                  
+                  // Get references to elements
+                  const chatMessagesDiv = document.querySelector(".chat-messages");
+                  const mainContent = document.querySelector(".main-content");
+                  
+                  if (isFirstFocus) {
+                    console.log("FIRST FOCUS detected - applying special first-time handling");
+                    
+                    // More aggressive handling for first focus - use a larger estimated height
+                    // This prevents the keyboard from covering content on first appearance
+                    let keyboardHeight = window.innerHeight * 0.4; // 40% is a good estimate for iOS keyboard height
+                    
+                    // Use Visual Viewport API if available for more accurate measurement
+                    if (window.visualViewport) {
+                      // If viewport has already changed, use it, otherwise use our estimate
+                      if (window.visualViewport.height < window.innerHeight * 0.8) {
+                        keyboardHeight = window.innerHeight - window.visualViewport.height;
+                        console.log("Using visual viewport for keyboard height:", keyboardHeight);
+                      } else {
+                        console.log("Using estimated keyboard height:", keyboardHeight);
+                      }
+                    }
+                    
+                    if (chatMessagesDiv) {
+                      // Immediate adjustment with more aggressive padding
+                      chatMessagesDiv.style.height = `calc(100dvh - 4rem - 80px - ${keyboardHeight}px)`;
+                      chatMessagesDiv.style.paddingBottom = `${keyboardHeight * 0.5}px`;
+                      
+                      // Force scroll adjustment
+                      chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
+                      window.scrollTo(0, 0);
+                      
+                      // Add dramatic temporary padding to the main content to force layout shift
+                      if (mainContent && isIOS) {
+                        mainContent.style.paddingBottom = `${keyboardHeight}px`;
+                        // Force reflow
+                        mainContent.style.display = 'none';
+                        mainContent.offsetHeight;
+                        mainContent.style.display = 'flex';
+                      }
+                      
+                      // Set the flag after a delay to ensure the keyboard is fully shown
+                      setTimeout(() => {
+                        e.target.dataset.hadFocus = "true";
+                        // Remove any temporary padding from main content
+                        if (mainContent) {
+                          mainContent.style.paddingBottom = '';
+                        }
+                        // Keep proper height for chat messages
+                        if (window.visualViewport) {
+                          const updatedKeyboardHeight = window.innerHeight - window.visualViewport.height;
+                          if (updatedKeyboardHeight > 100) { // If keyboard is visible
+                            chatMessagesDiv.style.height = `calc(100dvh - 4rem - 80px - ${updatedKeyboardHeight}px)`;
+                          }
+                        }
+                        // Ensure input stays in view
+                        e.target.scrollIntoView({ block: 'center', behavior: 'auto' });
+                      }, 300);
+                    }
+                  }
+                  
+                  // Regular adjustment with timeout (for all focus events)
                   setTimeout(() => {
+                    console.log("Focus timeout executing - adjusting chat messages height");
                     const chatMessagesDiv = document.querySelector(".chat-messages");
                     if (chatMessagesDiv) {
-                      chatMessagesDiv.style.height = 'calc(100dvh - 4rem - 80px)';
+                      // Use visual viewport if available for more accurate measurement
+                      if (window.visualViewport) {
+                        const keyboardHeight = window.innerHeight - window.visualViewport.height;
+                        chatMessagesDiv.style.height = `calc(100dvh - 4rem - 80px - ${keyboardHeight}px)`;
+                      } else {
+                        chatMessagesDiv.style.height = 'calc(100dvh - 4rem - 80px)';
+                      }
+                      
+                      // Ensure content is properly scrolled
+                      chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
                     }
                   }, 300);
                 }
               }}
-              onBlur={() => {
+              onBlur={(e) => {
+                console.log("INPUT BLUR EVENT - Target:", e.target.tagName, "Related target:", e.relatedTarget ? e.relatedTarget.tagName : 'null');
                 if (deviceInfo.isMobile) {
-                  // Force scroll to top when keyboard is dismissed
-                  scrollToTop();
+                  // Check if the related target is the send button
+                  // If it is, don't scroll to top as we're trying to send a message
+                  const relatedTarget = e.relatedTarget;
+                  const isSendButton = relatedTarget &&
+                    (relatedTarget.className.includes('send-button') ||
+                     relatedTarget.closest('.send-button'));
+                  
+                  console.log("Is send button:", isSendButton);
+                  
+                  if (!isSendButton) {
+                    // Only scroll to top if we're not clicking the send button
+                    console.log("Calling scrollToTop from blur event");
+                    scrollToTop();
+                  }
                 }
               }}
             />
@@ -446,7 +611,58 @@ useEffect(() => {
                 '--button-letter-spacing': getLayout(deviceInfo).SEND_BUTTON.TEXT ? getLayout(deviceInfo).SEND_BUTTON.TEXT.LETTER_SPACING : 'normal',
                 '--button-line-height': getLayout(deviceInfo).SEND_BUTTON.TEXT ? getLayout(deviceInfo).SEND_BUTTON.TEXT.LINE_HEIGHT : '1.2'
               }}
-              onClick={() => send()}
+              // Touch events specifically for mobile
+              onTouchStart={(e) => {
+                // Only for mobile
+                if (!deviceInfo.isMobile) return;
+                
+                // Get current input text
+                const currentInput = input.trim();
+                if (!currentInput) return;
+                
+                console.log("Touch START on send button:", currentInput);
+                
+                // Store it for later use
+                pendingInputRef.current = currentInput;
+                
+                // Clear input for immediate feedback
+                setInput("");
+                
+                // Blur any focused input to dismiss keyboard
+                if (document.activeElement &&
+                    (document.activeElement.tagName === 'INPUT' ||
+                     document.activeElement.tagName === 'TEXTAREA')) {
+                  document.activeElement.blur();
+                }
+              }}
+              onTouchEnd={(e) => {
+                // Only for mobile
+                if (!deviceInfo.isMobile) return;
+                
+                console.log("Touch END on send button:", pendingInputRef.current);
+                if (pendingInputRef.current) {
+                  // iOS needs more time for keyboard to fully dismiss
+                  setTimeout(() => {
+                    const messageToSend = pendingInputRef.current;
+                    pendingInputRef.current = "";
+                    send(messageToSend);
+                  }, 300); // Longer delay for iOS keyboard animation
+                }
+              }}
+              // Fallback click handler for non-touch devices
+              onClick={(e) => {
+                if (!input.trim()) return;
+                
+                // For non-mobile, just send directly
+                if (!deviceInfo.isMobile) {
+                  send(input);
+                  return;
+                }
+                
+                // For mobile, we already handled this with touch events
+                // This is just a fallback
+                console.log("Click fallback on send button");
+              }}
               disabled={!input.trim()}
               className="send-button"
             >

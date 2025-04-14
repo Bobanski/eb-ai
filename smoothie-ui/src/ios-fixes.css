@@ -55,13 +55,30 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Prevent iOS zoom on input focus */
+/* Prevent iOS zoom on input focus while ensuring keyboard appears properly */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   select,
   textarea,
   input {
     font-size: 16px !important;
   }
+}
+
+/* Fix for iOS keyboard appearance */
+input, textarea {
+  /* Disable iOS auto-zoom */
+  font-size: 16px;
+  
+  /* Prevent content shifting */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Improve tap target size for better mobile interaction */
+.chat-input, .send-button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Fix for iOS Safari white bar at the top */

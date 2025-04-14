@@ -92,7 +92,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0.5rem 0.75rem;
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  font-size: 0.9rem;
+  font-size: 0.9rem; /* MOBILE-UI-FONT-SIZE / DESKTOP-UI-FONT-SIZE */
 }
 
 .message-user {
@@ -146,11 +146,13 @@ h1, h2, h3, h4, h5, h6 {
   cursor: not-allowed;
 }
 
-/* Main content */
+/* Main content - now handled in chat-styles.css */
+/*
 .main-content {
   padding: 1rem 0;
   width: 100%;
 }
+*/
 
 /* Specific styling for the chat UI, regardless of Tailwind */
 main > div {
@@ -204,7 +206,9 @@ body {
   padding: 12px 16px;
 }
 
-.title {
+/* These styles are now handled in chat-styles.css */
+/*
+.title-text {
   font-size: 2rem;
   font-weight: 700;
   color: #111827;
@@ -217,6 +221,7 @@ body {
   max-width: 36rem;
   margin: 0 auto 2rem;
 }
+*/
 
 /* Footer */
 .footer {
@@ -224,31 +229,41 @@ body {
   padding: 1.5rem 0;
   text-align: center;
   color: #6b7280;
-  font-size: 0.875rem;
+  font-size: 0.875rem; /* MOBILE-UI-FONT-SIZE / DESKTOP-UI-FONT-SIZE */
 }
 
-.content-container { /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL & MOBILE-UI-ELEMENT-SIZING */
-  width: 100%; /* MOBILE-UI-ELEMENT-SIZING */
-  max-width: 95%; /* MOBILE-UI-ELEMENT-SIZING - For mobile */
+/* Mobile-specific font sizes - now handled in chat-styles.css */
+/*
+@media (max-width: 768px) {
+  .header-container .title-text {
+    font-size: 1.25rem;
+  }
+  .header-container .subtitle {
+    font-size: 0.8rem;
+  }
+}
+*/
+
+.content-container {
+  width: 100%;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  margin: -85px auto 0; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - Negative margin to move content way up */
-  padding-top: 10px; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - For mobile */
-  padding: 0 0.75rem; /* MOBILE-UI-ELEMENT-POSITIONING-HORIZONTAL - For mobile */
+  margin: 0 auto;
+  padding: 0;
   overflow-x: hidden;
-  overflow-y: auto;
+  overflow-y: hidden !important; /* Prevent scrolling on the main window */
   box-sizing: border-box;
   z-index: 10;
   position: relative;
+  flex: 1; /* Allow the container to grow and fill available space */
 }
 
 @media (min-width: 769px) {
   .content-container {
     max-width: 600px; /* MOBILE-UI-ELEMENT-SIZING - For desktop */
-    margin-top: 0; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - For desktop */
-    padding-top: 0; /* MOBILE-UI-ELEMENT-POSITIONING-VERTICAL - For desktop */
     padding: 0 1rem; /* MOBILE-UI-ELEMENT-POSITIONING-HORIZONTAL - For desktop */
   }
 }

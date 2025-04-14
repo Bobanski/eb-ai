@@ -103,6 +103,29 @@ export const SHADOWS = {
   LARGE: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
   XL: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
 };
+// UI Element Sizes
+// ---------------
+// USAGE GUIDE:
+// To resize the top-left "earthbar-filled.png" logo:
+//   - Adjust LOGO values below (values in pixels)
+//
+// To resize the chat widget "eb-full-logo.svg" logo:
+//   - Adjust corresponding CSS variables in chat-styles.css
+//   - Look for :root variables at the top of that file
+export const UI_SIZES = {
+  LOGO: {
+    VERY_SMALL_MOBILE: 14, // Default size for very small mobile - in pixels
+    MOBILE: 35,           // Default size for mobile - in pixels
+    DESKTOP: 120,         // Default size for desktop - in pixels
+    // You can adjust these values to change the top-left logo size
+  },
+  CHAT_LOGO: {
+    VERY_SMALL_MOBILE: 1.5, // Default size for very small mobile - in rem
+    MOBILE: 1.6,           // Default size for mobile - in rem
+    DESKTOP: 3.8,          // Default size for desktop - in rem
+    // You can adjust these values to change the chat widget logo size
+  }
+};
 
 // Z-index stack
 export const Z_INDEX = {

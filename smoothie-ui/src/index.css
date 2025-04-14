@@ -11,30 +11,29 @@ html, body {
   box-sizing: border-box;
   background-color: #c7e0ff; /* Match the bottom color of the gradient in App.jsx */
   overflow-x: hidden; /* Prevent horizontal scrolling that could expose white edges */
+  overflow-y: hidden !important; /* Prevent vertical scrolling on the main document */
+  position: fixed; /* Lock the viewport in place */
+  top: 0;
+  left: 0;
 }
 
 /* Mobile-specific styles that respect safe areas and prevent cropping */
 @media (max-width: 768px) {
   html, body {
     min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
-    overflow: hidden; /* Prevent scroll bounce on iOS */
-    position: relative; /* Use relative positioning instead of fixed */
-    overscroll-behavior: none; /* Prevent bounce effect on mobile browsers */
+    overscroll-behavior-y: contain; /* Better control of scroll bounce on iOS */
     -webkit-overflow-scrolling: touch; /* Improve scroll behavior on iOS */
+    overflow-y: hidden; /* Prevent vertical scrolling on mobile */
     /* Add safe area insets for iOS devices */
-    padding-top: env(safe-area-inset-top, 2rem);
+    padding-top: env(safe-area-inset-top, 0);
     padding-bottom: env(safe-area-inset-bottom, 0);
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 }
 
-/* Desktop-specific styles - preserve original behavior */
+/* Desktop-specific styles */
 @media (min-width: 769px) {
   html, body {
-    overflow: hidden; /* Prevent page scrolling */
-    position: fixed; /* Ensure the app stays fixed on screen */
-    inset: 0; /* Cover the entire viewport */
+    min-height: 100vh; /* Use viewport height */
+    overflow-y: hidden; /* Prevent vertical scrolling on desktop */
   }
 }

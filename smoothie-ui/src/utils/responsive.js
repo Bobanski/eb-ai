@@ -1,9 +1,13 @@
 /**
  * Responsive Design Utilities
- * 
+ *
  * This file contains centralized utilities for handling responsive design
- * including device detection, breakpoints, and style generation
+ * including device detection, breakpoints, and style generation.
+ *
+ * For positioning and sizing constants, see utils/layout.js
  */
+
+import { getLayout } from './layout';
 
 // Standardized breakpoints for the application
 export const BREAKPOINTS = {
@@ -45,43 +49,28 @@ export const getDeviceInfo = () => {
 
 // Generate container styles based on device type
 export const getContainerStyles = (deviceInfo) => {
-  const { isMobile, isVerySmallMobile } = deviceInfo;
+  // Get layout based on device type
+  const layout = getLayout(deviceInfo);
   
   // Base styles common to all device types
-  const baseStyles = {
+  return {
     boxSizing: "border-box",
     width: "100%",
+    maxWidth: layout.SIZE.CONTAINER_MAX_WIDTH,
     position: "relative",
     zIndex: "5",
-  };
-  
-  // Mobile-specific styles
-  if (isMobile) {
-    return {
-      ...baseStyles,
-      minHeight: "90dvh", // MOBILE-UI-ELEMENT-SIZING - Use dynamic viewport height for better iOS support
-      paddingTop: "env(safe-area-inset-top, 0)",
-      paddingBottom: "env(safe-area-inset-bottom, 6rem)", // MOBILE-UI-ELEMENT-POSITIONING-VERTICAL
-      display: "flex",
-      alignItems: "flex-start", // Changed from center to fix content being pushed above viewport
-      justifyContent: "center",
-      backgroundColor: "transparent",
-      overflow: "auto", // Changed from hidden to allow scrolling if needed
-      fontSize: isVerySmallMobile ? "0.85rem" : "0.9rem", // MOBILE-UI-ELEMENT-SIZING
-    };
-  }
-  
-  // Desktop styles
-  return {
-    ...baseStyles,
-    position: "fixed",
-    inset: 0,
-    backgroundColor: "transparent",
     display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: "1rem",
-    overflow: "hidden",
+    flexDirection: "column", // Stack children vertically
+    alignItems: "center", // Center children horizontally
+    minHeight: "100vh", // Full viewport height for all devices
+    backgroundColor: "transparent",
+    overflow: "visible", // Allow content to overflow and scroll naturally
+    justifyContent: "flex-start", // Align children to the top
+    fontSize: layout.SIZE.FONT_BASE,
+    padding: layout.PADDING.CONTAINER,
+    paddingTop: `calc(env(safe-area-inset-top, 0) + ${layout.PADDING.CONTAINER})`,
+    paddingBottom: `calc(env(safe-area-inset-bottom, 0) + ${layout.PADDING.CONTAINER})`,
+    margin: "0 auto", // Center the container
   };
 };
 
@@ -127,16 +116,18 @@ export const getBackgroundStyles = () => {
 
 // Generate logo styles based on device type
 export const getLogoStyles = (deviceInfo) => {
-  const { isMobile, isVerySmallMobile } = deviceInfo;
+  // Get layout based on device type
+  const layout = getLayout(deviceInfo);
   
   return {
-    position: "absolute",
-    top: isVerySmallMobile ? "calc(env(safe-area-inset-top, 0) + 70px)" : // MOBILE-UI-ELEMENT-POSITIONING-VERTICAL
-         (isMobile ? "calc(env(safe-area-inset-top, 0) + 33px)" : "20px"), // MOBILE-UI-ELEMENT-POSITIONING-VERTICAL / DESKTOP-UI-ELEMENT-POSITIONING-VERTICAL
-    left: isVerySmallMobile ? "3px" : (isMobile ? "26px" : "20px"), // MOBILE-UI-ELEMENT-POSITIONING-HORIZONTAL / DESKTOP-UI-ELEMENT-POSITIONING-HORIZONTAL - Slight change to force cache invalidation
-    width: isVerySmallMobile ? "14px" : (isMobile ? "40px" : "120px"), // MOBILE-UI-ELEMENT-SIZING / DESKTOP-UI-ELEMENT-SIZING
+    position: "relative",
+    marginTop: layout.MARGIN.LOGO_TOP,
+    marginBottom: layout.MARGIN.LOGO_BOTTOM,
+    height: layout.SIZE.LOGO_HEIGHT,
+    width: layout.SIZE.LOGO_WIDTH,
     zIndex: "10",
     opacity: "0.6",
+    alignSelf: "flex-start", // Align to the start of the flex container
   };
 };
 
@@ -149,26 +140,29 @@ export const getContentContainerStyles = (deviceInfo) => {
 
 // Generate footer styles based on device type
 export const getFooterStyles = (deviceInfo) => {
-  const { isMobile } = deviceInfo;
+  // Get layout based on device type
+  const layout = getLayout(deviceInfo);
   
   return {
     container: {
       width: "100%",
       textAlign: "center",
-      marginTop: "auto",
-      paddingTop: "1rem",
-      paddingBottom: isMobile ? "env(safe-area-inset-bottom, 1rem)" : "0.5rem",
+      marginTop: layout.MARGIN.FOOTER_TOP, // Push to bottom of container
+      marginBottom: layout.MARGIN.FOOTER_BOTTOM,
+      padding: `${layout.PADDING.FOOTER} 0`,
+      paddingBottom: `calc(env(safe-area-inset-bottom, 0) + ${layout.PADDING.FOOTER})`,
       backgroundColor: "transparent",
       zIndex: "10",
+      position: "relative",
     },
-    text: (deviceInfo) => ({
+    text: () => ({
       color: "black",
       fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
       fontWeight: "bold",
-      fontSize: deviceInfo.isVerySmallMobile ? "0.8rem" : (deviceInfo.isMobile ? "0.9rem" : "1.2rem"),
+      fontSize: layout.SIZE.FONT_FOOTER,
       margin: 0,
-      marginTop: deviceInfo.isMobile ? "-0.25rem" : "-1rem",
       padding: 0,
+      position: "relative",
     })
   };
 };

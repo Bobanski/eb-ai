@@ -1,6 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css' // Tailwind CSS
+import './layout.css' // Layout variables and utilities
 import './styles.css' // Custom styling
 import './chat-styles.css' // Standalone styling without Tailwind
 import App from './App.jsx'

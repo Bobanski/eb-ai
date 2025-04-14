@@ -8,9 +8,12 @@ html, body {
   width: 100%;
   margin: 0;
   padding: 0;
-  /* Mobile-friendly layout - no fixed positioning */
+  /* Mobile-friendly layout - using fixed positioning to prevent scrolling */
   min-height: 100vh;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow: hidden !important; /* Prevent scrolling of entire page */
 }
 
 /* Header styles */
@@ -27,54 +30,66 @@ p {
 .subtitle {
   color: #333;
   text-align: center;
-  margin-bottom: 0.8rem; /* Reduced by 20% to move up */
   width: 100%;
   font-size: 0.85rem;
   line-height: 1.3;
   padding: 0 0.5rem;
   max-width: 75%; /* Further limit the width of the subtitle */
-  margin-left: auto;
-  margin-right: auto;
+  margin: 0 auto; /* Reset margins to be controlled by the parent */
+  position: relative; /* Allow for relative positioning */
 }
 
 
 /* Main container */
 .main-content {
   width: 100%;
-  max-width: 600px;
+  max-width: var(--container-max-width);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   box-sizing: border-box;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  overflow: visible;
   position: relative;
-  padding-top: env(safe-area-inset-top, 0); /* Safe area inset for top */
-  padding-bottom: env(safe-area-inset-bottom, 0); /* Safe area inset for bottom */
+  padding: var(--container-padding);
+  padding-top: calc(env(safe-area-inset-top, 0) + var(--container-padding));
+  padding-bottom: calc(env(safe-area-inset-bottom, 0) + var(--container-padding));
+  min-height: 100vh;
+  margin: 0 auto;
 }
 
-/* Header container */
+/*
+ * Header container
+ * Using CSS variables for positioning
+ */
 .header-container {
   width: 100%;
   text-align: center;
-  margin-bottom: 1.5rem;
-  padding: 0 1rem;
-  margin-top: 1rem; /* Add top margin to lower the header */
+  padding: var(--header-padding);
+  position: relative;
+  margin-top: var(--header-margin-top);
+  margin-bottom: var(--header-margin-bottom);
+  z-index: 10;
 }
 
-/* Chat container - this is the black rounded rectangle */
+/*
+ * Chat container - this is the black rounded rectangle
+ */
 .chat-container {
   width: 100%;
-  max-width: 800px; /* Increased from 600px */
+  max-width: var(--chat-max-width);
   background-color: black;
-  border-radius: 1.5rem;
+  border-radius: var(--border-radius-chat);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.15);
   display: flex;
   flex-direction: column;
   overflow: hidden;
   border: none;
   box-sizing: border-box;
+  position: relative;
+  margin-top: var(--chat-margin-top);
+  margin-bottom: var(--chat-margin-bottom);
+  z-index: 5;
 }
 
 /* Chat messages area */
@@ -83,25 +98,31 @@ p {
   height: calc(100vh - 12rem); /* Use viewport height minus space for header and input */
   max-height: 40rem;
   min-height: 15rem;
-  overflow-y: auto;
+  overflow-y: auto !important; /* Force scrolling to be enabled within chat area */
   overflow-x: hidden;
   display: flex;
+  flex-grow: 1;
   flex-direction: column;
   gap: 1.25rem;
   background-color: white;
   -webkit-overflow-scrolling: touch;
   box-sizing: border-box;
+  position: relative; /* Ensure proper stacking context */
+  z-index: 2; /* Higher than body but lower than input area */
 }
 
 /* Mobile-specific styles */
 @media (max-width: 768px) {
   .main-content {
     min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
-    overflow-y: auto; /* Allow vertical scrolling if needed */
+    overflow: hidden !important; /* Prevent scrolling on the container */
+    position: relative; /* Ensure proper stacking */
   }
   
   .chat-messages {
-    height: calc(100dvh - 12rem); /* Use dynamic viewport height for better iOS support */
+    height: calc(100dvh - 5rem); /* Use dynamic viewport height for better iOS support */
+    position: relative; /* Ensure proper stacking */
+    z-index: 2; /* Ensure chat messages can be scrolled */
   }
 }
 
@@ -297,6 +318,13 @@ p {
   background-color: black;
 }
 
+/* Desktop-specific styling for chat input area */
+@media (min-width: 769px) {
+  .chat-input-area {
+    padding: 1.2rem 1rem; /* Reduced padding to extend up and left */
+  }
+}
+
 .input-container {
   display: flex;
   align-items: center;
@@ -312,6 +340,15 @@ p {
   border: 1px solid #e5e7eb;
   border-radius: 0.75rem;
   color: black;
+}
+
+/* Desktop-specific styling for chat input to make it bigger */
+@media (min-width: 769px) {
+  .chat-input {
+    padding: 0.8rem 1rem; /* Taller input field */
+    margin-left: -0.5rem; /* Extend to the left */
+    width: calc(100% + 0.5rem); /* Adjust width to match the leftward extension */
+  }
 }
 
 .chat-input:focus {
@@ -368,19 +405,19 @@ p {
 .title-with-logo {
   display: flex;
   align-items: center;
-  padding-top: 0.5rem;
   justify-content: center;
-  gap: 0.05rem; /* Reduced by 15% from 0.63rem */
-  font-size: 1.75rem;
+  gap: 0.05rem; /* Spacing between elements */
+  font-size: var(--font-size-title);
   font-weight: bold;
   color: black;
-  margin-bottom: 0.75rem;
   width: 100%;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  margin-bottom: 0.75rem; /* Space between title and subtitle */
+  position: relative;
 }
 
 .title-text {
-  font-size: 1.75rem;
+  font-size: var(--font-size-title);
   font-weight: bold;
   line-height: 1.2;
 }
@@ -391,12 +428,20 @@ p {
   justify-content: center;
 }
 
+/* Logo wrapper for App.jsx logo */
+.logo-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  padding: 0.5rem 0;
+}
+
 .logo-image {
-  height: 3.8rem; /* Reduced by 5% from 4rem */
+  height: var(--logo-height);
   width: auto;
   display: inline-block;
   filter: brightness(0); /* Make SVG black for better visibility */
-  max-width: 142px; /* Also reduced by ~5% from 150px */
+  max-width: 142px;
 }
 /* Prompt buttons styling */
 .prompt-buttons-separator {
@@ -405,13 +450,22 @@ p {
   gap: 0.5rem;
   justify-content: space-around;
   width: 100%;
-  padding: 1rem 0;
-  position: sticky;
-  bottom: 0;
-  margin-top: auto;
+  padding: 0.25rem 0;
+  position: absolute;
+  bottom: 0.5rem;
   border-top: 1px solid #e5e7eb;
   background-color: white;
   box-shadow: none;
+  margin-left: -1.2rem;
+}
+
+/* Desktop-specific styling for prompt buttons separator */
+@media (min-width: 769px) {
+  .prompt-buttons-separator {
+    padding-top: 0.75rem; /* Add space above buttons */
+    margin-top: -0.75rem; /* Negative margin to move the border up */
+    border-top-color: #e5e7eb; /* Ensure border is visible */
+  }
 }
 .prompt-button {
   background-color: #f2f2f2;
@@ -444,53 +498,53 @@ p {
     font-size: 0.85rem; /* Controls the font size of the title text */
     gap: 0.1rem;
     flex-wrap: nowrap; /* Prevent wrapping to keep elements inline */
-    justify-content: center;
-    margin-top: 1.5rem; /* Increased to provide more space below logo */
-    padding-top: 0;
-    margin-bottom: 0.1rem; /* Reduced to bring elements closer together */
-    align-items: center; /* Ensure vertical alignment */
-    display: flex; /* Ensure flex display for alignment */
+    line-height: 1.2; /* Improved line height for readability */
+  }
+  
+  .last-message {
+    margin-bottom: auto;
   }
   
   .title-text {
     font-size: 0.85rem;
     line-height: 1.2;
-    display: inline-flex; /* Use inline-flex to maintain horizontal flow */
-    align-items: center; /* Ensure vertical alignment with logo */
     white-space: nowrap; /* Prevent text wrapping */
   }
   
   .logo-image {
-    height: 1.6rem;
-    max-width: 70px;
-    margin-top: 0; /* Remove top margin to align with text */
-    vertical-align: middle; /* Ensure vertical alignment */
-    display: inline-block; /* Keep inline with text */
+    height: 2.1rem !important; /* SIZING */
+    width: auto !important; /* SIZING - Override SVG intrinsic width */
+    max-width: 140px !important; /* SIZING */
+    display: inline-block;
+    position: relative;
+    top: -3px; /* Slight vertical adjustment */
   }
   
+  /*
+   * Mobile header container - MAIN POSITIONING ELEMENT FOR MOBILE
+   * Adjust the top value below to move the entire header section up or down on mobile
+   */
   .header-container {
-    margin-bottom: 0.1rem; /* Reduced to bring elements closer to chat container */
-    padding: 0 0.5rem;
-    margin-top: 5rem; /* Further increased to ensure content is below the logo */
+    margin-top: var(--header-margin-top-mobile); /* Use CSS variable for mobile */
+    padding: var(--header-padding-mobile);
+    z-index: 10;
   }
   
   /* Adjust subtitle position */
   .subtitle {
-    margin-top: 0.24rem;
-    margin-bottom: 0.16em;
-    font-size: 0.85rem; /* SIZE: Controls the font size of the subtitle */
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
   }
   
   /* Chat container adjustments - using percentages instead of fixed scaling */
   .chat-container {
     border-radius: 1rem;
-    width: 95%; /* Slightly wider on mobile as requested */
-    max-width: 95%; /* Slightly wider on mobile as requested */
-    margin: 0 auto;
+    width: 95%;
+    max-width: 95%;
     box-sizing: border-box;
     overflow: hidden;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    margin-top: 0.5rem; /* FIXED: Increased slightly for better spacing */
+    margin-top: var(--chat-margin-top-mobile); /* Use CSS variable for mobile */
   }
   
   .chat-messages {
@@ -560,20 +614,20 @@ p {
   
   /* Main container padding - using percentages instead of fixed scaling */
   .main-content {
-    padding: 0.4rem 0;
+    padding: 0.5rem 0;
     width: 100%;
     max-width: 100vw;
-    margin: 0 auto;
-    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
+    margin: 0 auto; /* Reset margin */
+    min-height: 100dvh;
     box-sizing: border-box;
     overflow-x: hidden;
-    overflow-y: auto; /* FIXED: Changed from 'hidden' to 'auto' to allow scrolling */
+    overflow-y: auto; /* Enable vertical scrolling */
     position: relative;
-    padding-top: calc(env(safe-area-inset-top, 0) + 0.5rem); /* Simplified padding */
-    padding-bottom: env(safe-area-inset-bottom, 3rem); /* Match the padding in App.jsx */
+    padding-top: calc(env(safe-area-inset-top, 0) + 0.5rem);
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* FIXED: Changed from 'center' to 'flex-start' */
+    justify-content: flex-start;
   }
   
   /* Adjust smoothie image size */
@@ -670,12 +724,12 @@ p {
     width: 100%;
     margin: 0 auto;
     padding-top: calc(env(safe-area-inset-top, 0) + 0.5rem);
-    padding-bottom: env(safe-area-inset-bottom, 3rem); /* Match the padding in App.jsx */
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* FIXED: Changed from 'center' to 'flex-start' */
-    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
-    overflow-y: auto; /* FIXED: Added to allow scrolling */
+    justify-content: flex-start;
+    min-height: 100dvh;
+    overflow-y: auto;
   }
   
   p {
@@ -752,13 +806,13 @@ p {
     width: 98%;
     margin: 0 auto;
     padding: 0.15rem 0;
-    padding-top: calc(env(safe-area-inset-top, 0) + 0.3rem); /* Safe area inset plus padding */
+    padding-top: calc(env(safe-area-inset-top, 0) + 0.3rem);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* FIXED: Changed from 'flex-end' to 'flex-start' */
-    padding-bottom: env(safe-area-inset-bottom, 3rem); /* Match the padding in App.jsx */
-    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
-    overflow-y: auto; /* FIXED: Added to allow scrolling */
+    justify-content: flex-start;
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
+    min-height: 100dvh;
+    overflow-y: auto;
   }
   
   /* Adjust input area for landscape */
@@ -789,12 +843,12 @@ p {
     width: 100%;
     margin: 0 auto;
     padding-top: calc(env(safe-area-inset-top, 0) + 0.5rem);
-    padding-bottom: env(safe-area-inset-bottom, 3rem); /* Match the padding in App.jsx */
+    padding-bottom: env(safe-area-inset-bottom, 1rem);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* FIXED: Changed from 'center' to 'flex-start' */
-    min-height: 100dvh; /* Use dynamic viewport height for better iOS support */
-    overflow-y: auto; /* FIXED: Added to allow scrolling */
+    justify-content: flex-start;
+    min-height: 100dvh;
+    overflow-y: auto;
   }
   
   .chat-container {
@@ -849,3 +903,6 @@ p {
     font-size: 0.7rem; /* SIZE: Controls the font size of the subtitle on intermediate screens */
   }
 }
+
+
+

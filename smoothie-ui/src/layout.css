@@ -1,0 +1,132 @@
+/**
+ * Layout CSS
+ * 
+ * This file provides CSS variables based on the layout configuration.
+ * These variables can be used in any CSS file to maintain consistent
+ * spacing, sizing, and positioning across the application.
+ */
+
+:root {
+  /* Desktop layout variables (default) */
+  --container-padding: 2rem;
+  --header-padding: 1rem;
+  --content-padding: 1.5rem;
+  --footer-padding: 1rem;
+  
+  --header-margin-top: 2rem;
+  --header-margin-bottom: 1rem;
+  --logo-margin-top: 1rem;
+  --logo-margin-bottom: 1rem;
+  --chat-margin-top: 1rem;
+  --chat-margin-bottom: 2rem;
+  --footer-margin-bottom: 2rem;
+  
+  --logo-height: 120px;
+  --container-max-width: 600px;
+  --chat-max-width: 800px;
+  --font-size-base: 1rem;
+  --font-size-title: 1.75rem;
+  --font-size-subtitle: 0.9rem;
+  --font-size-footer: 1.2rem;
+  
+  --border-radius-chat: 1.5rem;
+  --border-radius-message: 1rem;
+  --border-radius-input: 0.75rem;
+  --border-radius-button: 0.75rem;
+}
+
+/* Mobile layout variables */
+@media (max-width: 768px) {
+  :root {
+    --container-padding: 1rem;
+    --header-padding: 0.5rem;
+    --content-padding: 1rem;
+    --footer-padding: 0.5rem;
+    --header-margin-top: 0rem; /* Reduced to move header up */
+    --header-margin-bottom: 0.5rem;
+    --logo-margin-top: 0.5rem;
+    --logo-margin-top: 0.5rem;
+    --logo-margin-bottom: 0.5rem;
+    --chat-margin-top: 0.5rem;
+    --chat-margin-bottom: 1rem;
+    --footer-margin-bottom: 1rem;
+    
+    --logo-height: 35px;
+    --container-max-width: 100%;
+    --chat-max-width: 95%;
+    --font-size-base: 0.9rem;
+    --font-size-title: 0.85rem;
+    --font-size-subtitle: 0.85rem;
+    --font-size-footer: 1.25rem;
+    
+    --border-radius-chat: 1rem;
+    --border-radius-message: 0.75rem;
+  }
+}
+
+/* Very small mobile layout variables */
+@media (max-width: 375px) {
+  :root {
+    --container-padding: 0.5rem;
+    --header-padding: 0.3rem;
+    
+    --header-margin-top: 0.5rem;
+    --header-margin-bottom: 0.3rem;
+    
+    --logo-height: 14px;
+    --font-size-base: 0.85rem;
+    --font-size-title: 0.7rem;
+    --font-size-subtitle: 0.6rem;
+    --font-size-footer: 0.6rem;
+  }
+}
+
+/* Layout utility classes */
+.container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  padding: var(--container-padding);
+  margin: 0 auto;
+}
+
+.header {
+  margin-top: var(--header-margin-top);
+  margin-bottom: var(--header-margin-bottom);
+  padding: var(--header-padding);
+}
+
+.logo {
+  height: var(--logo-height);
+  margin-top: var(--logo-margin-top);
+  margin-bottom: var(--logo-margin-bottom);
+}
+
+.chat-container {
+  width: 100%;
+  max-width: var(--chat-max-width);
+  margin-top: var(--chat-margin-top);
+  margin-bottom: var(--chat-margin-bottom);
+  border-radius: var(--border-radius-chat);
+}
+
+.footer {
+  margin-bottom: var(--footer-margin-bottom);
+  padding: var(--footer-padding);
+}
+
+/* Typography */
+body {
+  font-size: var(--font-size-base);
+}
+
+.title {
+  font-size: var(--font-size-title);
+}
+
+.subtitle {
+  font-size: var(--font-size-subtitle);
+}
+
+.footer-text {
+  font-size: var(--font-size-footer);
+}

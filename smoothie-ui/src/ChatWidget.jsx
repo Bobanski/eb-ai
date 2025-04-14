@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { getDeviceInfo, getHeaderStyles, getChatContainerStyles, getLayout, getChatLogoStyles } from "./utils/layout-manager";
 
 /* ------------------------------------------------------------------ */
 /* 1.  image imports (unchanged)                                      */
@@ -82,6 +83,17 @@ export default function ChatWidget() {
     },
   ]);
   const [showPromptButtons, setShowPromptButtons] = useState(true);
+  const [deviceInfo, setDeviceInfo] = useState(getDeviceInfo());
+  
+  // Update device info on resize
+  useEffect(() => {
+    const handleResize = () => {
+      setDeviceInfo(getDeviceInfo());
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   const preGeneratedPrompts = [
     "I need a smoothie to boost my immune system",
     "What's the best smoothie for post-workout recovery?",
@@ -232,23 +244,27 @@ export default function ChatWidget() {
   /* ------------------------------------------------------------------ */
   return (
     <div className="main-content">
-      <div className="header-container">
+      <div style={getHeaderStyles(deviceInfo)}>
         <div className="title-with-logo">
           <div className="title-text">Your personal</div>
           <div className="logo-container">
-            <img src={EarthBarLogo} alt="Earth Bar" className="logo-image" />
+            <img
+              src={EarthBarLogo}
+              alt="Earth Bar"
+              style={getChatLogoStyles(deviceInfo)}
+            />
           </div>
           <div className="title-text">assistant</div>
         </div>
         <p className="subtitle">Tell us what you're craving, we'll pick out a smoothie that works as hard as you do</p>
       </div>
-      <div className="chat-container">
+      <div style={getChatContainerStyles(deviceInfo)}>
         {/* Chat messages */}
         <div className="chat-messages">
           {messages.map((m, i) => (
             <div
               key={i}
-              className={`message-wrapper ${m.role}`}
+              className={`message-wrapper ${m.role} ${i === messages.length - 1 ? 'last-message' : ''}`}
             >
               <div className={`message-container ${m.role}`}>
                 {/* Only show avatar for assistant messages */}
@@ -307,7 +323,6 @@ export default function ChatWidget() {
           )}
 
           <div ref={messagesEndRef} />
-          
           {/* Prompt buttons directly at the bottom without container */}
           {showPromptButtons && (
             <div className="prompt-buttons-separator">
@@ -325,6 +340,7 @@ export default function ChatWidget() {
               ))}
             </div>
           )}
+          
         </div>
 
         {/* Input area */}

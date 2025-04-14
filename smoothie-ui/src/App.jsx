@@ -6,8 +6,9 @@ import {
   getContainerStyles,
   getBackgroundStyles,
   getLogoStyles,
-  getFooterStyles
-} from "./utils/responsive";
+  getFooterStyles,
+  getLayout
+} from "./utils/layout-manager";
 
 export default function App() {
   // Initialize device info state
@@ -41,29 +42,34 @@ export default function App() {
 
   return (
     <>
-      {/* Primary background div */}
+      {/* Background layers */}
       <div style={backgroundStyles.primary} />
-      
-      {/* Gradient layer */}
       <div style={backgroundStyles.gradient} />
-
-      {/* Additional bottom coverage layer */}
       <div style={backgroundStyles.bottom} />
+      {/* Main container with flexbox layout */}
       <div style={containerStyles}>
+        {/* Logo positioned absolutely to avoid affecting other elements */}
         <img
           src={EarthbarLogo}
           alt="Earthbar Logo"
-          style={logoStyles}
+          style={{
+            ...logoStyles,
+            position: 'absolute',
+            top: getLayout(deviceInfo).APP_LOGO.TOP_OFFSET,
+            left: getLayout(deviceInfo).APP_LOGO.LEFT_MARGIN,
+            zIndex: 20 // Higher than other elements to ensure visibility
+          }}
         />
+        
+        {/* Content container with chat widget */}
         <div className="content-container">
           <ChatWidget />
-          {/* Footer text inside the main container */}
-          <div style={footerStyles.container}>
-            <p style={footerStyles.text(deviceInfo)}>
-              Be more than well.
-            </p>
-          </div>
         </div>
+        
+        {/* Footer at the bottom */}
+        <p style={footerStyles}>
+          Be more than well.
+        </p>
       </div>
     </>
   );

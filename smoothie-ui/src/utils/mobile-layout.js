@@ -185,7 +185,7 @@ const MOBILE_LAYOUT = {
    */
   INPUT_FIELD: {
     // Padding inside the input field
-    PADDING: '0.9rem 1.5rem',
+    PADDING: '0.7rem 1.5rem',
     
     // Font size of the input text
     FONT_SIZE: '0.85rem',
@@ -214,7 +214,7 @@ const MOBILE_LAYOUT = {
    */
   SEND_BUTTON: {
     // Padding inside the button
-    PADDING: '0.9rem 1rem',
+    PADDING: '0.7rem 1rem',
 
     // Font size and weight
     FONT_SIZE: '0.9rem',

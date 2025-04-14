@@ -101,7 +101,7 @@ const DESKTOP_LAYOUT = {
     // Absolute position from the top of the container
     TOP: '150px',
     
-    BOTTOM: '250px',
+    BOTTOM: '185px',
     // Horizontal position (centered by default)
     LEFT: '0',
     RIGHT: '0',
@@ -119,10 +119,10 @@ const DESKTOP_LAYOUT = {
    */
   CHAT_MESSAGES: {
     // Height of the chat messages area
-    HEIGHT: 'calc(100vh - 12rem)',
+    HEIGHT: 'calc(100vh - 15rem)',
     
     // Maximum height of the chat messages area
-    MAX_HEIGHT: '80rem',
+    MAX_HEIGHT: '60rem',
     
     // Minimum height of the chat messages area
     MIN_HEIGHT: '40rem',
@@ -150,7 +150,7 @@ const DESKTOP_LAYOUT = {
     
     // Position
     POSITION: 'relative',
-    BOTTOM: '30px'
+    BOTTOM: '20px'
   },
   
   /**

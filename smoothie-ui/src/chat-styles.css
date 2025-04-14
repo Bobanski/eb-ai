@@ -1,19 +1,14 @@
 /* Standalone styles for the chat UI without Tailwind dependencies */
 
-/* Base page styles */
+ /* Base page styles */
 html, body {
   font-family: 'Inter', sans-serif;
   background: white;
-  height: 100%;
+  height: 100dvh; /* Use dynamic viewport height */
   width: 100%;
   margin: 0;
   padding: 0;
-  /* Mobile-friendly layout - using fixed positioning to prevent scrolling */
-  min-height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  overflow: hidden !important; /* Prevent scrolling of entire page */
+  overflow: hidden; /* Prevent scrolling of entire page */
 }
 
 /* Header styles */
@@ -54,7 +49,7 @@ p {
   padding: var(--container-padding);
   padding-top: calc(env(safe-area-inset-top, 0) + var(--container-padding));
   padding-bottom: calc(env(safe-area-inset-bottom, 0) + var(--container-padding));
-  min-height: 100vh;
+  height: 100dvh; /* Use dynamic viewport height */
   margin: 0 auto;
 }
 
@@ -90,18 +85,16 @@ p {
   margin-top: var(--chat-margin-top);
   margin-bottom: var(--chat-margin-bottom);
   z-index: 5;
+  /* Height is now controlled by JS in mobile-layout.js */
 }
 
 /* Chat messages area */
 .chat-messages {
   padding: 1rem 1.25rem;
-  height: calc(100vh - 12rem); /* Use viewport height minus space for header and input */
-  max-height: 40rem;
-  min-height: 15rem;
-  overflow-y: auto !important; /* Force scrolling to be enabled within chat area */
+  flex: 1; /* Take up all available space in the container */
+  overflow-y: auto; /* Enable scrolling */
   overflow-x: hidden;
   display: flex;
-  flex-grow: 1;
   flex-direction: column;
   gap: 1.25rem;
   background-color: white;
@@ -120,9 +113,11 @@ p {
   }
   
   .chat-messages {
-    height: calc(100dvh - 5rem); /* Use dynamic viewport height for better iOS support */
     position: relative; /* Ensure proper stacking */
     z-index: 2; /* Ensure chat messages can be scrolled */
+    margin-bottom: 0; /* Remove bottom margin */
+    flex: 1; /* Take up available space */
+    /* Height is controlled by JS */
   }
 }
 
@@ -312,10 +307,15 @@ p {
 
 /* Chat input area */
 .chat-input-area {
-  padding: 1.5rem;
-  padding-bottom: env(safe-area-inset-bottom, 1.5rem);
+  padding: 1rem 1.5rem;
+  padding-bottom: calc(env(safe-area-inset-bottom, 1.75rem) + 0.25rem);
   border-top: none;
   background-color: black;
+  position: relative;
+  bottom: 0;
+  height: 4rem; /* Fixed height for input area */
+  display: flex;
+  align-items: center;
 }
 
 /* Desktop-specific styling for chat input area */
@@ -334,7 +334,7 @@ p {
 /* Text input */
 .chat-input {
   flex: 1;
-  padding: 0.625rem 0.875rem;
+  padding: 0.725rem 0.875rem;
   font-size: 0.9375rem;
   background-color: white;
   border: 1px solid #e5e7eb;
@@ -443,53 +443,31 @@ p {
   filter: brightness(0); /* Make SVG black for better visibility */
   max-width: 142px;
 }
-/* Prompt buttons styling */
-.prompt-buttons-separator {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-  justify-content: space-around;
-  width: 100%;
-  padding: 0.25rem 0;
-  position: absolute;
-  bottom: 0.5rem;
-  border-top: 1px solid #e5e7eb;
-  background-color: white;
-  box-shadow: none;
-  margin-left: -1.2rem;
-}
 
-/* Desktop-specific styling for prompt buttons separator */
+/*
+Commenting out the Desktop prompt buttons and .prompt-button CSS
+to prevent conflicts with the user-defined absolute positions via layout.
+
+Original lines 446-494 were:
+
+---------------------------------------
+/* Prompt buttons styling - Base styles (used for Desktop)
+.prompt-buttons-separator {
+   ...
+}
 @media (min-width: 769px) {
-  .prompt-buttons-separator {
-    padding-top: 0.75rem; /* Add space above buttons */
-    margin-top: -0.75rem; /* Negative margin to move the border up */
-    border-top-color: #e5e7eb; /* Ensure border is visible */
-  }
+   .prompt-buttons-separator {
+     ...
+   }
 }
 .prompt-button {
-  background-color: #f2f2f2;
-  color: #666666;
-  border: 1px solid #e0e0e0;
-  border-radius: 0.75rem;
-  padding: 0.5rem 0.25rem;
-  font-size: 0.85rem;
-  font-weight: 400;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-align: center;
-  flex: 1;
-  max-width: 31%;
-  white-space: normal;
-  line-height: 1.2;
-  box-shadow: none;
+   ...
 }
-
 .prompt-button:hover {
-  background-color: #e6e6e6;
-  color: #4b5563;
-  border-color: #d0d0d0;
+   ...
 }
+---------------------------------------
+*/
 
 /* Dynamic mobile responsiveness */
 @media (max-width: 640px) {
@@ -548,9 +526,7 @@ p {
   }
   
   .chat-messages {
-    height: calc(100vh - 13rem); /* Further adjust to account for more spacing */
-    max-height: 60vh; /* Use viewport height for better mobile scaling */
-    min-height: 50vh; /* Use viewport height for better mobile scaling */
+    /* Height, max-height, min-height controlled by JS */
     padding: 0.5rem;
     overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
@@ -569,20 +545,11 @@ p {
     border-radius: 1rem;
   }
   
-  /* Prompt buttons container */
-  .prompt-buttons-separator {
-    flex-direction: column;
-    padding: 0.5rem;
-    gap: 0.4rem;
-  }
+  /* Prompt buttons container - Mobile layout controlled by JS */
+  /* .prompt-buttons-separator { ... } */ /* Mobile styles handled by JS */
   
-  .prompt-button {
-    max-width: 100%;
-    padding: 0.5rem;
-    font-size: 0.8rem;
-    border-radius: 0.5rem;
-    transition: all 0.2s ease;
-  }
+  /* Prompt button - Mobile layout controlled by JS */
+  /* .prompt-button { ... } */ /* Mobile styles handled by JS */
   
   /* Chat input area */
   .chat-input-area {
@@ -685,11 +652,10 @@ p {
   }
   
   .chat-messages {
-    height: calc(100dvh - 14rem); /* Use dynamic viewport height for better iOS support */
+    /* Height controlled by JS */
     padding: 0.3rem;
     gap: 0.75rem;
-    max-height: 55dvh; /* Use dynamic viewport height for better iOS support */
-    min-height: 45dvh; /* Use dynamic viewport height for better iOS support */
+    /* max-height, min-height controlled by JS */
   }
   
   .message-wrapper-inner {
@@ -765,8 +731,7 @@ p {
 /* Optimize for landscape orientation on mobile */
 @media (max-height: 500px) and (orientation: landscape) {
   .chat-messages {
-    height: calc(100dvh - 8rem); /* Use dynamic viewport height for better iOS support */
-    min-height: 9rem;
+    /* Height, min-height controlled by JS */
   }
   
   .title-with-logo {
@@ -866,9 +831,7 @@ p {
   }
   
   .chat-messages {
-    height: calc(100dvh - 12rem); /* Use dynamic viewport height for better iOS support */
-    max-height: 58dvh; /* Use dynamic viewport height for better iOS support */
-    min-height: 48dvh; /* Use dynamic viewport height for better iOS support */
+    /* Height, max-height, min-height controlled by JS */
   }
   
   /* Adjust header for intermediate size */
@@ -903,6 +866,3 @@ p {
     font-size: 0.7rem; /* SIZE: Controls the font size of the subtitle on intermediate screens */
   }
 }
-
-
-

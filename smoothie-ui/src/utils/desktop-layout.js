@@ -96,11 +96,12 @@ const DESKTOP_LAYOUT = {
     WIDTH: '100%',
     
     // Maximum width of the chat container
-    MAX_WIDTH: '800px',
+    MAX_WIDTH: '1200px',
     
     // Absolute position from the top of the container
     TOP: '150px',
     
+    BOTTOM: '250px',
     // Horizontal position (centered by default)
     LEFT: '0',
     RIGHT: '0',
@@ -121,13 +122,88 @@ const DESKTOP_LAYOUT = {
     HEIGHT: 'calc(100vh - 12rem)',
     
     // Maximum height of the chat messages area
-    MAX_HEIGHT: '40rem',
+    MAX_HEIGHT: '80rem',
     
     // Minimum height of the chat messages area
-    MIN_HEIGHT: '15rem',
+    MIN_HEIGHT: '40rem',
     
     // Internal padding of the chat messages area
     PADDING: '1rem 1.25rem'
+  },
+  
+  /**
+   * ===== CHAT INPUT AREA =====
+   * Controls the positioning and appearance of the chat input area
+   */
+  CHAT_INPUT_AREA: {
+    // Height of the input area
+    HEIGHT: '4.5rem',
+    
+    // Internal padding of the input area
+    PADDING: '1rem 1rem',
+    
+    // Extra padding for the bottom (adds safe area inset for iOS)
+    PADDING_BOTTOM: 'calc(env(safe-area-inset-bottom, 0.75rem) + 0.5rem)',
+    
+    // Background color
+    BACKGROUND_COLOR: 'black',
+    
+    // Position
+    POSITION: 'relative',
+    BOTTOM: '30px'
+  },
+  
+  /**
+   * ===== INPUT FIELD =====
+   * Controls the appearance of the text input field
+   */
+  INPUT_FIELD: {
+    // Padding inside the input field
+    PADDING: '0.65rem 1rem',
+    
+    // Font size of the input text
+    FONT_SIZE: '1rem',
+    
+    // Width of the input field (relative to container)
+    WIDTH: '114%',
+    
+    // Position from the left side of the container
+    LEFT_OFFSET: '-5%',
+    
+    // Border radius for rounded corners
+    BORDER_RADIUS: '0.75rem',
+    
+    // Colors
+    BACKGROUND_COLOR: 'white',
+    TEXT_COLOR: 'black',
+    BORDER_COLOR: '#e5e7eb',
+    
+    // Gap between input field and send button
+    GAP: '0.75rem'
+  },
+  
+  /**
+   * ===== SEND BUTTON =====
+   * Controls the appearance of the send button
+   */
+  SEND_BUTTON: {
+    // Padding inside the button
+    PADDING: '0.65rem 1.5rem',
+    
+    // Font size and weight
+    FONT_SIZE: '1rem',
+    FONT_WEIGHT: '500',
+    
+    // Border radius for rounded corners
+    BORDER_RADIUS: '0.75rem',
+    
+    // Colors for enabled state
+    ENABLED_BG_COLOR: '#3b82f6',
+    ENABLED_TEXT_COLOR: 'white',
+    
+    // Colors for disabled state
+    DISABLED_BG_COLOR: '#e5e7eb',
+    DISABLED_TEXT_COLOR: '#9ca3af'
   },
   
   /**
@@ -166,6 +242,38 @@ const DESKTOP_LAYOUT = {
     // Base font size for the container
     FONT_SIZE: '1rem'
   }
-};
+,
+    PROMPT_BUTTONS: {
+      CONTAINER: {
+        DISPLAY: 'flex',
+        FLEX_DIRECTION: 'row',
+        FLEX_WRAP: 'wrap',
+        GAP: '0.5rem',
+        JUSTIFY_CONTENT: 'space-around',
+        WIDTH: '90%',
+        POSITION: 'absolute',
+        /* Shifting offsets below - user can adjust these to move container as desired. */
+        TOP: 'auto',
+        LEFT: '20px',
+        RIGHT: '10px',
+        BOTTOM: '10px',
+        PADDING: '0.25rem 0',
+        BORDER_TOP: '1px solid #e5e7eb',
+        BACKGROUND_COLOR: 'white'
+      },
+      BUTTON: {
+        BACKGROUND_COLOR: '#f2f2f2',
+        TEXT_COLOR: '#666666',
+        BORDER: '1px solid #e0e0e0',
+        BORDER_RADIUS: '0.75rem',
+        PADDING: '0.5rem 0.25rem',
+        FONT_SIZE: '0.85rem',
+        FONT_WEIGHT: '400',
+        WHITE_SPACE: 'normal',
+        LINE_HEIGHT: '1.2',
+        MAX_WIDTH: '31%'
+      }
+    }
+  };
 
 export { DESKTOP_LAYOUT };

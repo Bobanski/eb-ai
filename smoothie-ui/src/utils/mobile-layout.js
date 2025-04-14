@@ -101,7 +101,11 @@ const MOBILE_LAYOUT = {
     MAX_WIDTH: '95%',
     
     // Absolute position from the top of the container
-    TOP: '80px',
+    TOP: '85px',
+    
+    // Absolute position from the bottom of the container
+    // Setting this extends the container downward
+    BOTTOM: '50px',
     
     // Horizontal position (centered by default)
     LEFT: '0',
@@ -111,7 +115,10 @@ const MOBILE_LAYOUT = {
     BORDER_RADIUS: '1rem',
     
     // Z-index (controls stacking order - higher numbers appear on top)
-    Z_INDEX: 5
+    Z_INDEX: 5,
+    
+    // Height property (percentage of available space)
+    HEIGHT: 'calc(100dvh - 12rem)' // Further increased container height
   },
   
   /**
@@ -119,17 +126,20 @@ const MOBILE_LAYOUT = {
    * Controls the chat messages area
    */
   CHAT_MESSAGES: {
-    // Height of the chat messages area
-    HEIGHT: 'calc(100vh - 13rem)',
+    // Height of the chat messages area - now using percentage
+    HEIGHT: 'calc(100% - 10rem)', // Adjusted to be relative to container height minus input area height
     
     // Maximum height of the chat messages area
-    MAX_HEIGHT: '60vh',
+    MAX_HEIGHT: '100dvh',
     
     // Minimum height of the chat messages area
-    MIN_HEIGHT: '50vh',
+    MIN_HEIGHT: '20vh',
     
     // Internal padding of the chat messages area
-    PADDING: '0.5rem'
+    PADDING: '1.5rem',
+    
+    // Flex property to take available space
+    FLEX: '2'
   },
   
   /**
@@ -138,7 +148,7 @@ const MOBILE_LAYOUT = {
    */
   FOOTER: {
     // Absolute position from the bottom of the container
-    BOTTOM: '60px',
+    BOTTOM: '-25px',
     
     // Horizontal position (centered by default)
     LEFT: '-0.8rem',
@@ -160,13 +170,98 @@ const MOBILE_LAYOUT = {
    */
   CONTAINER: {
     // Padding around the entire container
-    PADDING: '1rem',
+    PADDING: '0rem',
     
     // Maximum width of the container
     MAX_WIDTH: '100%',
     
     // Base font size for the container
     FONT_SIZE: '0.9rem'
+  },
+  
+  /**
+   * ===== INPUT FIELD =====
+   * Controls the appearance of the text input field
+   */
+  INPUT_FIELD: {
+    // Padding inside the input field
+    PADDING: '0.9rem 1.5rem',
+    
+    // Font size of the input text
+    FONT_SIZE: '0.85rem',
+    
+    // Width of the input field (relative to container)
+    WIDTH: '80%',
+    
+    // Position from the left side of the container
+    LEFT_OFFSET: '-8%',
+    
+    // Border radius for rounded corners
+    BORDER_RADIUS: '0.75rem',
+    
+    // Colors
+    BACKGROUND_COLOR: 'white',
+    TEXT_COLOR: 'black',
+    BORDER_COLOR: '#e5e7eb',
+    
+    // Gap between input field and send button
+    GAP: '0.5rem'
+  },
+  
+  /**
+   * ===== SEND BUTTON =====
+   * Controls the appearance of the send button for mobile devices
+   */
+  SEND_BUTTON: {
+    // Padding inside the button
+    PADDING: '0.9rem 1rem',
+
+    // Font size and weight
+    FONT_SIZE: '0.9rem',
+    FONT_WEIGHT: '500',
+
+    // Border radius for rounded corners
+    BORDER_RADIUS: '0.75rem',
+
+    // Colors for enabled state
+    ENABLED_BG_COLOR: '#3b82f6',
+    ENABLED_TEXT_COLOR: 'white',
+
+    // Colors for disabled state
+    DISABLED_BG_COLOR: '#e5e7eb',
+    DISABLED_TEXT_COLOR: '#9ca3af'
+  }
+,
+  PROMPT_BUTTONS: {
+    CONTAINER: {
+      DISPLAY: 'flex',
+      FLEX_DIRECTION: 'row',
+      GAP: '.5rem',
+      JUSTIFY_CONTENT: 'space-between',
+      WIDTH: '100%',
+      PADDING: '.5rem',
+      BORDER_TOP: '1px solid #e5e7eb',
+      BACKGROUND_COLOR: '#f9f9f9',
+      POSITION: 'absolute',
+      TOP: 'auto',
+      BOTTOM: '0rem',
+      LEFT: '0rem',
+      RIGHT: '1rem',
+      /* The user can easily shift these offsets (TOP, BOTTOM, LEFT, RIGHT) as desired
+         to reposition the prompt buttons within the chat window. */
+    },
+    BUTTON: {
+      BACKGROUND_COLOR: '#f2f2f2',
+      TEXT_COLOR: '#666666',
+      BORDER: '1px solid #e0e0e0',
+      BORDER_RADIUS: '0.75rem',
+      PADDING: '0.5rem 0.25rem',
+      FONT_SIZE: '0.75rem',
+      FONT_WEIGHT: '400',
+      WHITE_SPACE: 'normal',
+      LINE_HEIGHT: '1.2',
+      MAX_WIDTH: '100%'
+    }
   }
 };
 
@@ -177,6 +272,37 @@ const VERY_SMALL_MOBILE_OVERRIDES = {
   },
   CHAT_LOGO: {
     HEIGHT: '1.8rem'
+  },
+  PROMPT_BUTTONS: {
+    CONTAINER: {
+      DISPLAY: 'flex',
+      FLEX_DIRECTION: 'row',
+      FLEX_WRAP: 'wrap',
+      GAP: '0.5rem',
+      JUSTIFY_CONTENT: 'space-between',
+      WIDTH: '100%',
+      POSITION: 'absolute',
+      /* Shifting offsets below - user can edit these to move container. Currently all set to 'auto' except top, which is 0. */
+      TOP: '0',
+      LEFT: 'auto',
+      RIGHT: 'auto',
+      BOTTOM: 'auto',
+      PADDING: '0.5rem',
+      BORDER_TOP: '1px solid #e5e7eb',
+      BACKGROUND_COLOR: 'white'
+    },
+    BUTTON: {
+      BACKGROUND_COLOR: '#f2f2f2',
+      TEXT_COLOR: '#666666',
+      BORDER: '1px solid #e0e0e0',
+      BORDER_RADIUS: '0.75rem',
+      PADDING: '0.5rem 0.25rem',
+      FONT_SIZE: '0.75rem',
+      FONT_WEIGHT: '400',
+      WHITE_SPACE: 'normal',
+      LINE_HEIGHT: '1.2',
+      MAX_WIDTH: '30%'
+    }
   },
   TITLE: {
     FONT_SIZE: '0.7rem'
@@ -195,7 +321,24 @@ const VERY_SMALL_MOBILE_OVERRIDES = {
     TOP_MARGIN: '0.5rem',
     BOTTOM_MARGIN: '0.3rem',
     PADDING: '0.3rem'
-  }
+  },
+  INPUT_FIELD: {
+    // Smaller padding for very small devices
+    PADDING: '0.5rem 0.6rem',
+    
+    // Smaller font size for very small devices
+    FONT_SIZE: '0.75rem',
+    
+    // Narrower width for very small devices
+    WIDTH: '60%',
+    
+    // Position from the left side of the container for very small devices
+    LEFT_OFFSET: '2%',
+    
+    // Smaller border radius
+    BORDER_RADIUS: '0.5rem'
+  },
+  // No duplicate PROMPT_BUTTONS needed here
 };
 
 export { MOBILE_LAYOUT, VERY_SMALL_MOBILE_OVERRIDES };

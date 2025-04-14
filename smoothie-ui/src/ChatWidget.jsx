@@ -1,5 +1,17 @@
 import { useState, useEffect, useRef } from "react";
-import { getDeviceInfo, getHeaderStyles, getChatContainerStyles, getLayout, getChatLogoStyles } from "./utils/layout-manager";
+import {
+  getDeviceInfo,
+  getHeaderStyles,
+  getChatContainerStyles,
+  getLayout,
+  getChatLogoStyles,
+  getChatMessagesStyles,
+  getChatInputAreaStyles,
+  getInputFieldStyles,
+  getSendButtonStyles,
+  getPromptButtonsContainerStyles, // Added import
+  getPromptButtonStyles // Added import
+} from "./utils/layout-manager";
 
 /* ------------------------------------------------------------------ */
 /* 1.  image imports (unchanged)                                      */
@@ -260,7 +272,7 @@ export default function ChatWidget() {
       </div>
       <div style={getChatContainerStyles(deviceInfo)}>
         {/* Chat messages */}
-        <div className="chat-messages">
+        <div className="chat-messages" style={getChatMessagesStyles(deviceInfo)}>
           {messages.map((m, i) => (
             <div
               key={i}
@@ -323,13 +335,13 @@ export default function ChatWidget() {
           )}
 
           <div ref={messagesEndRef} />
-          {/* Prompt buttons directly at the bottom without container */}
+          {/* Prompt buttons - using style functions from layout-manager */}
           {showPromptButtons && (
-            <div className="prompt-buttons-separator">
+            <div style={getPromptButtonsContainerStyles(deviceInfo)}>
               {preGeneratedPrompts.map((prompt, index) => (
                 <button
                   key={index}
-                  className="prompt-button"
+                  style={getPromptButtonStyles(deviceInfo)}
                   onClick={() => {
                     setInput(prompt);
                     send(prompt);
@@ -343,18 +355,18 @@ export default function ChatWidget() {
           
         </div>
 
-        {/* Input area */}
-        <div className="chat-input-area">
+        {/* Input area - using style functions from layout-manager */}
+        <div style={getChatInputAreaStyles(deviceInfo)}>
           <div className="input-container">
             <input
-              className="chat-input"
+              style={getInputFieldStyles(deviceInfo)}
               placeholder="What smoothie are you craving?"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
             />
             <button
-              className={`send-button ${input.trim() ? "enabled" : "disabled"}`}
+              style={getSendButtonStyles(deviceInfo, input.trim())}
               onClick={() => send()}
               disabled={!input.trim()}
             >

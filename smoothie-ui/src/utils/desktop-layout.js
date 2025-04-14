@@ -101,8 +101,8 @@ const DESKTOP_LAYOUT = {
     // Absolute position from the top of the container
     TOP: '150px',
     
-    BOTTOM: '185px',
-    // Horizontal position (centered by default)
+    // BOTTOM: '185px',
+    HEIGHT: '750px',
     LEFT: '0',
     RIGHT: '0',
     
@@ -118,16 +118,12 @@ const DESKTOP_LAYOUT = {
    * Controls the chat messages area
    */
   CHAT_MESSAGES: {
-    // Height of the chat messages area
-    HEIGHT: 'calc(100vh - 15rem)',
-    
-    // Maximum height of the chat messages area
-    MAX_HEIGHT: '60rem',
-    
-    // Minimum height of the chat messages area
-    MIN_HEIGHT: '40rem',
-    
-    // Internal padding of the chat messages area
+    POSITION: 'absolute',
+    TOP: '0',
+    LEFT: '0',
+    RIGHT: '0',
+    BOTTOM: '6.5rem',
+    OVERFLOW: 'auto',
     PADDING: '1rem 1.25rem'
   },
   
@@ -159,7 +155,7 @@ const DESKTOP_LAYOUT = {
    */
   INPUT_FIELD: {
     // Padding inside the input field
-    PADDING: '0.65rem 1rem',
+    PADDING: '0.8rem 1rem',
     
     // Font size of the input text
     FONT_SIZE: '1rem',
@@ -188,7 +184,7 @@ const DESKTOP_LAYOUT = {
    */
   SEND_BUTTON: {
     // Padding inside the button
-    PADDING: '0.65rem 1.5rem',
+    PADDING: '0.8rem 1.5rem',
     
     // Font size and weight
     FONT_SIZE: '1rem',

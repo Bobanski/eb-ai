@@ -101,11 +101,11 @@ const MOBILE_LAYOUT = {
     MAX_WIDTH: '95%',
     
     // Position from the top of the container (percentage-based)
-    TOP: '0%',
+    TOP: '10%',
     
     // Position from the bottom of the container (percentage-based)
     // Setting this extends the container downward
-    BOTTOM: '12%',
+    BOTTOM: '5%',
     
     // Horizontal position (centered by default)
     LEFT: '0',
@@ -127,13 +127,13 @@ const MOBILE_LAYOUT = {
    */
   CHAT_MESSAGES: {
     // Height of the chat messages area - using percentage
-    HEIGHT: '90%', // Percentage of container height
+    HEIGHT: '70%', // Percentage of container height
     
     // Maximum height of the chat messages area
-    MAX_HEIGHT: '90vh',
+    MAX_HEIGHT: '70vh',
     
     // Minimum height of the chat messages area
-    MIN_HEIGHT: '60vh',
+    MIN_HEIGHT: '40vh',
     
     // Internal padding of the chat messages area (percentage-based)
     PADDING: '3%',
@@ -148,7 +148,7 @@ const MOBILE_LAYOUT = {
    */
   FOOTER: {
     // Position from the bottom of the container (percentage-based)
-    BOTTOM: '5%',
+    BOTTOM: '0%',
     
     // Horizontal position (centered by default)
     LEFT: '-2%',

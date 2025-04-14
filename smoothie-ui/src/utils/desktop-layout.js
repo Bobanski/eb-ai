@@ -39,13 +39,18 @@ const DESKTOP_LAYOUT = {
     HEIGHT: '12vh',
     
     // Position from the left edge (percentage-based)
-    LEFT_MARGIN: '-8%',
+    LEFT: '2%',
+    LEFT_MARGIN: '2%', // For inline style consistency
     
     // Position from the top edge (percentage-based)
-    TOP_OFFSET: '3%',
+    TOP: '3%',
+    TOP_OFFSET: '3%', // For inline style consistency
     
     // Z-index (controls stacking order - higher numbers appear on top)
-    Z_INDEX: 20
+    Z_INDEX: 20,
+    
+    // Make the logo responsive to viewport changes but still scroll with content
+    POSITION: 'absolute'
   },
   
   /**
@@ -69,7 +74,7 @@ const DESKTOP_LAYOUT = {
    */
   TITLE: {
     // Font size of the title text (using viewport width units for responsive text)
-    FONT_SIZE: '1vw',
+    FONT_SIZE: '1.9vw',
     
     // Line height of the title text
     LINE_HEIGHT: 1.2
@@ -81,10 +86,14 @@ const DESKTOP_LAYOUT = {
    */
   SUBTITLE: {
     // Font size of the subtitle text (using viewport width units for responsive text)
-    FONT_SIZE: '.8vw',
+    FONT_SIZE: '1.2vw',
     
     // Space above the subtitle (percentage-based)
-    TOP_MARGIN: '1%'
+    TOP_MARGIN: '-2%', // Increased to allow for vertical adjustment
+    
+    // Additional properties for subtitle positioning
+    MAX_WIDTH: '80%',
+    TEXT_ALIGN: 'center'
   },
   
   /**
@@ -96,13 +105,13 @@ const DESKTOP_LAYOUT = {
     WIDTH: '100%',
     
     // Maximum width of the chat container
-    MAX_WIDTH: '250%',
+    MAX_WIDTH: '100%',
     
     // Position from the top of the container (percentage-based)
-    TOP: '18%',
+    TOP: '14%',
     
-    // BOTTOM: '20%',
-    HEIGHT: '65%',
+    // Fixed height to prevent overflow
+    HEIGHT: '65vh',
     LEFT: '0',
     RIGHT: '0',
     
@@ -110,7 +119,11 @@ const DESKTOP_LAYOUT = {
     BORDER_RADIUS: '1.5vw',
     
     // Z-index (controls stacking order - higher numbers appear on top)
-    Z_INDEX: 5
+    Z_INDEX: 5,
+    
+    // Display and flex direction for internal layout (added from mobile layout)
+    DISPLAY: 'flex',
+    FLEX_DIRECTION: 'column'
   },
   
   /**
@@ -118,13 +131,24 @@ const DESKTOP_LAYOUT = {
    * Controls the chat messages area
    */
   CHAT_MESSAGES: {
-    POSITION: 'absolute',
-    TOP: '0%',
-    LEFT: '0',
-    RIGHT: '0',
-    BOTTOM: '10%',
-    OVERFLOW: 'auto',
-    PADDING: '2% 2.5%'
+    // Height of the chat messages area - use flex to fill available space
+    HEIGHT: 'auto',
+    
+    // Maximum height - let it be determined by the container
+    MAX_HEIGHT: 'none',
+    
+    // Minimum height - ensure there's always space for messages
+    MIN_HEIGHT: '200px',
+    
+    // Internal padding of the chat messages area
+    PADDING: '2% 2.5%',
+    
+    // Flex property to take available space
+    FLEX: '1',
+    
+    // Display and flex direction
+    DISPLAY: 'flex',
+    FLEX_DIRECTION: 'column'
   },
   
   /**
@@ -181,7 +205,22 @@ const DESKTOP_LAYOUT = {
     BORDER_COLOR: '#e5e7eb',
     
     // Gap between input field and send button
-    GAP: '1.5%'
+    GAP: '1.5%',
+    
+    // Placeholder text properties (added from mobile layout)
+    PLACEHOLDER: {
+      // Maximum width of the placeholder text (percentage of input field width)
+      MAX_WIDTH: '90%',
+      
+      // Font size of the placeholder text
+      FONT_SIZE: '1vw',
+      
+      // Color of the placeholder text
+      COLOR: '#9ca3af',
+      
+      // Text overflow handling
+      TEXT_OVERFLOW: 'ellipsis'
+    }
   },
   
   /**
@@ -191,10 +230,6 @@ const DESKTOP_LAYOUT = {
   SEND_BUTTON: {
     // Padding inside the button (percentage-based)
     PADDING: '1.5% 3%',
-    
-    // Font size and weight (using viewport width units)
-    FONT_SIZE: '1.2vw',
-    FONT_WEIGHT: '500',
     
     // Vertical position relative to the container (percentage from top)
     VERTICAL_POSITION: '18%',
@@ -214,7 +249,25 @@ const DESKTOP_LAYOUT = {
     
     // Colors for disabled state
     DISABLED_BG_COLOR: '#e5e7eb',
-    DISABLED_TEXT_COLOR: '#9ca3af'
+    DISABLED_TEXT_COLOR: '#9ca3af',
+    
+    // Text styling properties (added from mobile layout)
+    TEXT: {
+      // Font size of the button text (using viewport width units)
+      FONT_SIZE: '1.2vw',
+      
+      // Font weight of the button text
+      FONT_WEIGHT: '500',
+      
+      // Text transform (uppercase, lowercase, capitalize, none)
+      TEXT_TRANSFORM: 'none',
+      
+      // Letter spacing
+      LETTER_SPACING: 'normal',
+      
+      // Line height
+      LINE_HEIGHT: '1.2'
+    }
   },
   
   /**
@@ -223,7 +276,7 @@ const DESKTOP_LAYOUT = {
    */
   FOOTER: {
     // Position from the bottom of the container (percentage-based)
-    BOTTOM: '10%',
+    BOTTOM: '2%',
     
     // Horizontal position (centered by default)
     LEFT: '-2%',
@@ -236,7 +289,18 @@ const DESKTOP_LAYOUT = {
     FONT_SIZE: '1.5vw',
     
     // Z-index (controls stacking order - higher numbers appear on top)
-    Z_INDEX: 10
+    Z_INDEX: 10,
+    
+    // Make the footer fixed to prevent scrolling with content
+    POSITION: 'fixed',
+    
+    // Additional styling for better responsiveness
+    WIDTH: '100%',
+    TEXT_ALIGN: 'center',
+    BACKGROUND_COLOR: 'transparent',
+    COLOR: 'black',
+    FONT_FAMILY: 'Helvetica Neue, Helvetica, Arial, sans-serif',
+    FONT_WEIGHT: 'bold'
   },
   
   /**
@@ -248,10 +312,14 @@ const DESKTOP_LAYOUT = {
     PADDING: '3%',
     
     // Maximum width of the container (percentage-based)
-    MAX_WIDTH: '80%',
+    MAX_WIDTH: '100%',
     
     // Base font size for the container (using viewport width units)
-    FONT_SIZE: '1.2vw'
+    FONT_SIZE: '1.2vw',
+    
+    // Prevent scrolling by constraining to viewport
+    HEIGHT: '100vh',
+    OVERFLOW: 'hidden'
   }
 ,
     PROMPT_BUTTONS: {
@@ -270,7 +338,10 @@ const DESKTOP_LAYOUT = {
         BOTTOM: '1%',
         PADDING: '2.5% 0',
         BORDER_TOP: '1px solid #e5e7eb',
-        BACKGROUND_COLOR: 'white'
+        BACKGROUND_COLOR: 'white',
+        /* Explicit minimum height that can be adjusted */
+        MIN_HEIGHT: '3rem',
+        BOX_SIZING: 'border-box'
       },
       BUTTON: {
         BACKGROUND_COLOR: '#f2f2f2',
@@ -282,7 +353,13 @@ const DESKTOP_LAYOUT = {
         FONT_WEIGHT: '400',
         WHITE_SPACE: 'normal',
         LINE_HEIGHT: '1.3',
-        MAX_WIDTH: '31%'
+        MAX_WIDTH: '31%',
+        /* Ensure content is properly aligned */
+        DISPLAY: 'flex',
+        ALIGN_ITEMS: 'center',
+        JUSTIFY_CONTENT: 'center',
+        /* Explicit height property that can be easily adjusted */
+        HEIGHT: '3rem'
       }
     }
   };

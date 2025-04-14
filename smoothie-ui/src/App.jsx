@@ -48,16 +48,17 @@ export default function App() {
       <div style={backgroundStyles.bottom} />
       {/* Main container with flexbox layout */}
       <div style={containerStyles}>
-        {/* Logo positioned absolutely to avoid affecting other elements */}
+        {/* Logo positioned fixed to avoid scrolling with content */}
         <img
           src={EarthbarLogo}
           alt="Earthbar Logo"
           style={{
             ...logoStyles,
-            position: 'absolute',
+            position: 'fixed',
             top: getLayout(deviceInfo).APP_LOGO.TOP_OFFSET,
             left: getLayout(deviceInfo).APP_LOGO.LEFT_MARGIN,
-            zIndex: 20 // Higher than other elements to ensure visibility
+            zIndex: 20, // Higher than other elements to ensure visibility
+            pointerEvents: 'none' // Prevent interaction with the logo
           }}
         />
         
@@ -66,8 +67,16 @@ export default function App() {
           <ChatWidget />
         </div>
         
-        {/* Footer at the bottom */}
-        <p style={footerStyles}>
+        {/* Footer fixed at the bottom */}
+        <p style={{
+          ...footerStyles,
+          position: 'fixed',
+          bottom: getLayout(deviceInfo).FOOTER.BOTTOM,
+          left: getLayout(deviceInfo).FOOTER.LEFT,
+          right: getLayout(deviceInfo).FOOTER.RIGHT,
+          zIndex: getLayout(deviceInfo).FOOTER.Z_INDEX,
+          pointerEvents: 'none' // Prevent interaction with the footer
+        }}>
           Be more than well.
         </p>
       </div>

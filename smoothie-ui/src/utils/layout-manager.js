@@ -102,11 +102,11 @@ export const getContainerStyles = (deviceInfo) => {
       overflow: "visible", // Allow content to potentially overflow if needed
     };
   } else {
-    // Desktop: Minimum height, scrolling allowed
+    // Desktop: Use height and overflow from layout configuration
     return {
       ...baseStyles,
-      minHeight: "100vh",
-      overflow: "visible",
+      height: layout.CONTAINER.HEIGHT || "100vh",
+      overflow: layout.CONTAINER.OVERFLOW || "visible",
     };
   }
 };
@@ -120,13 +120,14 @@ export const getLogoStyles = (deviceInfo) => {
   const layout = getLayout(deviceInfo);
   
   return {
-    position: "absolute",
+    position: "fixed", // Changed from absolute to fixed
     height: layout.APP_LOGO.HEIGHT,
     width: "auto",
     opacity: "0.6",
     top: layout.APP_LOGO.TOP_OFFSET,
     left: layout.APP_LOGO.LEFT_MARGIN,
-    zIndex: layout.APP_LOGO.Z_INDEX
+    zIndex: layout.APP_LOGO.Z_INDEX,
+    pointerEvents: "none" // Prevent interaction with the logo
   };
 };
 
@@ -191,8 +192,8 @@ export const getChatContainerStyles = (deviceInfo) => {
     margin: "0 auto",
     backgroundColor: "black",
     boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.15)",
-    display: "flex",
-    flexDirection: "column",
+    display: layout.CHAT_CONTAINER.DISPLAY || "flex",
+    flexDirection: layout.CHAT_CONTAINER.FLEX_DIRECTION || "column",
     overflow: "hidden",
     border: "15px solid black",
     boxSizing: "border-box",
@@ -208,27 +209,38 @@ export const getChatContainerStyles = (deviceInfo) => {
 * @returns {Object} Chat messages styles
 */
 export const getChatMessagesStyles = (deviceInfo) => {
-const layout = getLayout(deviceInfo);
+  const layout = getLayout(deviceInfo);
 
-// Only apply these styles if CHAT_MESSAGES exists in the layout
-if (layout.CHAT_MESSAGES) {
-  return {
-    height: layout.CHAT_MESSAGES.HEIGHT,
-    maxHeight: layout.CHAT_MESSAGES.MAX_HEIGHT,
-    minHeight: layout.CHAT_MESSAGES.MIN_HEIGHT,
-    padding: layout.CHAT_MESSAGES.PADDING,
-    flex: layout.CHAT_MESSAGES.FLEX || '1', // Default flex to 1 if not specified
-    // Add other necessary base styles that should be controlled by JS
-    overflowY: 'auto',
-    overflowX: 'hidden',
-    boxSizing: 'border-box',
-    position: 'relative', // Ensure proper stacking context if needed
-    zIndex: 2 // Example z-index, adjust if necessary
-  };
-}
+  // Only apply these styles if CHAT_MESSAGES exists in the layout
+  if (layout.CHAT_MESSAGES) {
+    const styles = {
+      height: layout.CHAT_MESSAGES.HEIGHT,
+      maxHeight: layout.CHAT_MESSAGES.MAX_HEIGHT,
+      minHeight: layout.CHAT_MESSAGES.MIN_HEIGHT,
+      padding: layout.CHAT_MESSAGES.PADDING,
+      flex: layout.CHAT_MESSAGES.FLEX || '1', // Default flex to 1 if not specified
+      overflowY: 'auto',
+      overflowX: 'hidden',
+      boxSizing: 'border-box',
+      position: 'relative', // Ensure proper stacking context if needed
+      zIndex: 2 // Example z-index, adjust if necessary
+    };
+    
+    // Add display property if specified
+    if (layout.CHAT_MESSAGES.DISPLAY) {
+      styles.display = layout.CHAT_MESSAGES.DISPLAY;
+    }
+    
+    // Add flex-direction if specified
+    if (layout.CHAT_MESSAGES.FLEX_DIRECTION) {
+      styles.flexDirection = layout.CHAT_MESSAGES.FLEX_DIRECTION;
+    }
+    
+    return styles;
+  }
 
-// Return empty object if no specific styles defined for chat messages
-return {};
+  // Return empty object if no specific styles defined for chat messages
+  return {};
 };
 
 /**
@@ -240,7 +252,7 @@ export const getFooterStyles = (deviceInfo) => {
   const layout = getLayout(deviceInfo);
   
   return {
-    position: "absolute",
+    position: "fixed", // Changed from absolute to fixed
     bottom: layout.FOOTER.BOTTOM,
     left: layout.FOOTER.LEFT,
     right: layout.FOOTER.RIGHT,
@@ -252,7 +264,8 @@ export const getFooterStyles = (deviceInfo) => {
     color: "black",
     fontFamily: "Helvetica Neue, Helvetica, Arial, sans-serif",
     fontWeight: "bold",
-    fontSize: layout.FOOTER.FONT_SIZE
+    fontSize: layout.FOOTER.FONT_SIZE,
+    pointerEvents: "none" // Prevent interaction with the footer
   };
 };
 
@@ -263,7 +276,7 @@ export const getFooterStyles = (deviceInfo) => {
 export const getBackgroundStyles = () => {
   return {
     primary: {
-      position: "absolute",
+      position: "fixed",
       top: "-50vh",
       left: "-50vw",
       right: "-50vw",
@@ -276,13 +289,15 @@ export const getBackgroundStyles = () => {
     },
     gradient: {
       position: "fixed",
-      top: "0",
+      top: "0", // Start at the very top of the viewport
       left: "0",
       right: "0",
       bottom: "0",
       width: "100vw",
-      height: "100vh",
-      background: "linear-gradient(to bottom, #e8f3ff, #c7e0ff)",
+      height: "100vh", // Cover the entire viewport height
+      paddingTop: "env(safe-area-inset-top)", // Add padding for the safe area
+      boxSizing: "border-box",
+      background: "linear-gradient(to bottom, #c7e0ff, #c7e0ff)", // Use the same color for consistency
       zIndex: "-5",
       pointerEvents: "none"
     },
@@ -380,6 +395,18 @@ export const getInputFieldStyles = (deviceInfo) => {
       styles.marginLeft = layout.INPUT_FIELD.LEFT_OFFSET;
     }
     
+    // Add placeholder styles if specified in the layout
+    if (layout.INPUT_FIELD.PLACEHOLDER) {
+      styles['&::placeholder'] = {
+        maxWidth: layout.INPUT_FIELD.PLACEHOLDER.MAX_WIDTH,
+        fontSize: layout.INPUT_FIELD.PLACEHOLDER.FONT_SIZE,
+        color: layout.INPUT_FIELD.PLACEHOLDER.COLOR,
+        textOverflow: layout.INPUT_FIELD.PLACEHOLDER.TEXT_OVERFLOW,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden'
+      };
+    }
+    
     return styles;
   }
   
@@ -394,7 +421,15 @@ export const getInputFieldStyles = (deviceInfo) => {
     backgroundColor: 'white',
     color: 'black',
     borderRadius: '0.75rem',
-    border: '1px solid #e5e7eb'
+    border: '1px solid #e5e7eb',
+    '&::placeholder': {
+      maxWidth: '95%',
+      fontSize: '0.9375rem',
+      color: '#9ca3af',
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden'
+    }
   };
 };
 
@@ -411,19 +446,30 @@ export const getSendButtonStyles = (deviceInfo, isEnabled = true) => {
   if (layout.SEND_BUTTON) {
     const styles = {
       padding: layout.SEND_BUTTON.PADDING,
-      fontSize: layout.SEND_BUTTON.FONT_SIZE,
-      fontWeight: layout.SEND_BUTTON.FONT_WEIGHT,
       borderRadius: layout.SEND_BUTTON.BORDER_RADIUS,
       backgroundColor: isEnabled ? layout.SEND_BUTTON.ENABLED_BG_COLOR : layout.SEND_BUTTON.DISABLED_BG_COLOR,
       color: isEnabled ? layout.SEND_BUTTON.ENABLED_TEXT_COLOR : layout.SEND_BUTTON.DISABLED_TEXT_COLOR,
       cursor: isEnabled ? 'pointer' : 'not-allowed',
       transition: 'background-color 0.2s',
       boxSizing: 'border-box', // Ensure consistent box model
-      lineHeight: '1', // Control text vertical alignment
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center'
     };
+    
+    // Add text styling properties if specified in the layout
+    if (layout.SEND_BUTTON.TEXT) {
+      styles.fontSize = layout.SEND_BUTTON.TEXT.FONT_SIZE;
+      styles.fontWeight = layout.SEND_BUTTON.TEXT.FONT_WEIGHT;
+      styles.textTransform = layout.SEND_BUTTON.TEXT.TEXT_TRANSFORM;
+      styles.letterSpacing = layout.SEND_BUTTON.TEXT.LETTER_SPACING;
+      styles.lineHeight = layout.SEND_BUTTON.TEXT.LINE_HEIGHT;
+    } else {
+      // Fallback to old properties for backward compatibility
+      styles.fontSize = layout.SEND_BUTTON.FONT_SIZE;
+      styles.fontWeight = layout.SEND_BUTTON.FONT_WEIGHT;
+      styles.lineHeight = '1';
+    }
     
     // Add vertical position if specified in the layout
     if (layout.SEND_BUTTON.VERTICAL_POSITION) {
@@ -453,7 +499,13 @@ export const getSendButtonStyles = (deviceInfo, isEnabled = true) => {
     backgroundColor: isEnabled ? '#3b82f6' : '#e5e7eb',
     color: isEnabled ? 'white' : '#9ca3af',
     cursor: isEnabled ? 'pointer' : 'not-allowed',
-    transition: 'background-color 0.2s'
+    transition: 'background-color 0.2s',
+    textTransform: 'none',
+    letterSpacing: 'normal',
+    lineHeight: '1.2',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   };
 }; // End of getSendButtonStyles function
 
@@ -479,7 +531,8 @@ export const getPromptButtonsContainerStyles = (deviceInfo) => {
       padding: layout.PROMPT_BUTTONS.CONTAINER.PADDING,
       borderTop: layout.PROMPT_BUTTONS.CONTAINER.BORDER_TOP,
       backgroundColor: layout.PROMPT_BUTTONS.CONTAINER.BACKGROUND_COLOR,
-      boxSizing: 'border-box',
+      boxSizing: layout.PROMPT_BUTTONS.CONTAINER.BOX_SIZING || 'border-box',
+      minHeight: layout.PROMPT_BUTTONS.CONTAINER.MIN_HEIGHT || 'auto',
       // Use POSITION from layout if available, otherwise default to 'absolute'
       position: layout.PROMPT_BUTTONS.CONTAINER.POSITION || 'absolute'
     };
@@ -551,7 +604,13 @@ export const getPromptButtonStyles = (deviceInfo) => {
       maxWidth: layout.PROMPT_BUTTONS.BUTTON.MAX_WIDTH,
       whiteSpace: layout.PROMPT_BUTTONS.BUTTON.WHITE_SPACE,
       lineHeight: layout.PROMPT_BUTTONS.BUTTON.LINE_HEIGHT,
-      boxShadow: 'none'
+      boxShadow: 'none',
+      // Add height if specified in the layout
+      height: layout.PROMPT_BUTTONS.BUTTON.HEIGHT || 'auto',
+      // Add display properties if specified in the layout
+      display: layout.PROMPT_BUTTONS.BUTTON.DISPLAY || 'block',
+      alignItems: layout.PROMPT_BUTTONS.BUTTON.ALIGN_ITEMS || 'center',
+      justifyContent: layout.PROMPT_BUTTONS.BUTTON.JUSTIFY_CONTENT || 'center'
     };
   }
   // Fallback/Default styles (used for desktop now)

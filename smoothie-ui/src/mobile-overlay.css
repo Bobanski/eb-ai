@@ -1,0 +1,140 @@
+/**
+ * Mobile Input Overlay Styles
+ * 
+ * These styles control the appearance and animation of the mobile input overlay
+ * that slides up from the bottom when a user clicks on the input field.
+ */
+
+.mobile-input-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.overlay-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+}
+
+.overlay-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 10001;
+  max-height: 70vh;
+  animation: slideUp 0.3s ease-out;
+}
+
+.context-messages {
+  overflow-y: auto;
+  max-height: 40vh;
+  margin-bottom: 16px;
+  padding: 8px 0;
+}
+
+.context-message {
+  padding: 8px 12px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.context-message.user {
+  background-color: #f0f0f0;
+  align-self: flex-end;
+  text-align: right;
+  margin-left: 30px;
+}
+
+.context-message.assistant {
+  background-color: #f8f8f8;
+  align-self: flex-start;
+  margin-right: 30px;
+}
+
+.overlay-input-container {
+  display: flex;
+  align-items: center;
+  background-color: #f8f8f8;
+  border-radius: 24px;
+  padding: 4px;
+  margin-top: auto;
+  border: 1px solid #e0e0e0;
+}
+
+.overlay-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 16px;
+  font-size: 16px;
+  outline: none;
+}
+
+/* Mobile Input Trigger Button - Styled to look like an input field */
+.mobile-input-trigger {
+  width: 100%;
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
+  border-radius: 24px;
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 16px;
+  color: #999;
+  margin-bottom: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-input-trigger:active {
+  background-color: #f0f0f0;
+}
+
+.overlay-send-button {
+  background-color: #00806a;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.overlay-send-button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

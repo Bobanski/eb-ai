@@ -1,0 +1,79 @@
+/* iOS-specific fixes and enhancements */
+
+/* Placeholder text styling using CSS variables */
+.chat-input::placeholder {
+  max-width: var(--placeholder-max-width, 90%);
+  font-size: var(--placeholder-font-size, 16px);
+  color: var(--placeholder-color, #9ca3af);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+/* For Firefox */
+.chat-input::-moz-placeholder {
+  max-width: var(--placeholder-max-width, 90%);
+  font-size: var(--placeholder-font-size, 16px);
+  color: var(--placeholder-color, #9ca3af);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+/* For Chrome/Edge/Safari */
+.chat-input::-webkit-input-placeholder {
+  max-width: var(--placeholder-max-width, 90%);
+  font-size: var(--placeholder-font-size, 16px);
+  color: var(--placeholder-color, #9ca3af);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+/* For Internet Explorer */
+.chat-input:-ms-input-placeholder {
+  max-width: var(--placeholder-max-width, 90%);
+  font-size: var(--placeholder-font-size, 16px);
+  color: var(--placeholder-color, #9ca3af);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+/* Ensure the background extends to the safe area insets */
+html, body {
+  background-color: #c7e0ff;
+  padding-top: env(safe-area-inset-top, 0);
+  box-sizing: border-box;
+}
+
+/* Prevent iOS zoom on input focus */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input {
+    font-size: 16px !important;
+  }
+}
+
+/* Fix for iOS Safari white bar at the top */
+@supports (-webkit-touch-callout: none) {
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: env(safe-area-inset-top, 0);
+    background-color: #c7e0ff;
+    z-index: 9999;
+  }
+}

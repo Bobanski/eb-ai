@@ -4,15 +4,44 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="theme-color" content="#c7e0ff" />
     <title>Vite + React</title>
     <style>
+      :root {
+        --app-background-color: #c7e0ff;
+      }
+      
       html, body, #root {
         height: 100%;
         width: 100%;
         margin: 0;
         padding: 0;
-        background-color: #c7e0ff;
+        background-color: var(--app-background-color);
         overflow-x: hidden;
+      }
+      
+      /* Ensure the status bar area has the same background color */
+      @supports (padding-top: env(safe-area-inset-top)) {
+        body::before {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: env(safe-area-inset-top);
+          background-color: var(--app-background-color); /* Use CSS variable */
+          z-index: 10000;
+        }
+      }
+      
+      /* Add additional styles for iOS safe area handling */
+      :root {
+        --safe-area-inset-top: env(safe-area-inset-top);
+        --safe-area-inset-bottom: env(safe-area-inset-bottom);
+        --safe-area-inset-left: env(safe-area-inset-left);
+        --safe-area-inset-right: env(safe-area-inset-right);
       }
     </style>
   </head>

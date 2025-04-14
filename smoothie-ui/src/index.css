@@ -9,11 +9,16 @@ html, body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #c7e0ff; /* Match the bottom color of the gradient in App.jsx */
+  background-color: var(--app-background-color, #c7e0ff); /* Use CSS variable with fallback */
   overflow-x: hidden; /* Prevent horizontal scrolling that could expose white edges */
   /* Modified screen freeze to work better with percentage-based layout */
   overflow-y: auto; /* Allow vertical scrolling when needed */
   position: relative; /* Use relative positioning instead of fixed */
+}
+
+/* Ensure the background extends to the top of the viewport including safe area */
+html {
+  background-color: var(--app-background-color, #c7e0ff);
 }
 
 /* Mobile-specific styles that respect safe areas and prevent cropping */
@@ -24,7 +29,10 @@ html, body {
     -webkit-overflow-scrolling: touch; /* Improve scroll behavior on iOS */
     /* Modified to work with percentage-based layout */
     overflow-y: auto; /* Allow vertical scrolling when needed */
-    /* Add safe area insets for iOS devices */
+  }
+  
+  /* Apply padding to body for content positioning, not for background color */
+  body {
     padding-top: env(safe-area-inset-top, 0);
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
@@ -43,4 +51,15 @@ html, body {
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
+  background-color: var(--app-background-color, #c7e0ff); /* Use CSS variable with fallback */
+}
+
+/* iOS-specific fixes for safe area insets */
+@supports (padding-top: env(safe-area-inset-top)) {
+  /* Ensure the app container respects safe areas */
+  #root {
+    padding-top: env(safe-area-inset-top, 0);
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    min-height: calc(100vh - env(safe-area-inset-top, 0) - env(safe-area-inset-bottom, 0));
+  }
 }

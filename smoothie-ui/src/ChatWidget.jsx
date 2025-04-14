@@ -108,6 +108,15 @@ export default function ChatWidget() {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  
+  // Initialize mobile autoscroll functionality
+  useEffect(() => {
+    // Only initialize on mobile devices
+    if (deviceInfo.isMobile) {
+      const cleanup = initMobileAutoScroll();
+      return cleanup;
+    }
+  }, [deviceInfo.isMobile]);
 
   const preGeneratedPrompts = [
     "I need a smoothie to boost my immune system",
@@ -115,108 +124,24 @@ export default function ChatWidget() {
     "I'd like a detox smoothie for cleansing"
   ];
   const [isTyping, setIsTyping] = useState(false);
-  const [initialViewCaptured, setInitialViewCaptured] = useState(false);
 
-  // Capture initial view state on first render
-  useEffect(() => {
-    // Small delay to ensure everything is properly rendered
-    setTimeout(() => {
-      const captured = captureInitialViewState();
-      setInitialViewCaptured(captured);
-      console.log("Initial view state captured:", captured);
-    }, 300);
-  }, []);
-
-  // Scroll to bottom of chat messages when messages change
-  useEffect(() => {
-    // Use a short delay so DOM is updated before calculating scroll height.
-    setTimeout(() => {
-      const chatMessagesDiv = document.querySelector(".chat-messages");
-      if (chatMessagesDiv) {
-        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-      }
-    }, 0);
-  }, [messages, isTyping]);
-  
-  // Initialize mobile auto-scroll functionality
-  useEffect(() => {
-    // Only enable auto-scroll on mobile devices
-    if (deviceInfo.isMobile) {
-      // Track viewport height to detect keyboard appearance/dismissal
-      let lastHeight = window.innerHeight;
-      let lastVisualViewportHeight = window.visualViewport?.height || window.innerHeight;
-      
-      // Function to scroll to top
-      const scrollWindowToTop = () => {
-        window.scrollTo(0, 0);
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-      };
-      
-      // Function that detects keyboard dismissal and scrolls to top
-      const handleViewportChange = () => {
-        const currentHeight = window.innerHeight;
-        const currentVisualViewportHeight = window.visualViewport?.height || window.innerHeight;
-        
-        // When height increases significantly, it means keyboard is dismissed
-        if (
-          (window.visualViewport && currentVisualViewportHeight > lastVisualViewportHeight * 1.1) ||
-          (!window.visualViewport && currentHeight > lastHeight * 1.1)
-        ) {
-          console.log("Keyboard dismissed detected - scrolling to top");
-          
-          // Multiple attempts for reliability
-          scrollWindowToTop();
-          setTimeout(scrollWindowToTop, 100);
-          setTimeout(scrollWindowToTop, 300);
-          setTimeout(scrollWindowToTop, 500);
-        }
-        
-        // Update last heights
-        lastHeight = currentHeight;
-        lastVisualViewportHeight = currentVisualViewportHeight;
-      };
-      
-      // Register event listeners for viewport changes
-      if (window.visualViewport) {
-        window.visualViewport.addEventListener('resize', handleViewportChange);
-      }
-      window.addEventListener('resize', handleViewportChange);
-      
-      // Initial scroll to top
-      scrollWindowToTop();
-      
-      // Clean up event listeners
-      return () => {
-        if (window.visualViewport) {
-          window.visualViewport.removeEventListener('resize', handleViewportChange);
-        }
-        window.removeEventListener('resize', handleViewportChange);
-      };
+// Scroll to bottom of chat messages when messages change
+useEffect(() => {
+  // Use a short delay so DOM is updated before calculating scroll height.
+  setTimeout(() => {
+    const chatMessagesDiv = document.querySelector(".chat-messages");
+    if (chatMessagesDiv) {
+      chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
     }
-  }, [deviceInfo.isMobile]);
+  }, 0);
   
-  // Handle input field focusing (when keyboard appears)
-  useEffect(() => {
-    if (deviceInfo.isMobile) {
-      const inputEl = document.querySelector('.chat-input');
-      if (!inputEl) return;
-      
-      const handleFocus = () => {
-        // Make input visible when keyboard shows
-        setTimeout(() => {
-          inputEl.scrollIntoView({ behavior: 'auto', block: 'center' });
-        }, 100);
-      };
-      
-      inputEl.addEventListener('focus', handleFocus);
-      
-      return () => {
-        inputEl.removeEventListener('focus', handleFocus);
-      };
-    }
-}, [deviceInfo.isMobile]);
-// Removed redundant focusout listener to simplify scroll logic
+  // On mobile, ensure we're at the top of the viewport
+  if (deviceInfo.isMobile) {
+    scrollToTop();
+  }
+}, [messages, isTyping, deviceInfo.isMobile]);
+  
+  
 
   const messagesEndRef = useRef(null);
 
@@ -234,26 +159,7 @@ export default function ChatWidget() {
     // Hide prompt buttons once a selection is made
     setShowPromptButtons(false);
     
-    // On mobile, blur input and make multiple attempts to restore the initial view for reliability
-    if (deviceInfo.isMobile) {
-      const inputEl = document.querySelector(".chat-input");
-      if (inputEl) inputEl.blur();
-
-      const attemptRestoreView = () => {
-        // If initial view state is captured, use that to restore the original view
-        if (initialViewCaptured) {
-          console.log("Restoring initial view after send");
-          restoreInitialView();
-        } else {
-          // Fall back to standard scroll top if initial view not captured
-          console.log("Scrolling to top after send (fallback)");
-          scrollToTop({ forceScroll: true });
-        }
-      };
-      
-      // Increased initial delay to ensure keyboard is fully dismissed
-      setTimeout(attemptRestoreView, 500);
-    }
+    // No need for manual view restoration on mobile anymore
 
     const userMsg = { role: "user", content: promptText };
     const updatedMessages = [...messages, userMsg];
@@ -393,7 +299,13 @@ export default function ChatWidget() {
           </div>
           <div className="title-text" style={{fontSize: getLayout(deviceInfo).TITLE.FONT_SIZE, lineHeight: getLayout(deviceInfo).TITLE.LINE_HEIGHT}}>assistant</div>
         </div>
-        <p className="subtitle" style={{fontSize: getLayout(deviceInfo).SUBTITLE.FONT_SIZE, marginTop: getLayout(deviceInfo).SUBTITLE.TOP_MARGIN}}>Tell us what you're craving, we'll pick out a smoothie that works as hard as you do</p>
+        <p className="subtitle" style={{
+          fontSize: getLayout(deviceInfo).SUBTITLE.FONT_SIZE,
+          marginTop: getLayout(deviceInfo).SUBTITLE.TOP_MARGIN,
+          maxWidth: getLayout(deviceInfo).SUBTITLE.MAX_WIDTH,
+          textAlign: getLayout(deviceInfo).SUBTITLE.TEXT_ALIGN,
+          margin: '0 auto'
+        }}>Tell us what you're craving, we'll pick out a smoothie that works as hard as you do</p>
       </div>
       <div style={getChatContainerStyles(deviceInfo)}>
         {/* Chat messages */}
@@ -427,16 +339,7 @@ export default function ChatWidget() {
                             chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
                           }
                           
-                          // Restore to initial view on mobile after image loads
-                          if (deviceInfo.isMobile) {
-                            if (initialViewCaptured) {
-                              console.log("Restoring initial view after image load");
-                              // Short delay to ensure image is fully rendered
-                              setTimeout(restoreInitialView, 50);
-                            } else {
-                              scrollToTop();
-                            }
-                          }
+                          // No need for manual view restoration on mobile anymore
                         }}
                       />
                     )}
@@ -502,59 +405,50 @@ export default function ChatWidget() {
         <div style={getChatInputAreaStyles(deviceInfo)}>
           <div className="input-container">
             <input
-              style={getInputFieldStyles(deviceInfo)}
+              style={{
+                ...getInputFieldStyles(deviceInfo),
+                // Add custom placeholder styles for dynamic font sizing
+                '--placeholder-max-width': getLayout(deviceInfo).INPUT_FIELD.PLACEHOLDER ? getLayout(deviceInfo).INPUT_FIELD.PLACEHOLDER.MAX_WIDTH : '90%',
+                '--placeholder-font-size': getLayout(deviceInfo).INPUT_FIELD.PLACEHOLDER ? getLayout(deviceInfo).INPUT_FIELD.PLACEHOLDER.FONT_SIZE : '16px',
+                '--placeholder-color': getLayout(deviceInfo).INPUT_FIELD.PLACEHOLDER ? getLayout(deviceInfo).INPUT_FIELD.PLACEHOLDER.COLOR : '#9ca3af'
+              }}
               placeholder="What smoothie are you craving?"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
+              className="chat-input"
+              // Add keyboard event handlers for iOS
               onFocus={() => {
                 if (deviceInfo.isMobile) {
-                  // On focus, ensure the input is visible with keyboard
+                  // Force redraw after keyboard appears
                   setTimeout(() => {
-                    const inputEl = document.querySelector(".chat-input");
-                    if (inputEl) inputEl.scrollIntoView({ behavior: 'auto', block: 'center' });
-                  }, 100);
+                    const chatMessagesDiv = document.querySelector(".chat-messages");
+                    if (chatMessagesDiv) {
+                      chatMessagesDiv.style.height = 'calc(100dvh - 4rem - 80px)';
+                    }
+                  }, 300);
                 }
               }}
               onBlur={() => {
                 if (deviceInfo.isMobile) {
-                  // More aggressive approach for iOS on blur
-                  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                               (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-                  
-                  // Use initial view restoration if available
-                  if (initialViewCaptured) {
-                    console.log("Restoring initial view on input blur");
-                    restoreInitialView();
-                    
-                    // Multiple attempts with increasing delays
-                    setTimeout(restoreInitialView, 100);
-                    setTimeout(restoreInitialView, 300);
-                    
-                    // iOS needs extra attention
-                    if (isIOS) {
-                      setTimeout(restoreInitialView, 500);
-                      setTimeout(restoreInitialView, 800);
-                    }
-                  } else {
-                    // Fall back to standard scroll if initial view not captured
-                    scrollToTop({ forceScroll: true });
-                    setTimeout(() => scrollToTop({ forceScroll: true }), 100);
-                    setTimeout(() => scrollToTop({ forceScroll: true }), 300);
-                    
-                    if (isIOS) {
-                      setTimeout(() => scrollToTop({ forceScroll: true }), 500);
-                      setTimeout(() => scrollToTop({ forceScroll: true }), 800);
-                    }
-                  }
+                  // Force scroll to top when keyboard is dismissed
+                  scrollToTop();
                 }
               }}
-              className="chat-input"
             />
             <button
-              style={getSendButtonStyles(deviceInfo, input.trim())}
+              style={{
+                ...getSendButtonStyles(deviceInfo, input.trim()),
+                // Add custom text styling for the send button
+                '--button-font-size': getLayout(deviceInfo).SEND_BUTTON.TEXT ? getLayout(deviceInfo).SEND_BUTTON.TEXT.FONT_SIZE : '0.9375rem',
+                '--button-font-weight': getLayout(deviceInfo).SEND_BUTTON.TEXT ? getLayout(deviceInfo).SEND_BUTTON.TEXT.FONT_WEIGHT : '500',
+                '--button-text-transform': getLayout(deviceInfo).SEND_BUTTON.TEXT ? getLayout(deviceInfo).SEND_BUTTON.TEXT.TEXT_TRANSFORM : 'none',
+                '--button-letter-spacing': getLayout(deviceInfo).SEND_BUTTON.TEXT ? getLayout(deviceInfo).SEND_BUTTON.TEXT.LETTER_SPACING : 'normal',
+                '--button-line-height': getLayout(deviceInfo).SEND_BUTTON.TEXT ? getLayout(deviceInfo).SEND_BUTTON.TEXT.LINE_HEIGHT : '1.2'
+              }}
               onClick={() => send()}
               disabled={!input.trim()}
+              className="send-button"
             >
               Send
             </button>

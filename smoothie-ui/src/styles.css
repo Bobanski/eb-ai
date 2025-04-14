@@ -7,9 +7,10 @@
 body {
   font-family: 'Inter', sans-serif;
   /* Light blue background to match App.jsx */
-  background: #c7e0ff;
+  background: var(--app-background-color, #c7e0ff);
   min-height: 100vh;
   padding-bottom: env(safe-area-inset-bottom, 0px); /* Ensure bottom padding respects safe areas */
+  padding-top: env(safe-area-inset-top, 0px); /* Ensure top padding respects safe areas */
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -185,7 +186,7 @@ main > div * {
 
 /* Light blue background to match gradient bottom */
 body {
-  background: #c7e0ff;
+  background: var(--app-background-color, #c7e0ff);
 }
 
 /* Custom rounded corners for user messages */
@@ -259,6 +260,8 @@ body {
   z-index: 10;
   position: relative;
   flex: 1; /* Allow the container to grow and fill available space */
+  min-height: calc(100vh - env(safe-area-inset-top) - env(safe-area-inset-bottom)); /* Ensure it fills the viewport */
+  height: 100%; /* Take full height of parent */
 }
 
 @media (min-width: 769px) {

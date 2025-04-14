@@ -46,6 +46,14 @@ export const scrollToTop = (options = {}) => {
       document.body.offsetHeight; // Force reflow
       document.body.style.transform = '';
       
+      // Force redraw to fix iOS visual glitches after keyboard dismissal
+      const chatContainer = document.querySelector('.chat-container');
+      if (chatContainer) {
+        chatContainer.style.display = 'none';
+        chatContainer.offsetHeight; // Force reflow
+        chatContainer.style.display = 'flex';
+      }
+      
       // Re-enable scrolling after forced position
       setTimeout(() => {
         document.body.style.overflow = '';
@@ -107,12 +115,37 @@ export const setupInputFocusHandlers = (inputSelector = '.chat-input') => {
       if (document.body.style.zoom) {
         document.body.style.zoom = 1.0;
       }
+      
+      // Ensure chat messages container is properly sized
+      const chatMessages = document.querySelector('.chat-messages');
+      if (chatMessages) {
+        // Force recalculation of chat messages height when keyboard appears
+        chatMessages.style.height = `calc(100dvh - 4rem - 80px - ${window.visualViewport?.height || window.innerHeight}px + ${window.innerHeight}px)`;
+      }
     }, 100);
   });
-  // When input is blurred (keyboard disappears), scroll to top
+  
+  // When input is blurred (keyboard disappears), scroll to top and fix layout
   inputEl.addEventListener('blur', () => {
     // Use multiple delays to ensure we catch the right moment after keyboard dismissal
-    setTimeout(() => scrollToTop(), 100);
+    setTimeout(() => {
+      scrollToTop();
+      
+      // Reset chat messages container height
+      const chatMessages = document.querySelector('.chat-messages');
+      if (chatMessages) {
+        chatMessages.style.height = 'calc(100dvh - 4rem - 80px)';
+      }
+      
+      // Force redraw of the entire container to fix iOS visual glitches
+      const mainContent = document.querySelector('.main-content');
+      if (mainContent) {
+        mainContent.style.display = 'none';
+        mainContent.offsetHeight; // Force reflow
+        mainContent.style.display = 'flex';
+      }
+    }, 100);
+    
     setTimeout(() => scrollToTop(), 300);
     setTimeout(() => scrollToTop(), 500);
   });
@@ -172,9 +205,33 @@ export const initMobileAutoScroll = () => {
   // Clear interval after 2 seconds
   setTimeout(() => clearInterval(initialScrollInterval), 2000);
   
+  // Add event listener for visual viewport changes (better for keyboard events)
+  const handleVisualViewportResize = () => {
+    // When keyboard appears/disappears, adjust the chat messages container height
+    const chatMessages = document.querySelector('.chat-messages');
+    if (chatMessages && window.visualViewport) {
+      // If visual viewport is significantly smaller than window height, keyboard is likely visible
+      if (window.visualViewport.height < window.innerHeight * 0.8) {
+        // Adjust height to account for keyboard
+        chatMessages.style.height = `calc(100dvh - 4rem - 80px - ${window.innerHeight - window.visualViewport.height}px)`;
+      } else {
+        // Reset to default height when keyboard is hidden
+        chatMessages.style.height = 'calc(100dvh - 4rem - 80px)';
+      }
+    }
+  };
+  
+  // Add visual viewport event listener if available
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener('resize', handleVisualViewportResize);
+  }
+  
   // Return a function that cleans up all listeners
   return () => {
     clearInterval(initialScrollInterval);
     cleanupViewportListeners();
+    if (window.visualViewport) {
+      window.visualViewport.removeEventListener('resize', handleVisualViewportResize);
+    }
   };
 };

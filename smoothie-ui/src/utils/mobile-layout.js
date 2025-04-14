@@ -101,11 +101,10 @@ const MOBILE_LAYOUT = {
     MAX_WIDTH: '95%',
     
     // Position from the top of the container (percentage-based)
-    TOP: '10%',
+    TOP: '12%',
     
     // Position from the bottom of the container (percentage-based)
     // Setting this extends the container downward
-    BOTTOM: '5%',
     
     // Horizontal position (centered by default)
     LEFT: '0',
@@ -118,7 +117,7 @@ const MOBILE_LAYOUT = {
     Z_INDEX: 5,
     
     // Height property (percentage of available space)
-    HEIGHT: '80vh' // Using viewport height for responsive sizing
+    HEIGHT: '75vh' // Using viewport height for responsive sizing
   },
   
   /**
@@ -148,7 +147,7 @@ const MOBILE_LAYOUT = {
    */
   FOOTER: {
     // Position from the bottom of the container (percentage-based)
-    BOTTOM: '0%',
+    BOTTOM: '-4%',
     
     // Horizontal position (centered by default)
     LEFT: '-2%',

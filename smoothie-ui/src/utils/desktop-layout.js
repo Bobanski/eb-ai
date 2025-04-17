@@ -17,7 +17,7 @@ const DESKTOP_LAYOUT = {
    */
   HEADER: {
     // Position from the top of the container (percentage-based)
-    TOP: '3%',
+    TOP: '-2%',
     
     // Horizontal position (centered by default)
     LEFT: '-4%',
@@ -349,7 +349,7 @@ const DESKTOP_LAYOUT = {
         BORDER: '1px solid #e0e0e0',
         BORDER_RADIUS: '1vw',
         PADDING: '1% 0.5%',
-        FONT_SIZE: '0.7vw',
+        FONT_SIZE: '0.6vw',
         FONT_WEIGHT: '400',
         WHITE_SPACE: 'normal',
         LINE_HEIGHT: '1.3',

@@ -34,7 +34,15 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
     
     try:
         # First attempt: try to parse the entire response as JSON
-        return SmoothieResponse(**json.loads(raw))
+        parsed_json = json.loads(raw)
+        
+        # Ensure the intent field exists and has a valid value
+        if "intent" not in parsed_json:
+            parsed_json["intent"] = "SMOOTHIE_REQUEST"  # Default intent
+        elif parsed_json["intent"] not in ["SMOOTHIE_REQUEST", "FOLLOW_UP", "GENERAL_CHAT", "NEEDS_INFO"]:
+            parsed_json["intent"] = "SMOOTHIE_REQUEST"  # Default if invalid value
+            
+        return SmoothieResponse(**parsed_json)
     except (json.JSONDecodeError, ValidationError) as e:
         # Second attempt: try to extract JSON from the response if it's mixed with text
         try:
@@ -75,7 +83,13 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
                     for category in menu_data["categories"]:
                         for item in category["items"]:
                             if item["id"] == smoothie_id:
+                                # Try to detect intent from the response text
+                                intent = "SMOOTHIE_REQUEST"  # Default
+                                if "FOLLOW_UP" in raw or "follow up" in raw.lower():
+                                    intent = "FOLLOW_UP"
+                                
                                 return SmoothieResponse(
+                                    intent=intent,
                                     id=smoothie_id,
                                     name=item["name"],
                                     type=item["type"],
@@ -85,16 +99,73 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
                                     explanation=raw
                                 )
             
-            # Final fallback: create a generic response
-            return SmoothieResponse(
-                id="default_smoothie",
-                name="Recommended Smoothie",
-                type="smoothie",
-                price_usd=12.95,
-                requiresAddOn=True,
-                image_path="/images/ChocolateSupreme.jpg",
-                explanation="I recommend trying our signature smoothie. " + raw[:100]
-            )
+            # Check for intent signals in the text
+            intent = "SMOOTHIE_REQUEST"  # Default intent
+            if "GENERAL_CHAT" in raw or "general chat" in raw.lower():
+                intent = "GENERAL_CHAT"
+            elif "FOLLOW_UP" in raw or "follow up" in raw.lower():
+                intent = "FOLLOW_UP"
+            elif "NEEDS_INFO" in raw or "need more information" in raw.lower():
+                intent = "NEEDS_INFO"
+            
+            # Final fallback: create a response based on intent
+            if intent == "GENERAL_CHAT":
+                # Check if response ends with proper punctuation
+                explanation = raw[:150]
+                if not explanation.strip().endswith((".", "!", "?")):
+                    explanation = explanation.rstrip() + "."  # Add period for complete sentence
+                
+                # For general chat, completely omit price_usd from response
+                return SmoothieResponse(
+                    intent=intent,
+                    id="general_chat",
+                    name="Friendly Chat",
+                    type="general",
+                    # No price_usd field for general chat
+                    requiresAddOn=False,
+                    image_path="/images/avatar-icon.png",
+                    explanation=explanation
+                )
+            elif intent == "NEEDS_INFO":
+                # Ensure the explanation ends with a question mark for info requests
+                explanation = raw[:150]
+                if not explanation.strip().endswith("?"):
+                    explanation = explanation.rstrip() + "?"  # Add question mark for info requests
+                
+                # For info requests, completely omit price_usd field
+                return SmoothieResponse(
+                    intent=intent,
+                    id="needs_info",
+                    name="More Information Needed",
+                    type="general",
+                    # No price_usd field for info requests
+                    requiresAddOn=False,
+                    image_path="/images/avatar-icon.png",
+                    explanation=explanation
+                )
+            else:
+                # Default smoothie recommendation
+                # Start with greeting, then recommendation
+                smoothie_explanation = "Hi there! Based on what you're looking for, "
+                if raw.strip():
+                    # Append raw response but ensure it ends with proper punctuation
+                    additional_text = raw[:100].strip()
+                    if not additional_text.endswith((".", "!", "?")):
+                        additional_text += "."
+                    smoothie_explanation += additional_text
+                else:
+                    smoothie_explanation += "I recommend trying our signature Chocolate Supreme smoothie. It's packed with protein and delicious chocolate flavor."
+                
+                return SmoothieResponse(
+                    intent=intent,
+                    id="default_smoothie",
+                    name="Recommended Smoothie",
+                    type="smoothie",
+                    price_usd=12.95,  # Include price for actual product recommendations
+                    requiresAddOn=True,
+                    image_path="/images/ChocolateSupreme.jpg",
+                    explanation=smoothie_explanation
+                )
         except Exception as inner_e:
             # Log the detailed error for debugging
             import traceback

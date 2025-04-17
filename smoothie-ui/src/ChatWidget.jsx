@@ -91,6 +91,8 @@ export default function ChatWidget() {
   const [input, setInput] = useState("");
   const [pendingSend, setPendingSend] = useState(false);
   const pendingInputRef = useRef("");
+  // Use ref instead of state for currentSmoothieId to avoid async state update issues
+  const currentSmoothieIdRef = useRef(null);
   const [messages, setMessages] = useState([
     {
       role: "assistant",
@@ -149,58 +151,58 @@ export default function ChatWidget() {
   ];
   const [isTyping, setIsTyping] = useState(false);
 
-// Scroll to bottom of chat messages when messages change
-useEffect(() => {
-  // Use a short delay so DOM is updated before calculating scroll height.
-  setTimeout(() => {
-    const chatMessagesDiv = document.querySelector(".chat-messages");
-    if (chatMessagesDiv) {
-      chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
-    }
-  }, 0);
-  
-  // On mobile, ensure we're at the top of the viewport
-  // BUT NOT during first keyboard appearance
-  if (deviceInfo.isMobile) {
-    // Get reference to input element to check if it's in first keyboard state
-    const inputEl = document.querySelector('.chat-input');
-    const isFirstKeyboardAppearance = inputEl &&
-                                     !inputEl.dataset.hadFullKeyboardShown &&
-                                     document.activeElement === inputEl;
-    
-    if (!isFirstKeyboardAppearance) {
-      scrollToTop();
-    } else {
-      console.log("Skipping scrollToTop during messages update - first keyboard appearance in progress");
-    }
-  }
-}, [messages, isTyping, deviceInfo.isMobile]);
-
-// Handle pending send requests (for keyboard issues)
-useEffect(() => {
-  if (pendingSend && pendingInputRef.current) {
-    // We need specific handling for iOS devices
-    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-                 (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-    
-    // Reset the pendingSend state immediately to prevent double execution
-    setPendingSend(false);
-    
-    // Use longer delays for iOS devices
-    const delay = isIOS ? 300 : 100;
-    
-    console.log("Preparing to send with delay:", delay, "ms, text:", pendingInputRef.current);
-    
-    // Execute the send with a delay to allow for keyboard dismissal
+  // Scroll to bottom of chat messages when messages change
+  useEffect(() => {
+    // Use a short delay so DOM is updated before calculating scroll height.
     setTimeout(() => {
-      console.log("Executing delayed send with:", pendingInputRef.current);
-      if (pendingInputRef.current) {
-        send(pendingInputRef.current);
-        pendingInputRef.current = "";
+      const chatMessagesDiv = document.querySelector(".chat-messages");
+      if (chatMessagesDiv) {
+        chatMessagesDiv.scrollTop = chatMessagesDiv.scrollHeight;
       }
-    }, delay);
-  }
-}, [pendingSend]);
+    }, 0);
+    
+    // On mobile, ensure we're at the top of the viewport
+    // BUT NOT during first keyboard appearance
+    if (deviceInfo.isMobile) {
+      // Get reference to input element to check if it's in first keyboard state
+      const inputEl = document.querySelector('.chat-input');
+      const isFirstKeyboardAppearance = inputEl &&
+                                       !inputEl.dataset.hadFullKeyboardShown &&
+                                       document.activeElement === inputEl;
+      
+      if (!isFirstKeyboardAppearance) {
+        scrollToTop();
+      } else {
+        console.log("Skipping scrollToTop during messages update - first keyboard appearance in progress");
+      }
+    }
+  }, [messages, isTyping, deviceInfo.isMobile]);
+
+  // Handle pending send requests (for keyboard issues)
+  useEffect(() => {
+    if (pendingSend && pendingInputRef.current) {
+      // We need specific handling for iOS devices
+      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+                    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      
+      // Reset the pendingSend state immediately to prevent double execution
+      setPendingSend(false);
+      
+      // Use longer delays for iOS devices
+      const delay = isIOS ? 300 : 100;
+      
+      console.log("Preparing to send with delay:", delay, "ms, text:", pendingInputRef.current);
+      
+      // Execute the send with a delay to allow for keyboard dismissal
+      setTimeout(() => {
+        console.log("Executing delayed send with:", pendingInputRef.current);
+        if (pendingInputRef.current) {
+          send(pendingInputRef.current);
+          pendingInputRef.current = "";
+        }
+      }, delay);
+    }
+  }, [pendingSend]);
 
 
   const messagesEndRef = useRef(null);
@@ -211,6 +213,13 @@ useEffect(() => {
 
   const getCurrentTime = () =>
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    
+  // Function to format markdown text by removing ** characters
+  const formatMarkdown = (text) => {
+    if (!text) return "";
+    // Replace **text** with <strong>text</strong>
+    return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+  };
 
   /* ---------------- send ---------------- */
   async function send(promptText = input) {
@@ -222,6 +231,13 @@ useEffect(() => {
     
     // Hide prompt buttons once a selection is made
     setShowPromptButtons(false);
+    
+    // Reset currentSmoothieId if the user clears the chat or starts over
+    if (inputValue.toLowerCase().includes("start over") ||
+        inputValue.toLowerCase().includes("clear chat")) {
+      currentSmoothieIdRef.current = null;
+      console.log("[Image Logic] Reset smoothie ID to null (new conversation)");
+    }
     
     // Log to help debug mobile send issues
     console.log("Sending message:", inputValue);
@@ -290,33 +306,95 @@ useEffect(() => {
       }
 
       /* ---------- recommendation meta ---------- */
-      const firstRec = !messages.some(
+      // Use updatedMessages to avoid stale state references
+      const firstRec = !updatedMessages.some(
         (m) => m.role === "assistant" && m.smoothie_data
       );
 
-      const lastSmoothie = [...messages]
+      // Use updatedMessages for more accurate current state
+      const lastSmoothie = [...updatedMessages]
         .reverse()
         .find((m) => m.role === "assistant" && m.smoothie_data);
       const newSmoothie =
-        !lastSmoothie || lastSmoothie.smoothie_data.id !== bot.id;
+        !lastSmoothie || lastSmoothie.smoothie_data?.id !== bot.id;
 
       /* ---------- build bot message ---------- */
       const botMsg = {
         role: "assistant",
         content:
           bot.explanation ||
-          "I'm not sure what to recommend. Could you provide more details?",
+          "Let me know what you're in the mood for!",
         isFirstRecommendation: firstRec,
         isNewSmoothie: newSmoothie,
+        showImage: false, // Default to false, will be updated if needed
       };
 
-      if (imagePath && newSmoothie) botMsg.image_path = imagePath;
-      if (bot.name && bot.price_usd !== undefined)
+      // Set up showImage flag
+      let showImage = false;
+
+      // Handle image path for all messages that have smoothie information
+      if (imagePath) {
+        // Always include the image_path in the message
+        botMsg.image_path = imagePath;
+        
+        // Log the current state and incoming data for debugging
+        console.log("[Image Logic] Received bot object:", JSON.stringify(bot, null, 2));
+        console.log("[Image Logic] Current Smoothie ID (ref):", currentSmoothieIdRef.current);
+        console.log("[Image Logic] New Smoothie ID from bot:", bot.id);
+        
+        // Use a local variable to store the previous smoothie ID
+        const prevSmoothieId = currentSmoothieIdRef.current;
+        
+        // Default to not showing image
+        showImage = false;
+        
+        // Check if this is a smoothie recommendation (by checking for an ID)
+        const newId = bot.id;
+        
+        // Debug: Log intent information
+        console.log("[Image Logic DEBUG] Intent:", bot.intent);
+        console.log("[Image Logic DEBUG] Is SMOOTHIE_REQUEST:", bot.intent === "SMOOTHIE_REQUEST");
+        
+        // Current logic: show the image if newId != currentSmoothieId OR intent="SMOOTHIE_REQUEST"
+        if (newId && (newId !== prevSmoothieId || bot.intent === "SMOOTHIE_REQUEST")) {
+          // This is a new smoothie - show the image
+          showImage = true;
+          
+          // Update the ref immediately (synchronous)
+          currentSmoothieIdRef.current = newId;
+          
+          console.log(`[Image Logic] NEW SMOOTHIE DETECTED: ${newId}, Intent: ${bot.intent}. Setting showImage = true`);
+        } else {
+          // This is the same smoothie or no ID - don't show the image
+          if (!newId) {
+            console.log("[Image Logic] No valid smoothie ID found. Setting showImage = false");
+          } else if (newId === prevSmoothieId && bot.intent === "FOLLOW_UP") {
+            console.log(`[Image Logic] FOLLOW_UP on SAME SMOOTHIE: ${newId}. Setting showImage = false`);
+          } else {
+            console.log(`[Image Logic] Other case: ID=${newId}, Intent=${bot.intent}. Setting showImage = false`);
+          }
+        }
+        
+        // Add the showImage flag to the botMsg
+        botMsg.showImage = showImage;
+      }
+      
+      // Always include smoothie_data for smoothie recommendations
+      if (bot.id && bot.name && (bot.intent === "SMOOTHIE_REQUEST" || bot.intent === "FOLLOW_UP")) {
         botMsg.smoothie_data = {
           id: bot.id,
           name: bot.name,
-          price_usd: bot.price_usd,
+          price_usd: bot.price_usd !== undefined ? bot.price_usd : 0,
         };
+      }
+
+      // Final verification log to debug botMsg state before it's added to messages
+      console.log("[Image Logic] FINAL botMsg object being added to messages:", JSON.stringify({
+        showImage: botMsg.showImage,
+        image_path: botMsg.image_path,
+        id: botMsg.smoothie_data?.id,
+        currentSmoothieId: currentSmoothieIdRef.current
+      }, null, 2));
 
       setMessages((m) => [...m, botMsg]);
     } catch (err) {
@@ -393,7 +471,9 @@ useEffect(() => {
                 {/* Message bubble */}
                 <div className={`message-wrapper-inner ${m.role}`}>
                   <div className={`message ${m.role}`}>
-                    {m.image_path && (
+                    {/* Display image only when showImage flag is true */}
+                    {m.showImage && m.image_path &&
+                     m.image_path !== "/images/avatar-icon.png" && (
                       <img
                         src={m.image_path}
                         alt="Smoothie"
@@ -411,12 +491,17 @@ useEffect(() => {
                       />
                     )}
 
-                    {m.smoothie_data && m.isNewSmoothie ? (
+                    {/* Display content and price for all smoothie recommendations */}
+                    {m.smoothie_data ? (
                       <>
-                        <p>{m.content} <span className="smoothie-price">(${m.smoothie_data.price_usd.toFixed(2)})</span></p>
+                        <p dangerouslySetInnerHTML={{ __html: formatMarkdown(m.content) }}>
+                        </p>
+                        {m.smoothie_data.price_usd && m.smoothie_data.price_usd > 0 ? (
+                          <span className="smoothie-price">(${m.smoothie_data.price_usd.toFixed(2)})</span>
+                        ) : null}
                       </>
                     ) : (
-                      <p>{m.content}</p>
+                      <p dangerouslySetInnerHTML={{ __html: formatMarkdown(m.content) }}></p>
                     )}
                   </div>
                   <span className={`timestamp ${m.role}`}>
@@ -567,7 +652,6 @@ useEffect(() => {
                     console.log("Focus timeout executing - adjusting chat messages height");
                     const chatMessagesDiv = document.querySelector(".chat-messages");
                     if (chatMessagesDiv) {
-                      // Use visual viewport if available for more accurate measurement
                       if (window.visualViewport) {
                         const keyboardHeight = window.innerHeight - window.visualViewport.height;
                         chatMessagesDiv.style.height = `calc(100dvh - 4rem - 80px - ${keyboardHeight}px)`;

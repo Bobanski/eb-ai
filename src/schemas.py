@@ -17,6 +17,7 @@ class SmoothieResponse(BaseModel):
     requiresAddOn: bool
     image_path: str
     explanation: str
+    preference_analysis: Optional[Literal["flavor", "function", "both", "unclear"]] = None # Added for logging user preference
 
 class ChatResponse(SmoothieResponse):
     pass

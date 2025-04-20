@@ -1,0 +1,281 @@
+{
+    "add_ons": [
+      {
+        "name": "Almond Butter",
+        "price_usd": 2.00,
+        "health_tags": ["healthy_fats", "plant_based", "energy"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Cashews",
+        "price_usd": 2.00,
+        "health_tags": ["healthy_fats", "protein", "plant_based"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "MCT Oil",
+        "price_usd": 2.00,
+        "health_tags": ["healthy_fats", "energy", "brain_boost"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Peanut Butter",
+        "price_usd": 2.00,
+        "health_tags": ["healthy_fats", "protein", "energy"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Earthfusion Chocolate Plant Protein",
+        "price_usd": 3.00,
+        "health_tags": ["high_protein", "plant_based", "muscle_recovery"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Earthfusion Vanilla Plant Protein",
+        "price_usd": 3.00,
+        "health_tags": ["high_protein", "plant_based", "muscle_recovery"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Epic Plant Protein Vanilla",
+        "price_usd": 3.00,
+        "health_tags": ["high_protein", "plant_based"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Glow & Restore Collagen",
+        "price_usd": 3.00,
+        "health_tags": ["collagen", "skin_health", "joint_support"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Vegan Collagen Booster",
+        "price_usd": 3.00,
+        "health_tags": ["collagen", "skin_health", "plant_based"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Whey Protein Vanilla",
+        "price_usd": 3.00,
+        "health_tags": ["high_protein", "muscle_recovery"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Every Protein Syrup",
+        "price_usd": 3.00,
+        "health_tags": ["high_protein", "muscle_recovery"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Fresh Spinach",
+        "price_usd": 1.00,
+        "health_tags": ["detox", "antioxidant", "iron"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Avocado",
+        "price_usd": 1.00,
+        "health_tags": ["healthy_fats", "fiber", "energy"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Banana",
+        "price_usd": 1.00,
+        "health_tags": ["energy", "potassium", "natural_sweetener"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Blueberry",
+        "price_usd": 1.00,
+        "health_tags": ["antioxidant", "brain_boost", "fiber"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Coconut",
+        "price_usd": 1.00,
+        "health_tags": ["hydration", "healthy_fats"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Mango",
+        "price_usd": 1.00,
+        "health_tags": ["antioxidant", "vitamin_c"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Passion Fruit",
+        "price_usd": 1.00,
+        "health_tags": ["vitamin_c", "fiber", "antioxidant"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Pineapple",
+        "price_usd": 1.00,
+        "health_tags": ["anti_inflammatory", "digestion", "vitamin_c"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Pitaya",
+        "price_usd": 1.00,
+        "health_tags": ["antioxidant", "hydration"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Raspberry",
+        "price_usd": 1.00,
+        "health_tags": ["antioxidant", "fiber"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Strawberry",
+        "price_usd": 1.00,
+        "health_tags": ["antioxidant", "vitamin_c", "natural_sweetener"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Workout Stack (BCAAs, Creatine, L-Glutamine)",
+        "price_usd": 4.00,
+        "health_tags": ["muscle_recovery", "performance", "energy"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "B-12",
+        "price_usd": 2.00,
+        "health_tags": ["energy", "metabolism"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "BCAAs",
+        "price_usd": 2.00,
+        "health_tags": ["muscle_recovery", "endurance"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Creatine",
+        "price_usd": 2.00,
+        "health_tags": ["performance", "muscle_growth"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Electro:5 Electrolytes",
+        "price_usd": 2.00,
+        "health_tags": ["hydration", "electrolytes", "recovery"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Energy Ginseng Herbal Boost",
+        "price_usd": 2.00,
+        "health_tags": ["energy", "focus", "adaptogen"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Get Up & Go Go Herbal Boost",
+        "price_usd": 2.00,
+        "health_tags": ["energy", "mood", "adaptogen"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Hemp Boost",
+        "price_usd": 2.00,
+        "health_tags": ["protein", "omega_3", "plant_based"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "It's Time to Detox Herbal Boost",
+        "price_usd": 2.00,
+        "health_tags": ["detox", "digestion", "liver_support"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "L-Carnitine",
+        "price_usd": 2.95,
+        "health_tags": ["fat_metabolism", "energy", "performance"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "L-Glutamine",
+        "price_usd": 2.00,
+        "health_tags": ["muscle_recovery", "gut_health"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Power X Pre-Workout",
+        "price_usd": 2.00,
+        "health_tags": ["performance", "focus", "energy"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Probiotics",
+        "price_usd": 2.00,
+        "health_tags": ["gut_health", "digestion", "immunity"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Slim Down Herbal Boost",
+        "price_usd": 2.00,
+        "health_tags": ["weight_management", "metabolism"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Super Immune Herbal Boost",
+        "price_usd": 2.00,
+        "health_tags": ["immune_support", "antioxidant"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Bee Pollen",
+        "price_usd": 1.00,
+        "health_tags": ["immune_support", "antioxidant", "energy"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Beet Powder",
+        "price_usd": 2.00,
+        "health_tags": ["circulation", "energy", "performance"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Cacao Nibs",
+        "price_usd": 1.00,
+        "health_tags": ["antioxidant", "energy", "mood"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Chia Seeds",
+        "price_usd": 1.00,
+        "health_tags": ["fiber", "omega_3", "hydration"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Cold Brew Concentrate",
+        "price_usd": 2.00,
+        "health_tags": ["caffeine", "energy", "focus"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Ginger Extract",
+        "price_usd": 1.00,
+        "health_tags": ["digestion", "anti_inflammatory", "immune_support"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Goji Berries",
+        "price_usd": 1.00,
+        "health_tags": ["antioxidant", "immune_support", "eye_health"],
+        "orientation": ["flavor", "function"]
+      },
+      {
+        "name": "Hemp Seeds",
+        "price_usd": 1.00,
+        "health_tags": ["omega_3", "protein", "plant_based"],
+        "orientation": ["function"]
+      },
+      {
+        "name": "Matcha",
+        "price_usd": 2.00,
+        "health_tags": ["caffeine", "antioxidant", "energy", "focus"],
+        "orientation": ["flavor", "function"]
+      }
+    ]
+  }
+  

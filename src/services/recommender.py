@@ -1,6 +1,7 @@
 import json
 from typing import List
 from pydantic import ValidationError
+import re # Import re for keyword searching
 from .prompt_builder import build_prompt
 from ..deps import openai_client, settings
 from ..schemas import SmoothieResponse, ChatTurn
@@ -83,6 +84,10 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
             parsed_json["intent"] = default_intent
             print(f"[DEBUG] Defaulting intent (invalid): {default_intent}") # Debug log
             
+        # Log the preference analysis from the AI
+        preference = parsed_json.get("preference_analysis", "not provided")
+        print(f"[AI PREFERENCE LOG] AI analysis of user preference: {preference}")
+            
         return SmoothieResponse(**parsed_json)
     except (json.JSONDecodeError, ValidationError) as e:
         # Second attempt: try to extract JSON from the response if it's mixed with text
@@ -92,12 +97,25 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
             json_match = re.search(r'\{.*\}', raw, re.DOTALL)
             if json_match:
                 json_str = json_match.group(0)
+                parsed_json_fallback = None
                 try:
-                    return SmoothieResponse(**json.loads(json_str))
+                    parsed_json_fallback = json.loads(json_str)
+                    # Log the preference analysis from the AI (fallback 1)
+                    preference = parsed_json_fallback.get("preference_analysis", "not provided")
+                    print(f"[AI PREFERENCE LOG] AI analysis (fallback 1): {preference}")
+                    return SmoothieResponse(**parsed_json_fallback)
                 except (json.JSONDecodeError, ValidationError):
                     # If the extracted JSON is still invalid, try to fix common issues
-                    fixed_json = json_str.replace("'", '"')  # Replace single quotes with double quotes
-                    return SmoothieResponse(**json.loads(fixed_json))
+                    try:
+                        fixed_json_str = json_str.replace("'", '"')  # Replace single quotes with double quotes
+                        parsed_json_fallback_fixed = json.loads(fixed_json_str)
+                        # Log the preference analysis from the AI (fallback 2)
+                        preference = parsed_json_fallback_fixed.get("preference_analysis", "not provided")
+                        print(f"[AI PREFERENCE LOG] AI analysis (fallback 2 - fixed quotes): {preference}")
+                        return SmoothieResponse(**parsed_json_fallback_fixed)
+                    except (json.JSONDecodeError, ValidationError):
+                         # If still failing after fixing quotes, proceed to next fallback
+                         pass # Let it fall through to the next attempt
             
             # Third attempt: try to identify known smoothies in the text
             # Create a mapping of smoothie keywords to their IDs

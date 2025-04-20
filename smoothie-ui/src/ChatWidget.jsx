@@ -68,10 +68,10 @@ const smoothieImages = {
 /* ------------------------------------------------------------------ */
 // Use environment variable with fallback to localhost
 // Strip any comments from the API_BASE value
-let rawApiBase = import.meta.env.VITE_API_BASE || "http://localhost:8000";
+let rawApiBase = import.meta.env.DEV ? "http://localhost:8000" : import.meta.env.VITE_API_BASE;
 // Remove any comments (anything after #)
 const API_BASE = rawApiBase.split('#')[0].trim();
-const IS_PRODUCTION = import.meta.env.PROD;
+const IS_PRODUCTION = !import.meta.env.DEV;
 
 // Log more detailed environment info for debugging
 console.log("Raw VITE_API_BASE:", import.meta.env.VITE_API_BASE);
@@ -315,8 +315,12 @@ export default function ChatWidget() {
       const lastSmoothie = [...updatedMessages]
         .reverse()
         .find((m) => m.role === "assistant" && m.smoothie_data);
+      // Determine if this is a new smoothie recommendation
+      // It's new if: there's no previous smoothie, OR the ID is different, OR the intent is SMOOTHIE_REQUEST
       const newSmoothie =
-        !lastSmoothie || lastSmoothie.smoothie_data?.id !== bot.id;
+        !lastSmoothie ||
+        lastSmoothie.smoothie_data?.id !== bot.id ||
+        bot.intent === "SMOOTHIE_REQUEST";
 
       /* ---------- build bot message ---------- */
       const botMsg = {
@@ -355,7 +359,8 @@ export default function ChatWidget() {
         console.log("[Image Logic DEBUG] Intent:", bot.intent);
         console.log("[Image Logic DEBUG] Is SMOOTHIE_REQUEST:", bot.intent === "SMOOTHIE_REQUEST");
         
-        // Current logic: show the image if newId != currentSmoothieId OR intent="SMOOTHIE_REQUEST"
+        // Set showImage to match the isNewSmoothie logic for consistency
+        // Show image if: ID is different from previous OR intent is SMOOTHIE_REQUEST
         if (newId && (newId !== prevSmoothieId || bot.intent === "SMOOTHIE_REQUEST")) {
           // This is a new smoothie - show the image
           showImage = true;
@@ -496,7 +501,7 @@ export default function ChatWidget() {
                       <>
                         <p dangerouslySetInnerHTML={{ __html: formatMarkdown(m.content) }}>
                         </p>
-                        {m.smoothie_data.price_usd && m.smoothie_data.price_usd > 0 ? (
+                        {m.smoothie_data.price_usd && m.smoothie_data.price_usd > 0 && m.isNewSmoothie ? (
                           <span className="smoothie-price">(${m.smoothie_data.price_usd.toFixed(2)})</span>
                         ) : null}
                       </>

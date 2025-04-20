@@ -316,11 +316,15 @@ export default function ChatWidget() {
         .reverse()
         .find((m) => m.role === "assistant" && m.smoothie_data);
       // Determine if this is a new smoothie recommendation
-      // It's new if: there's no previous smoothie, OR the ID is different, OR the intent is SMOOTHIE_REQUEST
+      // More robust logic to handle multiple follow-ups:
+      // 1. If intent is explicitly SMOOTHIE_REQUEST, it's a new smoothie
+      // 2. If there's no previous smoothie, it's a new smoothie
+      // 3. If the ID is different from the previous smoothie, it's a new smoothie
+      // 4. Otherwise (same ID and not SMOOTHIE_REQUEST intent), it's a follow-up
       const newSmoothie =
+        bot.intent === "SMOOTHIE_REQUEST" ||
         !lastSmoothie ||
-        lastSmoothie.smoothie_data?.id !== bot.id ||
-        bot.intent === "SMOOTHIE_REQUEST";
+        lastSmoothie.smoothie_data?.id !== bot.id;
 
       /* ---------- build bot message ---------- */
       const botMsg = {
@@ -350,42 +354,33 @@ export default function ChatWidget() {
         const prevSmoothieId = currentSmoothieIdRef.current;
         
         // Default to not showing image
-        showImage = false;
-        
         // Check if this is a smoothie recommendation (by checking for an ID)
         const newId = bot.id;
-        
-        // Debug: Log intent information
+
+        // Debug: Log intent and smoothie information
         console.log("[Image Logic DEBUG] Intent:", bot.intent);
         console.log("[Image Logic DEBUG] Is SMOOTHIE_REQUEST:", bot.intent === "SMOOTHIE_REQUEST");
-        
-        // Set showImage to match the isNewSmoothie logic for consistency
-        // Show image if: ID is different from previous OR intent is SMOOTHIE_REQUEST
-        if (newId && (newId !== prevSmoothieId || bot.intent === "SMOOTHIE_REQUEST")) {
-          // This is a new smoothie - show the image
-          showImage = true;
-          
+        console.log("[Image Logic DEBUG] Previous smoothie ID:", prevSmoothieId);
+        console.log("[Image Logic DEBUG] Current smoothie ID:", newId);
+        console.log("[Image Logic DEBUG] Is new smoothie:", newSmoothie);
+
+        // Always update the current smoothie ID if we have a valid ID
+        if (newId) {
           // Update the ref immediately (synchronous)
           currentSmoothieIdRef.current = newId;
-          
-          console.log(`[Image Logic] NEW SMOOTHIE DETECTED: ${newId}, Intent: ${bot.intent}. Setting showImage = true`);
-        } else {
-          // This is the same smoothie or no ID - don't show the image
-          if (!newId) {
-            console.log("[Image Logic] No valid smoothie ID found. Setting showImage = false");
-          } else if (newId === prevSmoothieId && bot.intent === "FOLLOW_UP") {
-            console.log(`[Image Logic] FOLLOW_UP on SAME SMOOTHIE: ${newId}. Setting showImage = false`);
-          } else {
-            console.log(`[Image Logic] Other case: ID=${newId}, Intent=${bot.intent}. Setting showImage = false`);
-          }
+          console.log(`[Image Logic] Updated currentSmoothieIdRef to: ${newId}`);
         }
-        
+
+        // Set showImage based on imagePath, avatar exclusion, and the newSmoothie flag
+        showImage = imagePath && imagePath !== "/images/avatar-icon.png" && newSmoothie;
+
         // Add the showImage flag to the botMsg
         botMsg.showImage = showImage;
       }
-      
+
       // Always include smoothie_data for smoothie recommendations
-      if (bot.id && bot.name && (bot.intent === "SMOOTHIE_REQUEST" || bot.intent === "FOLLOW_UP")) {
+      // Only include smoothie_data if there's a valid ID and name
+      if (bot.id && bot.name) {
         botMsg.smoothie_data = {
           id: bot.id,
           name: bot.name,

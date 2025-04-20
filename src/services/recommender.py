@@ -5,6 +5,41 @@ from .prompt_builder import build_prompt
 from ..deps import openai_client, settings
 from ..schemas import SmoothieResponse, ChatTurn
 
+
+# Helper function to check if the last assistant message likely recommended a smoothie
+def last_message_was_smoothie_rec(chat_history: List[ChatTurn]) -> bool:
+    if not chat_history:
+        return False
+    
+    last_message = None
+    # Find the most recent assistant message
+    for i in range(len(chat_history) - 1, -1, -1):
+        if chat_history[i].role == "assistant":
+            last_message = chat_history[i]
+            break
+            
+    if not last_message:
+        return False # No assistant message found
+
+    # Basic check: Does the content mention known smoothie names?
+    # (Could be expanded with more sophisticated checks if needed)
+    # Using the same keywords as later in the file for consistency
+    smoothie_keywords = [
+        "chocolate supreme", "blueberry bliss", "detox greens", "blue moon",
+        "great breakfast", "muscle up", "flax master", "power shred", "slim down"
+    ]
+    content_lower = last_message.content.lower()
+    for keyword in smoothie_keywords:
+        if keyword in content_lower:
+            return True
+            
+    # Add checks for common recommendation phrases if needed
+    # e.g., if "recommend" in content_lower or "try the" in content_lower:
+    #    return True
+
+    return False
+
+
 def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
     """
     Generate a smoothie recommendation based on chat history.
@@ -38,9 +73,15 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
         
         # Ensure the intent field exists and has a valid value
         if "intent" not in parsed_json:
-            parsed_json["intent"] = "SMOOTHIE_REQUEST"  # Default intent
+            # Determine default based on history
+            default_intent = "FOLLOW_UP" if last_message_was_smoothie_rec(chat_history) else "SMOOTHIE_REQUEST"
+            parsed_json["intent"] = default_intent
+            print(f"[DEBUG] Defaulting intent (missing): {default_intent}") # Debug log
         elif parsed_json["intent"] not in ["SMOOTHIE_REQUEST", "FOLLOW_UP", "GENERAL_CHAT", "NEEDS_INFO"]:
-            parsed_json["intent"] = "SMOOTHIE_REQUEST"  # Default if invalid value
+             # Determine default based on history
+            default_intent = "FOLLOW_UP" if last_message_was_smoothie_rec(chat_history) else "SMOOTHIE_REQUEST"
+            parsed_json["intent"] = default_intent
+            print(f"[DEBUG] Defaulting intent (invalid): {default_intent}") # Debug log
             
         return SmoothieResponse(**parsed_json)
     except (json.JSONDecodeError, ValidationError) as e:
@@ -83,11 +124,13 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
                     for category in menu_data["categories"]:
                         for item in category["items"]:
                             if item["id"] == smoothie_id:
-                                # Try to detect intent from the response text
-                                intent = "SMOOTHIE_REQUEST"  # Default
+                                # Try to detect intent from the response text, default based on history
+                                intent = "FOLLOW_UP" if last_message_was_smoothie_rec(chat_history) else "SMOOTHIE_REQUEST"
                                 if "FOLLOW_UP" in raw or "follow up" in raw.lower():
                                     intent = "FOLLOW_UP"
-                                
+                                elif "SMOOTHIE_REQUEST" in raw or "recommend" in raw.lower(): # Be more specific for request
+                                     intent = "SMOOTHIE_REQUEST"
+                                print(f"[DEBUG] Detected intent (fallback smoothie): {intent}") # Debug log
                                 return SmoothieResponse(
                                     intent=intent,
                                     id=smoothie_id,
@@ -99,8 +142,8 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
                                     explanation=raw
                                 )
             
-            # Check for intent signals in the text
-            intent = "SMOOTHIE_REQUEST"  # Default intent
+            # Check for intent signals in the text, default based on history
+            intent = "FOLLOW_UP" if last_message_was_smoothie_rec(chat_history) else "SMOOTHIE_REQUEST"
             if "GENERAL_CHAT" in raw or "general chat" in raw.lower():
                 intent = "GENERAL_CHAT"
             elif "FOLLOW_UP" in raw or "follow up" in raw.lower():
@@ -156,8 +199,12 @@ def recommend(chat_history: List[ChatTurn]) -> SmoothieResponse:
                 else:
                     smoothie_explanation += "I recommend trying our signature Chocolate Supreme smoothie. It's packed with protein and delicious chocolate flavor."
                 
+                # Final fallback intent determination
+                final_fallback_intent = intent # Use the intent determined above (lines 103-109)
+                print(f"[DEBUG] Final fallback intent: {final_fallback_intent}") # Debug log
+                
                 return SmoothieResponse(
-                    intent=intent,
+                    intent=final_fallback_intent,
                     id="default_smoothie",
                     name="Recommended Smoothie",
                     type="smoothie",
